@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Você pode adicionar seu CSS customizado aqui embaixo */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
