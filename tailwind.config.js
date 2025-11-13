@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     // Adicione os caminhos para todos os seus arquivos .html, .js, .jsx, etc.
     "./index.html",
