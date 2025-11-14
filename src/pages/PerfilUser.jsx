@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mail, MapPin, Briefcase, GraduationCap, Award, Zap, ChevronDown, Check } from 'lucide-react';
 
-const PerfilUser = () => {
+const PerfilEmpresa = () => {
   const userData = {
     nome: "Rafael Souza",
     localizacao: "Curitiba, PR",
@@ -75,9 +75,7 @@ const PerfilUser = () => {
                       <button className="bg-blue-600 text-white rounded-full px-4 py-1.5 font-semibold text-sm hover:bg-blue-700">
                         Editar Perfil
                       </button>
-                      <div className="absolute right-0 mt-1 w-48 text-right text-xs text-gray-500">
-                        O botão "Editar Perfil" só está disponível para o dono do perfil.
-                      </div>
+                      
                     </div>
                   )}
                 </div>
@@ -165,4 +163,4 @@ const PerfilUser = () => {
   );
 };
 
-export default PerfilUser;
+export default PerfilEmpresa;
