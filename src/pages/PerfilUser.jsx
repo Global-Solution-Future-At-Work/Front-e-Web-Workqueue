@@ -68,14 +68,14 @@ const PerfilEmpresa = () => {
                 <div className="flex gap-2 mt-2">
                   <button className="flex items-center text-blue-600 border border-blue-600 rounded-full px-4 py-1.5 font-semibold text-sm hover:bg-blue-50">
                     <Mail size={16} className="mr-1" />
-                    Enviar mensagem
+                    Editar Perfil
                   </button>
                   {userData.isOwner && (
                     <div className="relative">
                       <button className="bg-blue-600 text-white rounded-full px-4 py-1.5 font-semibold text-sm hover:bg-blue-700">
-                        Editar Perfil
+                        Publicar vagas
                       </button>
-                      
+
                     </div>
                   )}
                 </div>
