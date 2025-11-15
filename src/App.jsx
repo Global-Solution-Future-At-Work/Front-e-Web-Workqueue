@@ -5,6 +5,12 @@ import Sobre from "./pages/Sobre";
 import FaleConosco from "./pages/FaleConosco";
 import PerfilUser from "./pages/PerfilUser";
 import PerfilEmpresa from "./pages/PerfilEmpresa";
+import VisaoGeral from "./pages/VisaoGeral";
+import Feed from "./pages/Feed";
+import Lobby from "./pages/Lobby";
+import EscolherTipo from "./pages/EscolherTipo";
+import CadastroUserForm from "./pages/CadastroUserForm";
+import CadastroEmpresaForm from "./pages/CadastroEmpresaForm";
 import { Route, Routes, Link } from "react-router-dom";
 
 function App() {
@@ -18,7 +24,14 @@ function App() {
             <Route path= "/faleconosco" element={<FaleConosco />} />
             <Route path= "/perfiluser" element={<PerfilUser />} />
             <Route path= "/perfilempresa" element={<PerfilEmpresa />}></Route>
+            <Route path="/lobby" element={<Lobby />}></Route>
+            <Route path="/visao-geral" element={<VisaoGeral />}></Route>
+            <Route path="/feed" element={<Feed />}></Route>
+            <Route path="/escolher-tipo" element={<EscolherTipo />}></Route>
+            <Route path="/cadastro-user" element={<CadastroUserForm />}></Route>
+            <Route path="/cadastro-empresa" element={<CadastroEmpresaForm />}></Route>
 
+            
             
       </Routes>
       <Footer />

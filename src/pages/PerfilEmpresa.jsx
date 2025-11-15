@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, MapPin, Briefcase, GraduationCap, Award, Zap, ChevronDown, Check, Pencil, Plus, Upload } from 'lucide-react';
 
 import ChatFlutuante from '../components/ChatFlutuante';
 
 const PerfilEmpresa = () => {
+  const [open, setOpen] = useState(false); 
+
   const userData = {
     nome: "NextCode Labs",
     localizacao: "Curitiba, PR",
@@ -11,6 +13,9 @@ const PerfilEmpresa = () => {
     tamanho: "50-200 funcionários",
     sobre: "A NextCode Labs é uma empresa de tecnologia focada em soluções escaláveis e integração de Inteligência Artificial. Nosso propósito é simplificar processos complexos e criar oportunidades humanas através da inovação. (Descrição breve)\nFundação: 2018\nMissão: Unir tecnologia e pessoas para acelerar o futuro do trabalho.\nVisão: Ser referência em soluções inteligentes e acessíveis.\nValores: Ética, inovação e colaboração.",
     vagas: "Desenvolvedor: Front-end | Florianópolis (Híbrido)\nCompatibilidade média dos candidatos: 82%",
+    conecte: "🌐 Site oficial: www.nextcodelabs.com\n💼 LinkedIn: NextCode Labs\n📧 E-mail: contato@nextcodelabs.com\n📍 Endereço: Florianópolis – SC",
+    insights: "👥 Total de candidatos alcançados: 312\n🎯 Compatibilidade média geral: 84%\n⏱️ Tempo médio de fechamento de vaga: 6 dias\n💡 Áreas com maior engajamento: Desenvolvimento, IA, UX Design",
+    lobbies: "[Lobby – Desenvolvedores React]\n5 candidatos sugeridos pela IA\nCompatibilidade média: 85%",
     isOwner: true 
   };
 
@@ -87,13 +92,40 @@ const PerfilEmpresa = () => {
                 </p>
               </div>
 
-              
+              {open && (
+                <div className="mb-4 animate-fadeIn">
+                  <div className="border-t pt-6 mt-6"></div>
+                  <h3 className='text-xl font-bold text-gray-800 mb-2'>Lobbies Ativos</h3>
+                  <p className='text-gray-700 leading-relaxed whitespace-pre-line'>{userData.lobbies}</p>
+                  <button className='bg-blue-500 text-white rounded-full px-2 py-2 font-semibold text-sm hover:bg-blue-500 shadow-sm'>
+                    Visualizar Lobby
+                  </button>
+
+                  <div className="border-t pt-6 mt-6" />
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Insights da IA Gemini</h3>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{userData.insights}</p>
+
+                  <div className="border-t pt-6 mt-6" />
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Conecte-se conosco</h3>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    {userData.conecte}
+                  </p>
+                </div>
+              )}
+
               
               <div className="flex justify-between items-center mt-6 pt-4 border-t">
-                <button className="text-blue-600 font-semibold text-sm flex items-center hover:text-blue-700">
-                  Ver mais
-                  <ChevronDown size={16} className="ml-1" />
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="text-blue-600 font-semibold text-sm flex items-center hover:text-blue-700"
+                >
+                  {open ? "Ver menos" : "Ver mais"}
+                  <ChevronDown
+                    size={16}
+                    className={`ml-1 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                  />
                 </button>
+
                 <button className="bg-blue-600 text-white rounded-full px-4 py-2 font-semibold text-sm hover:bg-blue-700 shadow-md">
                   Recomendar profissional
                 </button>

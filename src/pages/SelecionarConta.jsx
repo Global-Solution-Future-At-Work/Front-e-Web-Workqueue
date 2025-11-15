@@ -1,5 +1,8 @@
 import React from 'react';
 
+import ChatFlutuante from '../components/ChatFlutuante';
+import { ChartGantt } from 'lucide-react';
+
 const AccountSelection = () => {
   return (
     
@@ -53,6 +56,8 @@ const AccountSelection = () => {
         </button>
         
       </div>
+
+      <ChatFlutuante />
 
     </div>
   );
