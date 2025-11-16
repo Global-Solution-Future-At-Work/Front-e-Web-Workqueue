@@ -11,6 +11,10 @@ import Lobby from "./pages/Lobby";
 import EscolherTipo from "./pages/EscolherTipo";
 import CadastroUserForm from "./pages/CadastroUserForm";
 import CadastroEmpresaForm from "./pages/CadastroEmpresaForm";
+import RecuperarConta from "./pages/RecuperarConta";
+import CadastroConcluido from "./pages/CadastroConcluido";
+import CadastroConcluidoEmpresa from "./pages/CadastroConcluidoEmpresa";
+import Login from "./pages/Login";
 import { Route, Routes, Link } from "react-router-dom";
 
 function App() {
@@ -30,6 +34,10 @@ function App() {
             <Route path="/escolher-tipo" element={<EscolherTipo />}></Route>
             <Route path="/cadastro-user" element={<CadastroUserForm />}></Route>
             <Route path="/cadastro-empresa" element={<CadastroEmpresaForm />}></Route>
+            <Route path="/recuperar-conta" element={<RecuperarConta />}></Route>
+            <Route path="/cadastro-concluido" element={<CadastroConcluido />}></Route>
+            <Route path="/cadastro-concluido-empresa" element={<CadastroConcluidoEmpresa />}></Route>
+            <Route path="/login" element={<Login />}></Route>
 
             
             

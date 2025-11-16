@@ -7,6 +7,9 @@ export default function CadastroUserForm() {
     email: '',
     senha: '',
     confirmarSenha: '',
+    atuacao: '',
+    experiencia: '', 
+    localizao: '',
   });
 
   const handleChange = (e) => {
@@ -102,6 +105,52 @@ export default function CadastroUserForm() {
               onChange={handleChange}
               required
               minLength="8"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="areaatuacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+              Área de Atuação(Tecnologia, Marketing, Design):
+            </label>
+            <input
+              type="text"
+              id="atuacao"
+              name="atuacao"
+              value={formData.atuacao}
+              onChange={handleChange}
+              required
+              minLength="8"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="niveldeexperiencia" className="block text-sm font-medium text-gray-700 text-left mb-1">
+              Nível de Experiência(Júnior, Pleno, Sênior):
+            </label>
+            <input
+              type="text"
+              id="experiencia"
+              name="experiencia"
+              value={formData.experiencia}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+              Localização(Cidade, Estado):
+            </label>
+            <input
+              type="text"
+              id="localizacao"
+              name="localizacao"
+              value={formData.localizao}
+              onChange={handleChange}
+              required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
