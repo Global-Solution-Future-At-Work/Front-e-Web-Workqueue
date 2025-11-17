@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState } from "react";''
+import { useNavigate } from "react-router-dom";
 import ChatFlutuante from "../components/ChatFlutuante.jsx";
+
+import mulherfoto from "../assets/mulherfoto.svg";
 
 export default function FaleConosco() {
   const [sent, setSent] = useState(false);
@@ -20,6 +23,8 @@ export default function FaleConosco() {
     setTimeout(() => setSent(false), 3000);
   }
 
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
 
@@ -28,7 +33,7 @@ export default function FaleConosco() {
       
         <div className="md:w-1/2 h-72 md:h-auto overflow-hidden">
           <img
-            src="/faleconosco.jpg" 
+            src={mulherfoto} 
             alt="Pessoa atendendo"
             className="w-full h-full object-cover"
           />

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 const logoUrl = "/workqueue-logo.png"; 
 
 export default function EscolhaCadastro() {
@@ -36,7 +38,7 @@ export default function EscolhaCadastro() {
             <div className="space-y-4">
                 
                 <button
-                    onClick={() => handleChoice('Profissional')}
+                    onClick={() => window.location.href = '/cadastro-user'}
                     className="w-full px-6 py-3 border border-blue-500 text-blue-500 rounded-full text-lg font-medium hover:bg-blue-50 hover:border-blue-600 hover:text-blue-600 transition duration-150 shadow-sm"
                 >
                     Sou um profissional
@@ -44,7 +46,7 @@ export default function EscolhaCadastro() {
 
                 
                 <button
-                    onClick={() => handleChoice('Empresa')}
+                    onClick={() => window.location.href = '/cadastro-empresa'}
                     className="w-full px-6 py-3 border border-blue-500 text-blue-500 rounded-full text-lg font-medium hover:bg-blue-50 hover:border-blue-600 hover:text-blue-600 transition duration-150 shadow-sm"
                 >
                     Sou uma empresa

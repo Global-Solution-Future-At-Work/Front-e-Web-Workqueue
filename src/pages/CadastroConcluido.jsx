@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 export default function CadastroConcluido() {
+
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 text-center">
 
-
       <img 
-        src="/logo.svg" 
-        alt="WorkQueue Logo" 
-        className="w-28 mb-6"
+        src={logo} 
+        alt="WorkQueue Logo"
+        className="w-[800px] h-auto"
       />
-
 
       <h1 className="text-4xl font-bold text-gray-900 mb-4">
         Cadastro concluído!
@@ -21,8 +23,7 @@ export default function CadastroConcluido() {
       </p>
 
       <button
-        onClick={() => window.location.href = '/'
-        }
+        onClick={() => navigate('/')}
         className="px-10 py-3 bg-blue-400 text-white text-lg font-medium rounded-full hover:bg-blue-500 transition shadow-md"
       >
         Explore o mercado de trabalho

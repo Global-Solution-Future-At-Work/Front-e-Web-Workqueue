@@ -1,19 +1,21 @@
+import { Link, useNavigate } from "react-router-dom";
+
+import logonome from "../assets/logonome.svg";
+
 export default function HomePage() {
+
+  const navigate = useNavigate();
+
   return (
     <main className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-50 text-gray-900 px-6 md:gap-x-24">
       
       <div className="flex items-center gap-3 md:w-1/2 justify-center md:justify-end mb-10 md:mb-0">
         <img
-          src="/logo.svg"
+          src={logonome}
           alt="WorkQueue Logo"
-          className="w-20 h-20 md:w-24 md:h-24"
+          className="w-[2000px] h-auto"
         />
-        <div>
-          <h1 className="text-4xl font-semibold text-[#1a2a6c]">WorkQueue</h1>
-          <p className="text-gray-600 text-sm mt-1">
-            Where AI meets human potential.
-          </p>
-        </div>
+        
       </div>
 
       <div className="md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
@@ -31,7 +33,7 @@ export default function HomePage() {
           <p className="text-xs text-gray-500">
             Ainda não faz parte da WorkQueue?{" "}
             <span className="text-blue-600 hover:underline cursor-pointer">
-              Cadastrar-se
+            <Link to="/escolher-tipo">  Cadastrar-se </Link>
             </span>
           </p>
         </div>

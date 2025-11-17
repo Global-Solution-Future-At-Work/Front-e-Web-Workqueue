@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Moon, Sun, Menu, X } from 'lucide-react'; 
+import { Link } from 'react-router-dom';
 
 
 export default function Navbar() {
@@ -28,10 +29,24 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-6">
           <ul className="flex gap-6 text-sm">
-            <li className="hover:underline cursor-pointer">Home</li>
-            <li className="hover:underline cursor-pointer">Contato</li>
-            <li className="hover:underline cursor-pointer">Sobre</li>
-            <li className="hover:underline cursor-pointer">Login</li>
+            <li className="hover:underline cursor-pointer">
+             <Link to="/">Home</Link> 
+              </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/faleconosco">
+              Contato
+              </Link>
+              </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/sobre">
+              Sobre
+              </Link>
+              </li>
+            <li className="hover:underline cursor-pointer">
+              <Link to="/login">
+              Login
+              </Link>
+              </li>
           </ul>
 
           <button className="bg-white text-[#0B2A6B] px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">

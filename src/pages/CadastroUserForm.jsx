@@ -156,6 +156,7 @@ export default function CadastroUserForm() {
           </div>
           
           <button
+          onClick={() => window.location.href = '/cadastro-concluido'}
             type="submit"
             className="w-full mt-6 px-4 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition duration-150 shadow-lg"
           >

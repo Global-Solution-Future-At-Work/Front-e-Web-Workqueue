@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, MapPin, Briefcase, GraduationCap, Award, Zap, ChevronDown, Check } from 'lucide-react';
+
+import fotohomem from '../assets/fotohomem.svg'
 
 const PerfilUser = () => {
   const [open, setOpen] = useState(false);
@@ -35,6 +38,8 @@ const PerfilUser = () => {
     isOwner: true 
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6">
@@ -45,7 +50,7 @@ const PerfilUser = () => {
             <div className="bg-blue-600 h-32 rounded-t-lg relative">
               <div className="absolute left-8 top-16">
                 <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-300 overflow-hidden shadow-md">
-                  <img src="caminho-para-foto-rafael.jpg" alt={`Foto de ${userData.nome}`} className="w-full h-full object-cover" />
+                  <img src={fotohomem} alt={`Foto de ${userData.nome}`} className="w-full h-full object-cover" />
                 </div>
               </div>
             </div>

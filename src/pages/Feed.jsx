@@ -1,6 +1,10 @@
 import React from 'react';
 import ChatFlutuante from '../components/ChatFlutuante';
 
+import fotohomem from "../assets/fotohomem.svg";
+
+import { useNavigate  } from 'react-router-dom';
+
 const postData = {
   profileName: 'Alexandre Silva',
   profileTitle: 'Desenvolvedor Full Stack • Next Code Labs',
@@ -64,7 +68,7 @@ const Post = ({ data }) => (
         {/* Cabeçalho do Post */}
         <div className="flex items-start mb-3">
             <img 
-                src={data.profilePicUrl}
+                src={fotohomem}
                 alt={data.profileName}
                 className="w-10 h-10 rounded-full object-cover mr-3"
             />
@@ -91,7 +95,7 @@ const Post = ({ data }) => (
         </p>
 
         <img 
-            src={data.imageUrl} 
+            src={fotohomem} 
             alt="Imagem do Post" 
             className="w-full rounded-lg mb-4 object-cover max-h-80"
         />
@@ -111,6 +115,8 @@ const Post = ({ data }) => (
 
 export default function Feed() {
 
+    const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100 pt-6 pb-12">
       
@@ -123,7 +129,7 @@ export default function Feed() {
                 className="grow p-1.5 text-gray-700 placeholder-gray-400 focus:outline-none bg-transparent mx-3"
             />
             <img
-                src={profileCardData.profilePicUrl}
+                src={fotohomem}
                 alt="Seu Perfil"
                 className="w-8 h-8 rounded-full object-cover mr-2"
             />
@@ -150,7 +156,7 @@ export default function Feed() {
             
           <div className="bg-white p-4 rounded-xl shadow-lg flex flex-col items-center text-center sticky top-6">
             <img
-                src={profileCardData.profilePicUrl}
+                src={fotohomem}
                 alt={profileCardData.name}
                 className="w-16 h-16 rounded-full object-cover mb-3 border-2 border-white"
             />

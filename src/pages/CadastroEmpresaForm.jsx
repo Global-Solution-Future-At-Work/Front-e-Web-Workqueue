@@ -42,8 +42,9 @@ export default function CadastroEmpresaForm() {
                 Crie sua conta na WorkQueue!
             </p>
             <h2 className="text-xl font-semibold text-gray-700">
-                Cadastre-se como usuário profissional.
+                Cadastre-se como uma empresa.
             </h2>
+            <p>Divulgue vagas, encontre talentos e otimize seu recrutamento com IA</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
