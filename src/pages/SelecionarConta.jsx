@@ -1,11 +1,14 @@
 import React from 'react';
 
+import ChatFlutuante from '../components/ChatFlutuante';
+import { ChartGantt } from 'lucide-react';
+
 const AccountSelection = () => {
   return (
     
-    <div className="flex-grow flex flex-col items-center justify-center p-8 bg-white">
+    <div className="grow flex flex-col items-center justify-center p-8 bg-white">
       
-      {/* 1. Logo e Slogan da WorkQueue */}
+     
       <div className="text-center mb-10">
         <div className="flex justify-center items-center mb-4">
           <div className="text-4xl text-gray-800 mr-2">
@@ -53,6 +56,8 @@ const AccountSelection = () => {
         </button>
         
       </div>
+
+      <ChatFlutuante />
 
     </div>
   );
