@@ -1,6 +1,13 @@
 import React from "react";
 
+import { useNavigate } from "react-router-dom";
+
+import fotomaorobo from '../assets/fotomaorobo.svg';
+
 export default function SobrePage() {
+
+  const navigate = useNavigate();
+
   return (
     <main className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-50 text-gray-900 px-6 py-16">
       {/* Área de texto */}
@@ -37,7 +44,7 @@ export default function SobrePage() {
      
       <div className="md:w-1/2 w-full flex justify-center">
         <img
-          src="/sobre-image.jpg" 
+          src={fotomaorobo} 
           alt="Tecnologia e Inovação"
           className="rounded-3xl shadow-xl w-full object-cover"
         />

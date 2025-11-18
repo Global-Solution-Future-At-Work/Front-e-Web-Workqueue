@@ -8,7 +8,7 @@ export default function FaleConosco() {
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    
     subject: "",
     message: "",
   });
@@ -74,15 +74,7 @@ export default function FaleConosco() {
                 required
               />
 
-              <input
-                type="email"
-                name="email"
-                placeholder="E-mail"
-                value={form.email}
-                onChange={handleChange}
-                className="p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-blue-500"
-                required
-              />
+              
 
               <input
                 type="text"

@@ -5,7 +5,7 @@ export default function CadastroEmpresaForm() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    cnpj: '',
+    
     atuacao: '',
     tamanho: '',
     descricao: '',
@@ -64,20 +64,7 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          <div>
-            <label htmlFor="cnpj" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              CNPJ:
-            </label>
-            <input
-              type="number"
-              id="cnpj"
-              name="cnpj"
-              value={formData.cnpj}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-            />
-          </div>
+          
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-left mb-1">

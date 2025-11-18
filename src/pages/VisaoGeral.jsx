@@ -75,30 +75,7 @@ export default function VisaoGeral() {
               </p>
             </div>
 
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">
-              Relatórios e métricas
-            </h2>
-            <div className="space-y-3 text-sm text-gray-700">
-              <p>
-                <span className="font-semibold">Relatório mensal de acessos:</span>{" "}
-                [<a href="#" className="text-blue-600 hover:underline">Baixar PDF</a>]
-              </p>
-              <p>
-                <span className="font-semibold">Relatório de vagas e compatibilidade:</span>{" "}
-                [<a href="#" className="text-blue-600 hover:underline">Baixar CSV</a>]
-              </p>
-              <p className="flex items-center">
-                <span className="text-orange-600 mr-1">📈</span>
-                <span className="font-semibold">Evolução de cadastros:</span>{" "}
-                [<button onClick={handleVisualizarGrafico} className="text-blue-600 hover:underline">Visualizar gráfico</button>]
-              </p>
-              <button
-                onClick={handleReiniciarIntegracao}
-                className="text-red-600 font-semibold text-sm hover:underline mt-4"
-              >
-                Reiniciar Integração
-              </button>
-            </div>
+            
           </div>
 
           <div className="space-y-8">
@@ -170,12 +147,7 @@ export default function VisaoGeral() {
                   ))}
                 </ul>
               </div>
-              <button
-                onClick={handleReiniciarIntegracao}
-                className="text-red-600 font-semibold text-sm hover:underline mt-4"
-              >
-                Reiniciar Integração
-              </button>
+              
             </div>
           </div>
           

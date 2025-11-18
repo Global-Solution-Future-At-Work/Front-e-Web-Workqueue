@@ -2,7 +2,9 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-const logoUrl = "/workqueue-logo.png"; 
+import { useNavigate } from 'react-router-dom';
+
+import logo from '../assets/logo.png';
 
 export default function EscolhaCadastro() {
 
@@ -11,15 +13,17 @@ export default function EscolhaCadastro() {
     
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="bg-white p-8 sm:p-12 rounded-xl shadow-2xl max-w-md w-full text-center">
         
         <div className="mb-8">
             <img 
-              src={logoUrl} 
+              src={logo}
               alt="WorkQueue Logo" 
-              className="mx-auto w-24 h-auto mb-4" 
+              className="w-full h-full object-cover" 
             />
             <h1 className="text-3xl font-bold text-gray-800">
                 Cadastre-se
