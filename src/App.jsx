@@ -15,6 +15,7 @@ import RecuperarConta from "./pages/RecuperarConta";
 import CadastroConcluido from "./pages/CadastroConcluido";
 import CadastroConcluidoEmpresa from "./pages/CadastroConcluidoEmpresa";
 import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 import { Route, Routes, Link } from "react-router-dom";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             <Route path="/cadastro-concluido" element={<CadastroConcluido />}></Route>
             <Route path="/cadastro-concluido-empresa" element={<CadastroConcluidoEmpresa />}></Route>
             <Route path="/login" element={<Login />}></Route>
+            <Route path="*" element={<NotFound />}></Route>
 
             
             
