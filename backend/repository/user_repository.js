@@ -1,7 +1,7 @@
 import fs from "node:fs/promises"
 import { randomUUID } from "node:crypto"
 
-const filepath = "../backend/data/user.json"
+const filepath = "../data/user.json"
 
 class UserRepository {
 
@@ -36,6 +36,16 @@ class UserRepository {
         })
         await fs.writeFile(filepath, JSON.stringify(data))
         return 1
+    }
+
+    static async findById(id) {
+        const data = await this.read();
+        return data.find(user => user.id === id) || null;
+    }
+
+    static async findByEmail(email) {
+        const data = await this.read();
+        return data.find(user => user.email === email) || null;
     }
 
     static async delete(id) {
@@ -93,5 +103,6 @@ class UserRepository {
         }
         return -1
     }
-
 }
+
+export default UserRepository
