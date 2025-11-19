@@ -90,7 +90,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/perfil', authMiddleware, (req, res) => {
+router.get('/debugjwt', authMiddleware, (req, res) => {
     res.json({ user: req.user });
 });
 

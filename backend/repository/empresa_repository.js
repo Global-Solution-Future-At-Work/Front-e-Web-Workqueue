@@ -2,7 +2,7 @@ import fs from "node:fs/promises"
 import { randomUUID } from "node:crypto"
 
 // Alterei o caminho para empresa.json
-const filepath = "../data/empresa.json"
+const filepath = "../backend/data/empresa.json"
 
 class EmpresaRepository {
 

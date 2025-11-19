@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import verify_db from "./functions/database_verify.js"
+import login_register_routes from "./controllers/login_register.js"
 
 const app = express()
 const port = 3000
@@ -9,6 +10,8 @@ verify_db()
 
 app.use(cors())
 app.use(express.json())
+
+app.use(login_register_routes)
 
 app.get('/healthcheck', (req, res) => {
   res.send("Ok!")

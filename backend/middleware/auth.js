@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const SECRET_KEY = 'alskjzxcnmb';
 
 export function generateToken(payload) {
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' });
+    return jwt.sign(payload, SECRET_KEY);
 }
 
 export function authMiddleware(req, res, next) {

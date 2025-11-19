@@ -53,5 +53,24 @@
             "IA ética",
             "Educação"
         ]
+    },
+    {
+        "id": "70198b1f-ca7b-426c-905c-93b365ba840f",
+        "nome": "Daniel",
+        "email": "example@a.com",
+        "senha": "$2b$10$aA/xywaGdznZo0.aNpS1y.xS9bWUNmOdThcrZy3n8z9teCv7DF.xC",
+        "foto": null,
+        "cargo": "Conselheiro",
+        "resumo": null,
+        "localizacao": "Barueri - SP",
+        "area": null,
+        "habilidadesTecnicas": [],
+        "softSkills": [],
+        "experiencias": "Dev",
+        "formacao": [],
+        "projetos": [],
+        "certificacoes": [],
+        "idiomas": [],
+        "areaInteresses": []
     }
 ]

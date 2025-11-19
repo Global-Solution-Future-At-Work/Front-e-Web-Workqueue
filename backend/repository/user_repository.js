@@ -1,7 +1,7 @@
 import fs from "node:fs/promises"
 import { randomUUID } from "node:crypto"
 
-const filepath = "../data/user.json"
+const filepath = "../backend/data/user.json"
 
 class UserRepository {
 
