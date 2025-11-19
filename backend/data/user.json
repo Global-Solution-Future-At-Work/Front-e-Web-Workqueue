@@ -1,0 +1,57 @@
+[
+    {
+        "id": "uuid",
+        "nome": "Peralta",
+        "foto": "./images/foto1.jpg",
+        "cargo": "Engenheiro de Software",
+        "resumo": "Especialista em desenvolvimento Backend Node.js",
+        "localizacao": "São Paulo/SP",
+        "area": "Desenvolvimento",
+        "habilidadesTecnicas": [
+            "Python",
+            "SQL",
+            "React",
+            "Node.js"
+        ],
+        "softSkills": [
+            "Comunicação",
+            "Resiliência"
+        ],
+        "experiencias": [
+            {
+                "empresa": "Tech Solutions",
+                "cargo": "Analista Junior",
+                "inicio": "2022-01",
+                "fim": "2024-06",
+                "descricao": "Desenvolvimento de APIs"
+            }
+        ],
+        "formacao": [
+            {
+                "curso": "Ciência da Computação",
+                "instituicao": "FIAP",
+                "ano": 2021
+            }
+        ],
+        "projetos": [
+            {
+                "titulo": "Plataforma X",
+                "link": "https://github.com/fulano/x",
+                "descricao": "Sistema de gestão"
+            }
+        ],
+        "certificacoes": [
+            "AWS Certified Data Analytics"
+        ],
+        "idiomas": [
+            {
+                "idioma": "Inglês",
+                "nivel": "Avançado"
+            }
+        ],
+        "areaInteresses": [
+            "IA ética",
+            "Educação"
+        ]
+    }
+]
