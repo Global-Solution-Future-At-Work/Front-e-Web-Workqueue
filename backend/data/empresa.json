@@ -1,0 +1,13 @@
+[
+    {
+        "id": "ced54ffc-a881-4b79-b1e0-bde9e1d41d68",
+        "nome_empresa": "Daniel",
+        "email_corporativo": "example@ab.com",
+        "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+        "area_atuacao": "Desenvolvimento",
+        "tamanho": "Grande",
+        "descricao": "Empresa Softhouse",
+        "localizacao": "Barueri - SP",
+        "site": "https://www.google.com"
+    }
+]
