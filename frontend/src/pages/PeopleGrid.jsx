@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fotohomem from "../assets/fotohomem.svg"; // Fallback image
-
+import ChatFlutuante from '../components/ChatFlutuante';
 // --- Componente Modal de Detalhes (Permanece Igual) ---
 const UserModal = ({ user, onClose }) => {
   if (!user) return null;
@@ -335,6 +335,7 @@ export default function PeopleGrid() {
           onClose={() => setSelectedUser(null)} 
         />
       )}
+      <ChatFlutuante />
     </div>
   );
 }

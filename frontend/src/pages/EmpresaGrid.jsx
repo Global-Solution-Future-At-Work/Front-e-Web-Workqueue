@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 // Você pode importar um logo padrão de empresa aqui ou usar o SVG inline abaixo
 import defaultLogo from "../assets/fotohomem.svg"; 
+import ChatFlutuante from '../components/ChatFlutuante';
 
 // SVG Fallback para logo de empresa se não houver imagem
 const BuildingIcon = () => (
@@ -321,6 +322,7 @@ export default function EmpresaGrid() {
           onClose={() => setSelectedEmpresa(null)} 
         />
       )}
+      <ChatFlutuante />
     </div>
   );
 }

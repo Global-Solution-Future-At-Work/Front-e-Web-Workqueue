@@ -21,7 +21,6 @@ router.get("/:id", (req, res) => {
   res.json(lobby);
 });
 
-// POST adicionar usuário
 router.post("/:id/add", (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;

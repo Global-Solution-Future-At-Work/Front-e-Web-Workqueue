@@ -1,1 +1,68 @@
-[{"id":"5f8d4b3a-9c12-4e56-a789-d0e1f2g3h4i5","nome_empresa":"TechNova Solutions","email_corporativo":"contato@technova.com.br","senha":"$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC","area_atuacao":"Consultoria de TI","tamanho":"Média","descricao":"Especialistas em transformação digital","localizacao":"Rio de Janeiro - RJ","site":"https://www.technova.com.br"},{"id":"9a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6","nome_empresa":"AgroFuture","email_corporativo":"admin@agrofuture.io","senha":"$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC","area_atuacao":"Agronegócio","tamanho":"Pequena","descricao":"Tecnologia para monitoramento de safras","localizacao":"Ribeirão Preto - SP","site":"https://www.agrofuture.io"},{"id":"1q2w3e4r-5t6y-7u8i-9o0p-a1s2d3f4g5h6","nome_empresa":"BlueSky Logistics","email_corporativo":"rh@blueskylog.com","senha":"$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC","area_atuacao":"Logística","tamanho":"Grande","descricao":"Soluções logísticas internacionais","localizacao":"Curitiba - PR","site":"https://www.blueskylog.com"},{"id":"z9x8c7v6-b5n4-m3l2-k1j0-h9g8f7d6s5a4","nome_empresa":"HealthCare Connect","email_corporativo":"suporte@healthconnect.med","senha":"$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC","area_atuacao":"Saúde","tamanho":"Média","descricao":"Plataforma de telemedicina integrada","localizacao":"Belo Horizonte - MG","site":"https://www.healthconnect.med"},{"id":"e58b9dcf-3fbd-4ef4-9996-58fe97b929de","nome_empresa":"Raw Meat","email_corporativo":"rawmeat@gmail.com","senha":"$2b$10$8MRzzWSu2U155Fv0tP6fBuHmYVZBg9m6amNsOKbNg./A9feQyHr2.","area_atuacao":"Inteligência Artificial","tamanho":"Pequena","descricao":"Raw","localizacao":"Raw","site":"raw"}]
+[
+  {
+    "id": "5f8d4b3a-9c12-4e56-a789-d0e1f2g3h4i5",
+    "nome_empresa": "TechNova Solutions",
+    "email_corporativo": "contato@technova.com.br",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Consultoria de TI",
+    "tamanho": "Média",
+    "descricao": "Especialistas em transformação digital",
+    "localizacao": "Rio de Janeiro - RJ",
+    "site": "https://www.technova.com.br"
+  },
+  {
+    "id": "9a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
+    "nome_empresa": "AgroFuture",
+    "email_corporativo": "admin@agrofuture.io",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Agronegócio",
+    "tamanho": "Pequena",
+    "descricao": "Tecnologia para monitoramento de safras",
+    "localizacao": "Ribeirão Preto - SP",
+    "site": "https://www.agrofuture.io"
+  },
+  {
+    "id": "1q2w3e4r-5t6y-7u8i-9o0p-a1s2d3f4g5h6",
+    "nome_empresa": "BlueSky Logistics",
+    "email_corporativo": "rh@blueskylog.com",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Logística",
+    "tamanho": "Grande",
+    "descricao": "Soluções logísticas internacionais",
+    "localizacao": "Curitiba - PR",
+    "site": "https://www.blueskylog.com"
+  },
+  {
+    "id": "z9x8c7v6-b5n4-m3l2-k1j0-h9g8f7d6s5a4",
+    "nome_empresa": "HealthCare Connect",
+    "email_corporativo": "suporte@healthconnect.med",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Saúde",
+    "tamanho": "Média",
+    "descricao": "Plataforma de telemedicina integrada",
+    "localizacao": "Belo Horizonte - MG",
+    "site": "https://www.healthconnect.med"
+  },
+  {
+    "id": "e58b9dcf-3fbd-4ef4-9996-58fe97b929de",
+    "nome_empresa": "Raw Meat",
+    "email_corporativo": "rawmeat@gmail.com",
+    "senha": "$2b$10$8MRzzWSu2U155Fv0tP6fBuHmYVZBg9m6amNsOKbNg./A9feQyHr2.",
+    "area_atuacao": "Inteligência Artificial",
+    "tamanho": "Pequena",
+    "descricao": "Raw",
+    "localizacao": "Raw",
+    "site": "raw"
+  },
+  {
+    "id": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "nome_empresa": "Teste123",
+    "email_corporativo": "cba@cba.com",
+    "senha": "$2b$10$74epP8zgeYV7Mrp0EOKxwORuU6/jpa57Sy0JxCVwvlohqwOvz1WfW",
+    "area_atuacao": "Tecnologia",
+    "tamanho": "Grande",
+    "descricao": "Amizade",
+    "localizacao": "Florianopolis - PR",
+    "site": ""
+  }
+]

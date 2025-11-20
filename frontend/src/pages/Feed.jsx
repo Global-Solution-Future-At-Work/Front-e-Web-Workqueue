@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // 1. Importar hooks
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from "../assets/fotohomem.svg";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+// ... (Mantive seus dados estáticos de postData, profileCardData, etc para economizar espaço) ...
 const postData = {
   profileName: 'Alexandre Silva',
   profileTitle: 'Desenvolvedor Full Stack • Next Code Labs',
@@ -22,30 +23,6 @@ const profileCardData = {
   institution: 'TechBridge Solutions',
   profilePicUrl: ''
 };
-
-const filtersData = [
-  { title: 'Área de atuação', options: ['Tecnologia', 'Design', 'Marketing'], type: 'checkbox' },
-  { title: 'Localização', options: ['São Paulo', 'Rio de Janeiro', 'Paraná'], type: 'checkbox' },
-  { title: 'Tecnologia', options: ['Python', 'React', 'IA'], type: 'checkbox' }
-];
-
-const FilterGroup = ({ title, options, type }) => (
-  <div className="mb-6">
-    <h3 className="font-semibold text-gray-700 dark:text-gray-200 mb-2">{title}</h3>
-    {options.map(option => (
-      <div key={option} className="flex items-center mb-1">
-        <input
-          id={`${title}-${option}`}
-          type={type}
-          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
-        />
-        <label htmlFor={`${title}-${option}`} className="ml-2 text-sm text-gray-600 dark:text-gray-300">
-          {option}
-        </label>
-      </div>
-    ))}
-  </div>
-);
 
 const Post = ({ data }) => (
   <div className="bg-white dark:bg-gray-800 dark:border-gray-700 p-4 rounded-xl shadow-lg border border-gray-100 mb-6">
@@ -92,6 +69,51 @@ const Post = ({ data }) => (
 
 export default function Feed() {
   const navigate = useNavigate();
+  
+  // 2. State para guardar o link correto. Padrão inicia como user, mas pode ser null
+  const [perfilLink, setPerfilLink] = useState('/perfiluser'); 
+
+  // 3. useEffect para buscar os dados ao carregar a página
+  useEffect(() => {
+    const fetchUserRole = async () => {
+        // Recupera o token (Assumindo que você salvou como 'token' no login)
+        const token = localStorage.getItem('token'); 
+
+        if (!token) {
+            console.log("Token não encontrado, redirecionando para login...");
+            // navigate('/login'); // Opcional: Redirecionar se não tiver token
+            return;
+        }
+
+        try {
+            // IMPORTANTE: Ajuste a URL 'http://localhost:3000/datajwt' conforme a rota do seu backend
+            const response = await fetch('http://localhost:3000/datajwt', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Envia o token no padrão Bearer
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Backend retorna: { jwt_data: { id: '...', role: 'user' | 'empresa' } }
+                
+                if (data.jwt_data && data.jwt_data.role === 'empresa') {
+                    setPerfilLink('/perfilempresa');
+                } else {
+                    setPerfilLink('/perfiluser');
+                }
+            } else {
+                console.error('Erro ao validar token');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
+    };
+
+    fetchUserRole();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors pt-6 pb-12 flex flex-col items-center">
@@ -128,11 +150,9 @@ export default function Feed() {
       </div>
 
       {/* Grid Principal */}
-      {/* Adicionado 'w-full' e 'justify-center' para centralizar as colunas internas caso não somem 12 */}
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 px-4 sm:px-0 justify-center">
 
-        {/* Postagens (Aumentei para col-span-8 ou mantive 6 com justify-center no pai) */}
-        {/* Se quiser preencher tudo, mude para lg:col-span-8 e a sidebar para lg:col-span-4 */}
+        {/* Postagens */}
         <div className="lg:col-span-7"> 
           <Post data={postData} />
           <Post data={postData} />
@@ -155,7 +175,9 @@ export default function Feed() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg sticky top-64">
-            <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">Meu perfil 💼</h3>
+            <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">
+                <Link to={perfilLink}>Meu perfil 💼</Link>
+            </h3>
             <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">Meus lobbies 🏙️</h3>
             <h3 className="text-md font-bold text-gray-800 dark:text-gray-100">Recomendações ✨</h3>
           </div>

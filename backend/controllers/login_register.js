@@ -90,8 +90,8 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/debugjwt', authMiddleware, (req, res) => {
-    res.json({ user: req.user });
+router.get('/datajwt', authMiddleware, (req, res) => {
+    res.json({ jwt_data: req.user });
 });
 
 export default router;

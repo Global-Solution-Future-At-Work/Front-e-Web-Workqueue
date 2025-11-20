@@ -114,8 +114,6 @@ export default function FaleConosco() {
           </div>
         </div>
       </main>
-
-      <ChatFlutuante />
     </div>
   );
 }
