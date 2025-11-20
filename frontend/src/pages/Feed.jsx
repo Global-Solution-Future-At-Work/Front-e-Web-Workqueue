@@ -94,18 +94,20 @@ export default function Feed() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors pt-6 pb-12">
+    <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors pt-6 pb-12 flex flex-col items-center">
 
-      <div className="max-w-4xl mx-auto mb-4 px-4 sm:px-0 flex gap-4">
-        <Link to="/pessoas" className="flex-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200 border border-transparent hover:border-gray-200 dark:hover:border-gray-600">
+      {/* Container dos Botões de Topo */}
+      <div className="w-full max-w-4xl mb-4 px-4 sm:px-0 flex gap-4">
+        <Link to="/pessoas" className="flex-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200 border border-transparent hover:border-gray-200 dark:hover:border-gray-600 text-center">
           Ver pessoas da WorkQueue 🙋
         </Link>
-        <Link to="/empresas" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200">
+        <Link to="/empresas" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200 text-center">
           Ver empresas parceiras 💼
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto mb-8 px-4 sm:px-0">
+      {/* Container do Input de Publicação */}
+      <div className="w-full max-w-4xl mb-8 px-4 sm:px-0">
         <div className="bg-white dark:bg-gray-800 dark:text-gray-200 p-3 rounded-full shadow-md flex items-center">
           <svg className="w-5 h-5 text-gray-500 dark:text-gray-300 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -125,24 +127,19 @@ export default function Feed() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 px-4 sm:px-0">
+      {/* Grid Principal */}
+      {/* Adicionado 'w-full' e 'justify-center' para centralizar as colunas internas caso não somem 12 */}
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 px-4 sm:px-0 justify-center">
 
-        {/* Filtros */}
-        <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg sticky top-6">
-            <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">Filtros</h2>
-            {filtersData.map((group, index) => <FilterGroup key={index} {...group} />)}
-          </div>
-        </div>
-
-        {/* Postagens */}
-        <div className="lg:col-span-6">
+        {/* Postagens (Aumentei para col-span-8 ou mantive 6 com justify-center no pai) */}
+        {/* Se quiser preencher tudo, mude para lg:col-span-8 e a sidebar para lg:col-span-4 */}
+        <div className="lg:col-span-7"> 
           <Post data={postData} />
           <Post data={postData} />
         </div>
 
         {/* Sidebar */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-4 space-y-6">
           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg flex flex-col items-center text-center sticky top-6">
             <img
               src={fotohomem}

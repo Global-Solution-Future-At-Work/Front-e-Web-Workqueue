@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatFlutuante from "../components/ChatFlutuante.jsx";
-
+import logo from "../assets/logo.png";
 import mulherfoto from "../assets/mulherfoto.svg";
 
 export default function FaleConosco() {
@@ -18,20 +18,11 @@ export default function FaleConosco() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    // --- LÓGICA DO MAILTO ADICIONADA AQUI ---
     
-    // 1. Defina o e-mail que receberá a mensagem
-    const destinatario = "contato@workqueue.com"; // ALTERE PARA SEU E-MAIL
-    
-    // 2. Prepara o assunto e o corpo da mensagem (codificando para URL)
     const assunto = encodeURIComponent(form.subject || "Novo contato via Site");
     const corpo = encodeURIComponent(`Nome: ${form.name}\n\nMensagem:\n${form.message}`);
     
-    // 3. Abre o cliente de e-mail
     window.location.href = `mailto:workqueueai@gmail.com?subject=${assunto}&body=${corpo}`;
-
-    // ----------------------------------------
 
     setSent(true);
     setTimeout(() => setSent(false), 3000);
@@ -58,7 +49,7 @@ export default function FaleConosco() {
 
             <div className="flex flex-col items-center mb-6">
               <img
-                src="/logo.png"
+                src={logo}
                 alt="WorkQueue Logo"
                 className="w-20 h-20 mb-2 dark:invert dark:brightness-50"
               />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useDarkMode from '../hooks/useDarkMode';
+import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function Navbar() {
 
         {/* LOGO */}
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Logo" className="w-8 h-8 dark:invert dark:brightness-50" />
+          <img src={logo} alt="Logo" className="w-8 h-8 invert brightness-50" />
           <span className="text-xl font-semibold">WorkQueue</span>
         </div>
 

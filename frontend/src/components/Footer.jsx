@@ -1,9 +1,11 @@
 import React from 'react';
 import { Instagram, X } from 'lucide-react';
-
+import logo from "../assets/logo.png";
+import { Link } from 'react-router-dom';
+//
 export default function Footer() {
   return (
-    <footer 
+    <footer
       className="
         bg-gray-300 
         dark:bg-[#0A0F1E]
@@ -19,9 +21,9 @@ export default function Footer() {
 
           {/* COLUNA ESQUERDA */}
           <div className="flex flex-col space-y-4 items-start w-full md:w-auto">
-            <img 
-              src="/seu-icone.svg" 
-              alt="Logo WorkQueue" 
+            <img
+              src={logo}
+              alt="Logo WorkQueue"
               className="w-12 h-12"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
@@ -29,54 +31,25 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* COLUNAS DE LINKS */}
-          <div className="flex flex-wrap gap-12 text-sm justify-between md:justify-start w-full md:w-auto">
-
-            {/* COLUNA 1 */}
-            <div>
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                Links Dinâmicos
-              </h3>
-              <ul className="space-y-1">
-                <li>&nbsp;</li>
+          <div className="flex flew-wrap gap-12 text-sm justify-between md:justify-start w-full md:w-auto">
+            <div className>
+              <h1 className="font-semibold text-gray-800 dark:text-gray-200 mb-2 text-center text-2xl mt-6">
+                Páginas
+              </h1>
+              <ul className="space-y-1 flex gap-5">
+                <li className="hover:underline cursor-pointer"><Link to="/">Home</Link></li>
+                <li className="hover:underline cursor-pointer"><Link to="/sobre">Sobre</Link></li>
+                <li className="hover:underline cursor-pointer"><Link to="/faleconosco">Contato</Link></li>
               </ul>
             </div>
-
-            {/* COLUNA 2 */}
-            <div>
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                Geral
-              </h3>
-              <ul className="space-y-1">
-                <li className="hover:underline cursor-pointer">Home</li>
-                <li className="hover:underline cursor-pointer">Sobre</li>
-                <li className="hover:underline cursor-pointer">Contato</li>
-              </ul>
-            </div>
-
-            {/* COLUNA 3 */}
-            <div>
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
-                Diretórios
-              </h3>
-              <ul className="space-y-1">
-                <li className="hover:underline cursor-pointer">Usuários</li>
-                <li className="hover:underline cursor-pointer">Lobbies</li>
-                <li className="hover:underline cursor-pointer">Empresas</li>
-              </ul>
-            </div>
-
           </div>
 
-          {/* REDES SOCIAIS */}
           <div className="flex flex-col space-y-4 items-start md:items-end w-full md:w-auto mt-8 md:mt-0">
-
-            {/* INSTAGRAM */}
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500 dark:text-gray-300">@workqueue</span>
-              <a 
-                href="#" 
-                target="_blank" 
+              <a
+                href="#"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="
                   p-2 rounded-full 
@@ -90,12 +63,11 @@ export default function Footer() {
               </a>
             </div>
 
-            {/* X (Twitter) */}
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-500 dark:text-gray-300">@work_queue</span>
-              <a 
-                href="#" 
-                target="_blank" 
+              <a
+                href="#"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="
                   p-2 rounded-full 
