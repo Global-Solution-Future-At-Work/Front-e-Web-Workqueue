@@ -27,9 +27,9 @@ export default function HomePage() {
         </p>
 
         <div className="mt-6 flex flex-col items-center md:items-start gap-2">
-          <button className="border border-gray-400 text-gray-800 rounded-full px-6 py-2 text-sm hover:bg-gray-100 transition">
+          <Link to="/login" className="border border-gray-400 text-gray-800 rounded-full px-6 py-2 text-sm hover:bg-gray-100 transition">
             Entrar com e-mail
-          </button>
+          </Link>
           <p className="text-xs text-gray-500">
             Ainda não faz parte da WorkQueue?{" "}
             <span className="text-blue-600 hover:underline cursor-pointer">

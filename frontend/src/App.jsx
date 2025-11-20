@@ -23,26 +23,22 @@ function App() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <Routes>
-        
-            <Route path= "/" element={<HomePage />} />
-            <Route path= "/sobre" element={<Sobre />} />
-            <Route path= "/faleconosco" element={<FaleConosco />} />
-            <Route path= "/perfiluser" element={<PerfilUser />} />
-            <Route path= "/perfilempresa" element={<PerfilEmpresa />}></Route>
-            <Route path="/lobby" element={<Lobby />}></Route>
-            <Route path="/admin" element={<VisaoGeral />}></Route>
-            <Route path="/feed" element={<Feed />}></Route>
-            <Route path="/escolher-tipo" element={<EscolherTipo />}></Route>
-            <Route path="/cadastro-user" element={<CadastroUserForm />}></Route>
-            <Route path="/cadastro-empresa" element={<CadastroEmpresaForm />}></Route>
-            <Route path="/recuperar-conta" element={<RecuperarConta />}></Route>
-            <Route path="/cadastro-concluido" element={<CadastroConcluido />}></Route>
-            <Route path="/cadastro-concluido-empresa" element={<CadastroConcluidoEmpresa />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="*" element={<NotFound />}></Route>
-
-            
-            
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/faleconosco" element={<FaleConosco />} />
+        <Route path="/perfiluser" element={<PerfilUser />} />
+        <Route path="/perfilempresa" element={<PerfilEmpresa />}></Route>
+        <Route path="/lobby" element={<Lobby />}></Route>
+        <Route path="/admin" element={<VisaoGeral />}></Route>
+        <Route path="/feed" element={<Feed />}></Route>
+        <Route path="/escolher-tipo" element={<EscolherTipo />}></Route>
+        <Route path="/cadastro-user" element={<CadastroUserForm />}></Route>
+        <Route path="/cadastro-empresa" element={<CadastroEmpresaForm />}></Route>
+        <Route path="/recuperar-conta" element={<RecuperarConta />}></Route>
+        <Route path="/cadastro-concluido" element={<CadastroConcluido />}></Route>
+        <Route path="/cadastro-concluido-empresa" element={<CadastroConcluidoEmpresa />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
       <Footer />
     </div>
