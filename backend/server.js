@@ -10,6 +10,7 @@ import admin from "./controllers/admin.js"
 import user from "./controllers/user.js"
 import empresa from "./controllers/empresa.js"
 import lobbies from "./controllers/lobbies.js"
+import vagas from "./controllers/vagas.js"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
@@ -33,6 +34,7 @@ app.use(admin)
 app.use(user)
 app.use(empresa)
 app.use(lobbies)
+app.use(vagas)
 
 app.get('/healthcheck', (req, res) => {
   res.send("Ok!")

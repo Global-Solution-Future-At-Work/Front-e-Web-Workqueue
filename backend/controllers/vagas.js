@@ -1,44 +1,52 @@
-// Criar Endpoints de vagas para empresas (adicionar id) no json de vagas, fazer CRUD de vagas, tirar atualizar critérios de IA
-// Adicionar pessoas manualmente -> Pega o uuId da pessoa (user)
-// Criar um endpoint para adicionar pessoas manualmente e um endpoint para implementar o Gemini depois para seleção de vagas automáticas
+import express from "express";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from 'url';
 
-// Listar Vagas
-app.get("/vagas", (req, res) => {
-  res.json(db.vagas);
+const router = express.Router();
+
+// Configuração de caminhos
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Note que precisamos subir um nível (..) para sair de 'controllers' e entrar em 'data'
+const vagasPath = path.join(__dirname, '..', 'data', 'vagas.json');
+
+// 1. ROTA PARA LISTAR TODAS AS VAGAS
+router.get('/api/vagas', (req, res) => {
+    if (!fs.existsSync(vagasPath)) {
+        return res.json([]); // Se não existir arquivo, retorna lista vazia
+    }
+
+    fs.readFile(vagasPath, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: "Erro ao ler vagas." });
+        try {
+            const vagas = JSON.parse(data);
+            res.json(vagas);
+        } catch (e) {
+            res.status(500).json({ error: "Erro no JSON de vagas." });
+        }
+    });
 });
 
-// Criar Vagas
-app.post("/vagas", (req, res) => {
-  const novaVaga = {
-    id: "vaga_" + Date.now(),
-    empresaId: req.body.empresaId,
-    titulo: req.body.titulo,
-    descricao: req.body.descricao,
-    local: req.body.local,
-    tecnologias: req.body.tecnologias || [],
-    status: "aberta",
-    candidatos: []
-  };
+// 2. ROTA PARA DELETAR UMA VAGA
+router.delete('/api/vagas/:id', (req, res) => {
+    const { id } = req.params;
 
-  db.vagas.push(novaVaga);
-  res.status(201).json(novaVaga);
+    fs.readFile(vagasPath, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: "Erro ao ler vagas." });
+
+        let vagas = JSON.parse(data);
+        const novaLista = vagas.filter(v => v.id !== id);
+
+        if (vagas.length === novaLista.length) {
+            return res.status(404).json({ error: "Vaga não encontrada." });
+        }
+
+        fs.writeFile(vagasPath, JSON.stringify(novaLista, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: "Erro ao salvar." });
+            res.json({ message: "Vaga deletada com sucesso!", vagas: novaLista });
+        });
+    });
 });
 
-// Atualizar Vagas
-app.put("/vagas/:id", (req, res) => {
-  const id = req.params.id;
-  const index = db.vagas.findIndex(v => v.id === id);
-
-  if (index === -1) return res.status(404).send("Vaga não encontrada");
-
-  db.vagas[index] = { ...db.vagas[index], ...req.body };
-
-  res.json(db.vagas[index]);
-});
-
-// Deletar Vagas
-app.delete("/vagas/:id", (req, res) => {
-  const id = req.params.id;
-  db.vagas = db.vagas.filter(v => v.id !== id);
-  res.sendStatus(204);
-});
+export default router;

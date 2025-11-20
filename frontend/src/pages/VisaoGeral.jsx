@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Adicionei React aqui por garantia
 import ChatFlutuante from '../components/ChatFlutuante';
 import PainelLoginAdmin from '../components/PainelLoginAdmin';
 import UserListModal from '../components/UserListAdminModal';
-import EmpresaListAdminModal from '../components/EmpresaListAdminModal'; // <--- Importação nova
+import EmpresaListAdminModal from '../components/EmpresaListAdminModal'; 
+import VagasListAdminModal from '../components/VagasListAdminModal'; 
 
 export default function VisaoGeral() {
 
@@ -17,9 +18,12 @@ export default function VisaoGeral() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listaUsuarios, setListaUsuarios] = useState([]);
 
-  // Estados para Empresas (Novo)
+  // Estados para Empresas
   const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
   const [listaEmpresas, setListaEmpresas] = useState([]);
+
+  // --- NOVO: Estado para Vagas ---
+  const [showVagasModal, setShowVagasModal] = useState(false);
 
   useEffect(() => {
     fetch("http://127.0.0.1:3000/admin/gemini_status")
@@ -34,30 +38,26 @@ export default function VisaoGeral() {
   }, []);
 
   const liberarAcesso = () => {
-    // Busca contagem inicial de usuários para o dashboard
+    // Busca contagem inicial de usuários
     fetch("http://127.0.0.1:3000/useradmin", {
-      headers: {
-        "admin_code": localStorage.getItem("codigo")
-      }
+      headers: { "admin_code": localStorage.getItem("codigo") }
     })
-      .then((res) => {
-        if (res.ok) return res.json();
-      })
-      .then((data) => {
-        if(data) setUsuariosAtivos(data.length);
-      })
+      .then((res) => { if (res.ok) return res.json(); })
+      .then((data) => { if(data) setUsuariosAtivos(data.length); })
       .catch((err) => console.error(err));
       
-      // Busca contagem inicial de empresas para o dashboard
-      fetch("http://127.0.0.1:3000/empresaadmin", { // Ajuste a rota se criou uma especifica /empresaadmin
+      // Busca contagem inicial de empresas
+      fetch("http://127.0.0.1:3000/empresaadmin", { 
         headers: { "admin_code": localStorage.getItem("codigo") }
       })
-      .then((res) => {
-        if (res.ok) return res.json();
-      })
-      .then((data) => {
-        if(data) setEmpresasAtivas(data.length);
-      })
+      .then((res) => { if (res.ok) return res.json(); })
+      .then((data) => { if(data) setEmpresasAtivas(data.length); })
+      .catch((err) => console.error(err));
+
+      // Busca contagem inicial de Vagas (Se quiser adicionar depois)
+      fetch("http://127.0.0.1:3000/api/vagas") // Use a rota que criamos
+      .then((res) => { if (res.ok) return res.json(); })
+      .then((data) => { if(data) setVagasAtivas(data.length); })
       .catch((err) => console.error(err));
 
     setEstaLogado(true);
@@ -66,19 +66,11 @@ export default function VisaoGeral() {
   // --- LÓGICA DE USUÁRIOS ---
   const handleGerenciarUsuarios = () => {
     fetch("http://127.0.0.1:3000/useradmin", {
-      headers: {
-        "admin_code": localStorage.getItem("codigo")
-      }
+      headers: { "admin_code": localStorage.getItem("codigo") }
     })
-      .then((res) => {
-        if (res.ok) return res.json();
-      })
-      .then((data) => {
-        setListaUsuarios(data);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar usuários:", err);
-      });
+      .then((res) => { if (res.ok) return res.json(); })
+      .then((data) => { setListaUsuarios(data); })
+      .catch((err) => { console.error("Erro:", err); });
     setIsModalOpen(true);
   };
 
@@ -87,23 +79,15 @@ export default function VisaoGeral() {
       setListaUsuarios((prevUsers) => prevUsers.filter(user => user.id !== idToDelete));
       fetch("http://127.0.0.1:3000/useradmin/" + idToDelete, {
         method: "DELETE",
-        headers: {
-          "admin_code": localStorage.getItem("codigo")
-        }
+        headers: { "admin_code": localStorage.getItem("codigo") }
       });
     }
   };
 
-  // --- LÓGICA DE EMPRESAS (NOVO) ---
+  // --- LÓGICA DE EMPRESAS ---
   const handleGerenciarEmpresas = () => {
-    // Usando a rota /empresa que criamos anteriormente.
-    // Se você criar uma rota especifica de admin, mude para /empresaadmin
     fetch("http://127.0.0.1:3000/empresaadmin", {
-      headers: {
-        "admin_code": localStorage.getItem("codigo"),
-        // Se sua API exigir token Bearer em vez de admin_code para essa rota, adicione aqui
-        // "Authorization": `Bearer ${token}`
-      }
+      headers: { "admin_code": localStorage.getItem("codigo") }
     })
       .then((res) => {
         if (res.ok) return res.json();
@@ -111,25 +95,22 @@ export default function VisaoGeral() {
       })
       .then((data) => {
         setListaEmpresas(data);
-        setIsEmpresaModalOpen(true); // Abre o modal após carregar
+        setIsEmpresaModalOpen(true);
       })
       .catch((err) => {
-        console.error("Erro ao buscar empresas:", err);
-        alert("Erro ao carregar empresas. Verifique as permissões ou o console.");
+        console.error("Erro:", err);
+        alert("Erro ao carregar empresas.");
       });
   };
 
   const handleDeleteEmpresa = (idToDelete) => {
     if (window.confirm("Tem certeza que deseja remover esta empresa?")) {
-      // Atualiza a UI instantaneamente (Otimista)
       setListaEmpresas((prevEmpresas) => prevEmpresas.filter(empresa => empresa.id !== idToDelete));
-      setEmpresasAtivas((prev) => prev - 1); // Atualiza o contador do dashboard
+      setEmpresasAtivas((prev) => prev - 1);
 
       fetch("http://127.0.0.1:3000/empresaadmin/" + idToDelete, {
         method: "DELETE",
-        headers: {
-          "admin_code": localStorage.getItem("codigo")
-        }
+        headers: { "admin_code": localStorage.getItem("codigo") }
       }).catch(err => {
           console.error("Erro ao deletar:", err);
           alert("Erro ao deletar no servidor.");
@@ -137,8 +118,10 @@ export default function VisaoGeral() {
     }
   };
 
-  // Placeholder para Vagas
-  const handleGerenciarVagas = () => console.log("Gerenciar Vagas (Ainda não implementado)");
+  // --- LÓGICA DE VAGAS (CORRIGIDA) ---
+  const handleGerenciarVagas = () => {
+    setShowVagasModal(true); // Agora abre o modal corretamente
+  };
 
   // ---------------------------------------------------------
   // RENDERIZAÇÃO CONDICIONAL (Login)
@@ -191,8 +174,6 @@ export default function VisaoGeral() {
               <p className="text-sm text-gray-600 mb-4">
                 Gerencie a lista de profissionais cadastrados na plataforma.
               </p>
-
-              {/* Botão que abre o Modal de Usuários */}
               <button
                 onClick={handleGerenciarUsuarios}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
@@ -226,7 +207,6 @@ export default function VisaoGeral() {
               <p className="text-sm text-gray-600 mb-4">
                 Administre os cadastros corporativos e permissões.
               </p>
-              {/* Botão Atualizado para abrir Modal de Empresas */}
               <button
                 onClick={handleGerenciarEmpresas}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
@@ -258,13 +238,18 @@ export default function VisaoGeral() {
         onDelete={handleDeleteUser}
       />
 
-      {/* --- MODAL DE EMPRESAS (NOVO) --- */}
+      {/* --- MODAL DE EMPRESAS --- */}
       <EmpresaListAdminModal
         isOpen={isEmpresaModalOpen}
         onClose={() => setIsEmpresaModalOpen(false)}
         empresas={listaEmpresas}
         onDelete={handleDeleteEmpresa}
       />
+
+      {/* --- MODAL DE VAGAS (NOVO) --- */}
+      {showVagasModal && (
+        <VagasListAdminModal onClose={() => setShowVagasModal(false)} />
+      )}
 
       <ChatFlutuante />
     </div>
