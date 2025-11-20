@@ -1,0 +1,27 @@
+[
+  {
+    "id": "lobby_1",
+    "candidates": [
+      {
+        "id": "user_4",
+        "name": "Dev Python Senior",
+        "habilidades": [
+          "Python",
+          "Django",
+          "Flask"
+        ],
+        "compatibilidade": 95
+      },
+      {
+        "id": "user_5",
+        "name": "Ana Designer",
+        "habilidades": [
+          "Figma",
+          "UI/UX",
+          "Adobe XD"
+        ],
+        "compatibilidade": 80
+      }
+    ]
+  }
+]

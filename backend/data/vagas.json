@@ -1,0 +1,33 @@
+{
+  "vagas": [
+    {
+      "id": "vaga_001",
+      "empresaId": "empresa_123",
+      "titulo": "Desenvolvedor Front-end",
+      "descricao": "React, Node, UX",
+      "local": "Remoto",
+      "tecnologias": ["React", "Tailwind"],
+      "status": "aberta",
+      "candidatos": ["user_002", "user_010"]
+    }
+  ],
+
+  "usuarios": [
+    {
+      "id": "user_002",
+      "nome": "Carlos Lima",
+      "skills": ["React", "Python"],
+      "cidade": "São Paulo"
+    }
+  ],
+
+  "lobbies": [
+    {
+      "id": "lobby_01",
+      "vagaId": "vaga_001",
+      "empresaId": "empresa_123",
+      "candidatosSugeridos": [],
+      "candidatosManuais": []
+    }
+  ]
+}
