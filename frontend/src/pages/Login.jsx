@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
     email: '',
     senha: '',
   });
+
+  useEffect(() => {
+    const hasToken = localStorage.getItem('token');
+    if (hasToken) {
+      window.location.href = '/feed';
+    }
+  }, [])
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
