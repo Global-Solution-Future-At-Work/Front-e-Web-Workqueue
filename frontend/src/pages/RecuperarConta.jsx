@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function CadastroEmpresaForm() {
+export default function RecuperarConta() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',

@@ -73,21 +73,22 @@ export default function CadastroEmpresaForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      
-      <div className="bg-gray-200 p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full">
-        
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
+
+      <div className="bg-gray-200 dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full transition-colors">
+
+        {/* Cabeçalho */}
         <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-300 ">
                 Cadastre-se
             </h1>
-            <p className="text-gray-600 mt-1 mb-4">
+            <p className="text-gray-600 mt-1 mb-4 dark:text-gray-100">
                 Crie sua conta na WorkQueue!
             </p>
-            <h2 className="text-xl font-semibold text-gray-700">
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
                 Cadastre-se como uma empresa.
             </h2>
-            <p className="text-sm text-gray-500">Divulgue vagas, encontre talentos e otimize seu recrutamento com IA</p>
+            <p className="text-sm text-gray-500 dark:text-gray-300">Divulgue vagas, encontre talentos e otimize seu recrutamento com IA</p>
         </div>
 
         {message && (
@@ -97,71 +98,79 @@ export default function CadastroEmpresaForm() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
+          {/* Nome */}
           <div>
-            <label htmlFor="nome" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome da Empresa:
             </label>
             <input
               type="text"
-              id="nome"
               name="nome"
               value={formData.nome}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               E-mail Corporativo:
             </label>
             <input
               type="email"
-              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Senha */}
           <div>
-            <label htmlFor="senha" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Senha:
             </label>
             <input
               type="password"
-              id="senha"
               name="senha"
               value={formData.senha}
               onChange={handleChange}
-              required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              required
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Confirmar senha */}
           <div>
-            <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirmar senha:
             </label>
             <input
               type="password"
-              id="confirmarSenha"
               name="confirmarSenha"
               value={formData.confirmarSenha}
               onChange={handleChange}
-              required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              required
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Área de atuação */}
           <div>
-            <label htmlFor="atuacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Área de atuação da Empresa:
             </label>
             <input
@@ -171,42 +180,48 @@ export default function CadastroEmpresaForm() {
               value={formData.atuacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Tamanho */}
           <div>
-            <label htmlFor="tamanho" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="tamanho" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Tamanho da Empresa (pequena, média, grande):
             </label>
             <input
               type="text"
-              id="tamanho"
               name="tamanho"
               value={formData.tamanho}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Descrição */}
           <div>
-            <label htmlFor="descricao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Descrição breve da Empresa:
             </label>
             <input
               type="text"
-              id="descricao"
               name="descricao"
               value={formData.descricao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Localização (Sede):
             </label>
             <input
@@ -216,12 +231,14 @@ export default function CadastroEmpresaForm() {
               value={formData.localizacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="site" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="site" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Site da Empresa:
             </label>
             <input
@@ -231,7 +248,9 @@ export default function CadastroEmpresaForm() {
               value={formData.site}
               onChange={handleChange}
               placeholder="https://..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
           
@@ -246,7 +265,7 @@ export default function CadastroEmpresaForm() {
           </button>
 
         </form>
-        
+
       </div>
     </div>
   );

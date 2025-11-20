@@ -1,5 +1,25 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@tailwind utilities;
 
+/* Background global */
+body {
+  @apply bg-white text-black transition-colors duration-300;
+}
+
+body.dark {
+  @apply bg-[#0A0A0A] text-white transition-colors duration-300;
+}
+
+
+/* Background global */
+body {
+  @apply bg-white text-black transition-colors duration-300;
+}
+
+body.dark {
+  @apply bg-[#0A0A0A] text-white transition-colors duration-300;
+}
 
 body {
   margin: 0;

@@ -24,6 +24,8 @@ import PerfilEmpresa from "./pages/PerfilEmpresa";
 import VisaoGeral from "./pages/VisaoGeral";
 import Feed from "./pages/Feed";
 import Lobby from "./pages/Lobby";
+import PeopleGrid from "./pages/PeopleGrid";
+import EmpresaGrid from "./pages/EmpresaGrid";
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
             <Route path="/perfilempresa" element={<PerfilEmpresa />} />
             <Route path="/lobby" element={<Lobby />} />
             <Route path="/feed" element={<Feed />} />
+            <Route path="/pessoas" element={<PeopleGrid/>} />
+            <Route path="/empresas" element={<EmpresaGrid/>} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
