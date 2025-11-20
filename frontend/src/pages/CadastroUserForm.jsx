@@ -1,31 +1,73 @@
 import React, { useState } from 'react';
 
-
 export default function CadastroUserForm() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
     senha: '',
     confirmarSenha: '',
-    atuacao: '',
-    experiencia: '', 
-    localizao: '',
+    atuacao: '',      // Será enviado como 'cargo'
+    experiencia: '',  // Será enviado como 'experiencias'
+    localizacao: '',
   });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(null);
+
     if (formData.senha !== formData.confirmarSenha) {
       alert('As senhas não coincidem!');
       return;
     }
-    
-    console.log('Dados submetidos (Usuário Profissional):', formData);
-    alert('Cadastro inicial enviado! Prosseguindo para o próximo passo do formulário.');
+
+    setLoading(true);
+
+    // Preparar o payload conforme esperado pelo backend (/register/user)
+    const payload = {
+      nome: formData.nome,
+      email: formData.email,
+      senha: formData.senha,
+      cargo: formData.atuacao,
+      localizacao: formData.localizacao,
+      experiencias: formData.experiencia
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/register/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao cadastrar usuário');
+      }
+
+      // Sucesso
+      alert('Usuário criado com sucesso!');
+      console.log('Sucesso:', data);
+      
+      // Redirecionar ou limpar formulário
+      window.location.href = '/login'; 
+
+    } catch (error) {
+      console.error('Erro:', error);
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,6 +86,12 @@ export default function CadastroUserForm() {
                 Cadastre-se como usuário profissional.
             </h2>
         </div>
+
+        {message && (
+          <div className={`mb-4 p-3 rounded text-center ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+            {message.text}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           
@@ -110,8 +158,8 @@ export default function CadastroUserForm() {
           </div>
 
           <div>
-            <label htmlFor="areaatuacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              Área de Atuação(Tecnologia, Marketing, Design):
+            <label htmlFor="atuacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+              Área de Atuação (Tecnologia, Marketing, Design):
             </label>
             <input
               type="text"
@@ -120,14 +168,13 @@ export default function CadastroUserForm() {
               value={formData.atuacao}
               onChange={handleChange}
               required
-              minLength="8"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
           <div>
-            <label htmlFor="niveldeexperiencia" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              Nível de Experiência(Júnior, Pleno, Sênior):
+            <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 text-left mb-1">
+              Nível de Experiência (Júnior, Pleno, Sênior):
             </label>
             <input
               type="text"
@@ -142,13 +189,13 @@ export default function CadastroUserForm() {
 
           <div>
             <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              Localização(Cidade, Estado):
+              Localização (Cidade, Estado):
             </label>
             <input
               type="text"
               id="localizacao"
               name="localizacao"
-              value={formData.localizao}
+              value={formData.localizacao}
               onChange={handleChange}
               required
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
@@ -156,11 +203,13 @@ export default function CadastroUserForm() {
           </div>
           
           <button
-          onClick={() => window.location.href = '/cadastro-concluido'}
             type="submit"
-            className="w-full mt-6 px-4 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition duration-150 shadow-lg"
+            disabled={loading}
+            className={`w-full mt-6 px-4 py-3 text-white rounded-lg text-lg font-semibold transition duration-150 shadow-lg ${
+              loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
           >
-            Próximo
+            {loading ? 'Enviando...' : 'Cadastrar'}
           </button>
 
         </form>
