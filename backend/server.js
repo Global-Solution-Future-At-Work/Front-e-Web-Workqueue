@@ -4,6 +4,7 @@ import verify_db from "./functions/database_verify.js"
 import login_register_routes from "./controllers/login_register.js"
 import admin from "./controllers/admin.js"
 import user from "./controllers/user.js"
+import empresa from "./controllers/empresa.js"
 
 const app = express()
 const port = 3000
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use(login_register_routes)
 app.use(admin)
 app.use(user)
+app.use(empresa)
 
 app.get('/healthcheck', (req, res) => {
   res.send("Ok!")
