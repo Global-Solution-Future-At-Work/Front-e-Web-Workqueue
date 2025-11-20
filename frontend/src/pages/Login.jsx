@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 export default function LoginForm() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Define para onde ir após o login: ou para onde o usuário queria ir, ou para o /feed
+  const from = location.state?.from?.pathname || '/feed';
+
   const [formData, setFormData] = useState({
     email: '',
     senha: '',
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Verifica se já está logado ao carregar o componente
   useEffect(() => {
     const hasToken = localStorage.getItem('token');
     if (hasToken) {
-      window.location.href = '/feed';
+      // Redireciona imediatamente se já tiver token
+      navigate(from, { replace: true });
     }
-  }, [])
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  }, [navigate, from]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +38,7 @@ export default function LoginForm() {
       setIsLoading(true);
 
       // --- SEU ENDPOINT DE LOGIN ---
+      // Certifique-se que seu backend está rodando nesta porta
       const endpoint = 'http://127.0.0.1:3000/login'; 
       
       const response = await fetch(endpoint, {
@@ -46,27 +55,17 @@ export default function LoginForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Trata erros como "Senha incorreta" ou "Usuário não encontrado"
         throw new Error(data.message || 'Credenciais inválidas.');
       }
 
       // --- SUCESSO NO LOGIN ---
       console.log('Login realizado:', data);
       
-      // 1. Salvar o Token (Exemplo usando localStorage)
-      // Adapte 'accessToken' para o nome que sua API retorna (ex: data.token, data.jwt)
-      if (data.accessToken) {
-        localStorage.setItem('token', data.accessToken);
+      if (data.token) {
+        localStorage.setItem('token', data.token);
       }
 
-      // 2. Salvar dados do usuário (opcional)
-      if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user));
-      }
-
-      // 3. Redirecionar para a dashboard
-      // Se estiver usando React Router: navigate('/dashboard');
-      window.location.href = '/feed';
+      navigate(from, { replace: true });
 
     } catch (err) {
       console.error('Erro de login:', err);
@@ -118,10 +117,10 @@ export default function LoginForm() {
                 <label htmlFor="senha" className="block text-sm font-medium text-gray-700">
                 Senha
                 </label>
-                {/* Link para recuperação de senha (Opcional) */}
-                <a href="/recuperar-senha" class="text-sm text-blue-600 hover:underline">
+                {/* Correção: 'class' para 'className' e <a> para <Link> */}
+                <Link to="/recuperar-conta" className="text-sm text-blue-600 hover:underline">
                     Esqueceu a senha?
-                </a>
+                </Link>
             </div>
             <input
               type="password"
@@ -141,16 +140,23 @@ export default function LoginForm() {
             disabled={isLoading}
             className={`w-full mt-2 px-4 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 active:bg-blue-800 transition duration-150 shadow-md flex justify-center items-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            {isLoading ? 'Entrando...' : 'Entrar'}
+            {isLoading ? (
+              // Spinner simples SVG
+              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : 'Entrar'}
           </button>
 
         </form>
         
         <div className="mt-6 text-center text-sm text-gray-600">
             Não tem uma conta?{' '}
-            <a href="/cadastro" className="text-blue-600 font-semibold hover:underline">
+            {/* Atualizado para Link e apontando para a página de escolha de tipo */}
+            <Link to="/escolher-tipo" className="text-blue-600 font-semibold hover:underline">
                 Cadastre-se
-            </a>
+            </Link>
         </div>
 
       </div>
