@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, MapPin, Briefcase, Zap, Award, ChevronDown, Check, Pencil, X } from 'lucide-react';
+import { MapPin, Briefcase, Zap, Award, ChevronDown, Check, Pencil, X } from 'lucide-react';
+
+// --- IMPORTAÇÕES REAIS (Certifique-se que os caminhos estão corretos) ---
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from '../assets/fotohomem.svg'; 
 
@@ -15,52 +17,66 @@ const PerfilUser = () => {
   const [formData, setFormData] = useState({
     nome: '',
     cargo: '',
+    area: '',
     localizacao: '',
     resumo: '',
     habilidadesTecnicas: '', 
     softSkills: '',          
-    idiomas: ''              
+    idiomas: '',
+    certificacoes: '',
+    areaInteresses: ''
   });
 
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
     const token = localStorage.getItem('token');
+    
+    // 1. Validação de Token Real
     if (!token) {
       navigate('/login');
       return;
     }
 
     try {
+      // 2. Obter o ID do usuário através do Token (Endpoint datajwt)
       const authResponse = await fetch('http://localhost:3000/datajwt', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      const authData = await authResponse.json();
-      const myId = authData.jwt_data.id;
 
+      if (!authResponse.ok) {
+        throw new Error('Falha na autenticação');
+      }
+
+      const authData = await authResponse.json();
+      // Ajuste aqui se a estrutura do seu JSON for diferente (ex: authData.id ou authData.user.id)
+      const myId = authData.jwt_data.id; 
+
+      // 3. Buscar dados do usuário na API
       const userResponse = await fetch('http://localhost:3000/user', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!userResponse.ok) throw new Error('Erro ao buscar usuários');
-      
+      if (!userResponse.ok) {
+        throw new Error('Erro ao buscar usuários');
+      }
+
       const usersList = await userResponse.json();
-      
       const currentUser = usersList.find(user => user.id === myId);
 
       if (!currentUser) {
-        console.error("Usuário não encontrado na lista");
-        return;
+        throw new Error('Usuário não encontrado na base de dados');
       }
 
       setRawData(currentUser);
 
-      const formatList = (list) => Array.isArray(list) ? list.map(item => `[ ${item} ]`).join(' ') : list;
+      // Helpers de formatação
+      const formatList = (list) => Array.isArray(list) ? list.map(item => item).join(', ') : list;
       const formatSoft = (list) => Array.isArray(list) ? list.join(' • ') : list;
       
       const experienciasFormatadas = Array.isArray(currentUser.experiencias) 
         ? currentUser.experiencias.map(exp => ({
-            titulo: exp.empresa ? `${exp.empresa} — ${exp.cargo || 'Cargo não inf.'} (${exp.inicio || '?'} - ${exp.fim || 'Atual'})` : "Experiência genérica",
+            titulo: exp.empresa ? `${exp.empresa} — ${exp.cargo || 'Cargo não inf.'} (${exp.inicio || '?'} - ${exp.fim || 'Atual'})` : "Experiência",
             descricao: exp.descricao || "Sem descrição."
           }))
         : typeof currentUser.experiencias === 'string' 
@@ -73,28 +89,29 @@ const PerfilUser = () => {
           }))
         : [];
 
-      let idiomasFormatados = "Não informado";
-      if (Array.isArray(currentUser.idiomas)) {
-        idiomasFormatados = currentUser.idiomas.map(i => typeof i === 'object' ? `📘 ${i.idioma} (${i.nivel})` : i).join(', ');
-      }
-
       setUserData({
         nome: currentUser.nome,
         localizacao: currentUser.localizacao || "Localização não informada",
         cargo: currentUser.cargo || "Cargo não informado",
+        area: currentUser.area || "",
         instituicao: currentUser.experiencias?.[0]?.empresa || "Disponível para oportunidades", 
-        sobre: currentUser.resumo || "Olá! Sou um profissional apaixonado por tecnologia.",
+        sobre: currentUser.resumo || "Sem resumo cadastrado.",
         habilidade: formatList(currentUser.habilidadesTecnicas),
-        soft: `Soft Skills: ${formatSoft(currentUser.softSkills)}`,
-        // insights removido daqui
+        soft: formatSoft(currentUser.softSkills),
         formacao: formacaoFormatada,
-        idiomas: idiomasFormatados,
+        idiomas: currentUser.idiomas || [],
+        certificacoes: currentUser.certificacoes || [],
+        areaInteresses: currentUser.areaInteresses || [],
         experiencias: experienciasFormatadas,
         isOwner: true 
       });
 
     } catch (error) {
-      console.error("Erro:", error);
+      console.error("Erro ao carregar perfil:", error);
+      // Opcional: Redirecionar para login se der erro de auth
+      if (error.message === 'Falha na autenticação') {
+        navigate('/login');
+      }
     } finally {
       setLoading(false);
     }
@@ -108,15 +125,24 @@ const PerfilUser = () => {
     if (rawData) {
       const habTec = Array.isArray(rawData.habilidadesTecnicas) ? rawData.habilidadesTecnicas.join(', ') : '';
       const softSk = Array.isArray(rawData.softSkills) ? rawData.softSkills.join(', ') : '';
+      const certs = Array.isArray(rawData.certificacoes) ? rawData.certificacoes.join(', ') : '';
+      const interesses = Array.isArray(rawData.areaInteresses) ? rawData.areaInteresses.join(', ') : '';
+      
+      const idiomasStr = Array.isArray(rawData.idiomas) 
+        ? rawData.idiomas.map(i => typeof i === 'object' ? `${i.idioma} (${i.nivel})` : i).join(', ')
+        : '';
 
       setFormData({
         nome: rawData.nome || '',
         cargo: rawData.cargo || '',
+        area: rawData.area || '',
         localizacao: rawData.localizacao || '',
         resumo: rawData.resumo || '',
         habilidadesTecnicas: habTec,
         softSkills: softSk,
-        idiomas: '' 
+        idiomas: idiomasStr,
+        certificacoes: certs,
+        areaInteresses: interesses
       });
     }
     setIsModalOpen(true);
@@ -131,22 +157,42 @@ const PerfilUser = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     
-    if (!rawData || !rawData.id) return;
+    if (!rawData || !rawData.id) {
+        alert("Erro: ID do usuário não encontrado.");
+        return;
+    }
 
     try {
-      const habilidadesArray = formData.habilidadesTecnicas.split(',').map(s => s.trim()).filter(s => s !== '');
-      const softSkillsArray = formData.softSkills.split(',').map(s => s.trim()).filter(s => s !== '');
+      const splitAndTrim = (str) => str ? str.split(',').map(s => s.trim()).filter(s => s !== '') : [];
+
+      const habilidadesArray = splitAndTrim(formData.habilidadesTecnicas);
+      const softSkillsArray = splitAndTrim(formData.softSkills);
+      const certificacoesArray = splitAndTrim(formData.certificacoes);
+      const interessesArray = splitAndTrim(formData.areaInteresses);
+      
+      const idiomasArray = formData.idiomas ? formData.idiomas.split(',').map(s => {
+        const clean = s.trim();
+        if (!clean) return null;
+        const match = clean.match(/^(.*?)\s*\((.*?)\)$/); 
+        if (match) return { idioma: match[1], nivel: match[2] };
+        return { idioma: clean, nivel: "Não informado" };
+      }).filter(Boolean) : [];
       
       const payload = {
         ...rawData, 
         nome: formData.nome,
         cargo: formData.cargo,
+        area: formData.area,
         localizacao: formData.localizacao,
         resumo: formData.resumo,
         habilidadesTecnicas: habilidadesArray,
         softSkills: softSkillsArray,
+        idiomas: idiomasArray,
+        certificacoes: certificacoesArray,
+        areaInteresses: interessesArray
       };
 
+      // 4. Chamada Real de Update (PUT)
       const response = await fetch(`http://localhost:3000/user/${rawData.id}`, {
         method: 'PUT',
         headers: {
@@ -159,20 +205,28 @@ const PerfilUser = () => {
       if (response.ok) {
         alert("Perfil atualizado com sucesso!");
         setIsModalOpen(false);
-        fetchUserData(); 
+        fetchUserData(); // Recarrega os dados da API para garantir sincronia
       } else {
-        alert("Erro ao atualizar perfil.");
+        alert("Erro ao atualizar perfil. Tente novamente.");
       }
+
     } catch (error) {
       console.error("Erro no update:", error);
+      alert("Erro de conexão ao tentar salvar.");
     }
   };
 
   if (loading) return <div className="min-h-screen flex justify-center items-center text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-[#0F172A]">Carregando...</div>;
-  if (!userData) return <div className="min-h-screen flex justify-center items-center text-red-500 bg-gray-100 dark:bg-[#0F172A]">Erro ao carregar dados.</div>;
+  
+  if (!userData) return (
+    <div className="min-h-screen flex flex-col justify-center items-center text-red-500 bg-gray-100 dark:bg-[#0F172A]">
+        <p>Erro ao carregar dados.</p>
+        <button onClick={() => window.location.reload()} className="mt-4 text-blue-500 underline">Tentar novamente</button>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] py-8 transition-colors">
+    <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] py-8 transition-colors font-sans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6">
 
         {/* LADO ESQUERDO */}
@@ -205,18 +259,24 @@ const PerfilUser = () => {
                     {userData.localizacao}
                   </p>
 
-                  <p className="text-gray-700 dark:text-gray-200 mt-2 text-base">
-                    Cargo: <b>{userData.cargo}</b>
-                  </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <p className="text-gray-700 dark:text-gray-200 text-base">
+                      Cargo: <b>{userData.cargo}</b>
+                    </p>
+                    {userData.area && (
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                        {userData.area}
+                      </span>
+                    )}
+                  </div>
 
-                  <p className="text-gray-500 dark:text-gray-300 text-sm">
+                  <p className="text-gray-500 dark:text-gray-300 text-sm mt-1">
                     Instituição/Empresa: {userData.instituicao}
                   </p>
                 </div>
 
                 {/* BOTÕES */}
                 <div className="flex flex-col sm:flex-row gap-2 mt-2">
-
                   <button 
                     onClick={handleOpenModal}
                     className="flex items-center justify-center text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-full px-4 py-1.5 font-semibold text-sm hover:bg-blue-50 dark:hover:bg-blue-900 transition"
@@ -224,8 +284,6 @@ const PerfilUser = () => {
                     <Pencil size={16} className="mr-2" />
                     Editar Perfil
                   </button>
-
-
                 </div>
               </div>
 
@@ -251,7 +309,16 @@ const PerfilUser = () => {
                   ) : (
                     <li>Nenhuma formação registrada.</li>
                   )}
-                  <li className="mt-2 font-medium">{userData.idiomas}</li>
+                  
+                  {userData.idiomas && userData.idiomas.length > 0 && (
+                    <li className="flex flex-wrap gap-2 mt-3 pt-2">
+                      {userData.idiomas.map((lang, idx) => (
+                         <span key={idx} className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-100 dark:border-green-900">
+                           📘 {lang.idioma} <span className="text-xs opacity-75 ml-1 uppercase">({lang.nivel})</span>
+                         </span>
+                      ))}
+                    </li>
+                  )}
                 </ul>
               </div>
 
@@ -263,8 +330,11 @@ const PerfilUser = () => {
                   {userData.experiencias.length > 0 ? (
                     userData.experiencias.map((exp, index) => (
                       <li key={index}>
-                        <p className="font-semibold text-gray-900 dark:text-white">{exp.titulo}</p>
-                        <p className="ml-0 sm:ml-5 text-sm mt-1 text-gray-600 dark:text-gray-400">{exp.descricao}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                           <Briefcase size={16} className="text-gray-400" />
+                           {exp.titulo}
+                        </p>
+                        <p className="ml-6 text-sm mt-1 text-gray-600 dark:text-gray-400">{exp.descricao}</p>
                       </li>
                     ))
                   ) : (
@@ -278,22 +348,55 @@ const PerfilUser = () => {
                 <div className="mb-4 animate-fadeIn">
 
                   <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6" />
-                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                    Habilidades Técnicas
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center gap-2">
+                    <Zap size={20} className="text-yellow-500" /> Habilidades Técnicas
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                    {userData.habilidade || "Nenhuma habilidade listada."}
-                  </p>
-
-                  {/* Seção de Insights removida daqui */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                      {userData.habilidade ? userData.habilidade.split(', ').map((tech, i) => (
+                         <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 rounded-lg text-sm">{tech}</span>
+                      )) : "Nenhuma listada"}
+                  </div>
 
                   <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6" />
                   <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                    Soft Skills e Hobbies
+                    Soft Skills
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
                     {userData.soft || "Nenhuma soft skill listada."}
                   </p>
+
+                   {/* Certificações */}
+                   {userData.certificacoes && userData.certificacoes.length > 0 && (
+                    <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">
+                        <Award size={20} className="text-orange-500" /> Certificações
+                      </h3>
+                      <ul className="space-y-1 ml-1">
+                        {userData.certificacoes.map((cert, i) => (
+                          <li key={i} className="text-gray-700 dark:text-gray-300 text-sm flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 bg-orange-400 rounded-full"></span> {cert}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                   {/* Áreas de Interesse */}
+                   {userData.areaInteresses && userData.areaInteresses.length > 0 && (
+                    <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">
+                        ❤️ Áreas de Interesse
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {userData.areaInteresses.map((int, i) => (
+                          <span key={i} className="px-3 py-1 bg-pink-50 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300 rounded-full text-xs font-semibold uppercase tracking-wide">
+                            {int}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               )}
 
@@ -303,7 +406,7 @@ const PerfilUser = () => {
                   onClick={() => setOpen(!open)}
                   className="text-blue-600 dark:text-blue-400 font-semibold text-sm flex items-center hover:text-blue-700 dark:hover:text-blue-300"
                 >
-                  {open ? "Ver menos" : "Ver mais"}
+                  {open ? "Ver menos" : "Ver mais detalhes"}
                   <ChevronDown size={16} className={`ml-1 transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
 
@@ -320,7 +423,6 @@ const PerfilUser = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">
             
-            {/* Cabeçalho do Modal */}
             <div className="sticky top-0 bg-white dark:bg-gray-800 z-10 border-b border-gray-200 dark:border-gray-700 p-5 flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
                 <Pencil size={20} className="mr-2 text-blue-600" />
@@ -331,7 +433,6 @@ const PerfilUser = () => {
               </button>
             </div>
 
-            {/* Formulário */}
             <form onSubmit={handleSave} className="p-6 space-y-4">
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -358,16 +459,29 @@ const PerfilUser = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Localização</label>
-                <input 
-                  type="text" 
-                  name="localizacao"
-                  value={formData.localizacao}
-                  onChange={handleInputChange}
-                  placeholder="Ex: São Paulo - SP"
-                  className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Área de Atuação</label>
+                  <input 
+                    type="text" 
+                    name="area"
+                    value={formData.area}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Desenvolvimento"
+                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Localização</label>
+                  <input 
+                    type="text" 
+                    name="localizacao"
+                    value={formData.localizacao}
+                    onChange={handleInputChange}
+                    placeholder="Ex: São Paulo - SP"
+                    className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
               </div>
 
               <div>
@@ -381,31 +495,70 @@ const PerfilUser = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Habilidades Técnicas (Separe por vírgula)</label>
-                <input 
-                  type="text" 
-                  name="habilidadesTecnicas"
-                  value={formData.habilidadesTecnicas}
-                  onChange={handleInputChange}
-                  placeholder="Ex: Java, Python, React"
-                  className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                />
+              <div className="space-y-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Habilidades Técnicas <span className="text-xs text-gray-400 font-normal">(Separe por vírgula)</span></label>
+                    <input 
+                      type="text" 
+                      name="habilidadesTecnicas"
+                      value={formData.habilidadesTecnicas}
+                      onChange={handleInputChange}
+                      placeholder="Ex: Java, Python, React"
+                      className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Soft Skills <span className="text-xs text-gray-400 font-normal">(Separe por vírgula)</span></label>
+                    <input 
+                      type="text" 
+                      name="softSkills"
+                      value={formData.softSkills}
+                      onChange={handleInputChange}
+                      placeholder="Ex: Liderança, Comunicação"
+                      className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Idiomas <span className="text-xs text-gray-400 font-normal">(Formato: Idioma (Nivel), Idioma 2 (Nivel))</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      name="idiomas"
+                      value={formData.idiomas}
+                      onChange={handleInputChange}
+                      placeholder="Ex: Inglês (Avançado), Espanhol (Básico)"
+                      className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Certificações <span className="text-xs text-gray-400 font-normal">(Separe por vírgula)</span></label>
+                    <input 
+                      type="text" 
+                      name="certificacoes"
+                      value={formData.certificacoes}
+                      onChange={handleInputChange}
+                      placeholder="Ex: AWS Cloud, Scrum Master"
+                      className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Áreas de Interesse <span className="text-xs text-gray-400 font-normal">(Separe por vírgula)</span></label>
+                    <input 
+                      type="text" 
+                      name="areaInteresses"
+                      value={formData.areaInteresses}
+                      onChange={handleInputChange}
+                      placeholder="Ex: UI Design, Acessibilidade, IA"
+                      className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                  </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Soft Skills (Separe por vírgula)</label>
-                <input 
-                  type="text" 
-                  name="softSkills"
-                  value={formData.softSkills}
-                  onChange={handleInputChange}
-                  placeholder="Ex: Liderança, Comunicação"
-                  className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                />
-              </div>
-
-              {/* Footer do Modal */}
               <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button 
                   type="button" 
