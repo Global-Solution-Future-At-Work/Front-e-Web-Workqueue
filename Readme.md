@@ -43,7 +43,7 @@ Utilize os dados abaixo para testar os diferentes perfis de acesso e funcionalid
 Siga os passos abaixo para executar o projeto em sua máquina local:
 
 ### 1. Pré-requisitos
-Certifique-se de ter o **Node.js** e o **npm** (ou yarn) instalados em sua máquina.
+Certifique-se de ter o **Node.js** e o **npm** instalados em sua máquina.
 
 ### 2. Instalação
 
