@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ChatFlutuante from '../components/ChatFlutuante';
 import PainelLoginAdmin from '../components/PainelLoginAdmin';
 import UserListModal from '../components/UserListAdminModal';
-import EmpresaListAdminModal from '../components/EmpresaListAdminModal'; // <--- Importação nova
+import EmpresaListAdminModal from '../components/EmpresaListAdminModal';
 
 export default function VisaoGeral() {
 
@@ -260,13 +260,7 @@ export default function VisaoGeral() {
                   <span className="font-semibold">Conexão:</span> {statusGemini}
                 </p>
 
-                <p className="font-semibold mt-4">Funções ativas:</p>
 
-                <ul className="list-disc ml-5 text-gray-600 dark:text-gray-400 space-y-1">
-                  {iaStatus.funcoesAtivas.map((func, index) => (
-                    <li key={index}>{func}</li>
-                  ))}
-                </ul>
               </div>
 
             </div>

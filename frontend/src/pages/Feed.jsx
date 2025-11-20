@@ -2,6 +2,7 @@ import React from 'react';
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from "../assets/fotohomem.svg";
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const postData = {
   profileName: 'Alexandre Silva',
@@ -48,7 +49,6 @@ const FilterGroup = ({ title, options, type }) => (
 
 const Post = ({ data }) => (
   <div className="bg-white dark:bg-gray-800 dark:border-gray-700 p-4 rounded-xl shadow-lg border border-gray-100 mb-6">
-
     <div className="flex items-start mb-3">
       <img 
         src={fotohomem}
@@ -95,6 +95,15 @@ export default function Feed() {
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors pt-6 pb-12">
+
+      <div className="max-w-4xl mx-auto mb-4 px-4 sm:px-0 flex gap-4">
+        <Link to="/pessoas" className="flex-1 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200 border border-transparent hover:border-gray-200 dark:hover:border-gray-600">
+          Ver pessoas da WorkQueue 🙋
+        </Link>
+        <Link to="/empresas" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition-all duration-200">
+          Ver empresas parceiras 💼
+        </Link>
+      </div>
 
       <div className="max-w-4xl mx-auto mb-8 px-4 sm:px-0">
         <div className="bg-white dark:bg-gray-800 dark:text-gray-200 p-3 rounded-full shadow-md flex items-center">
