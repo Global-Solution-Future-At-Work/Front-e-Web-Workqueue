@@ -18,6 +18,21 @@ export default function FaleConosco() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    // --- LÓGICA DO MAILTO ADICIONADA AQUI ---
+    
+    // 1. Defina o e-mail que receberá a mensagem
+    const destinatario = "contato@workqueue.com"; // ALTERE PARA SEU E-MAIL
+    
+    // 2. Prepara o assunto e o corpo da mensagem (codificando para URL)
+    const assunto = encodeURIComponent(form.subject || "Novo contato via Site");
+    const corpo = encodeURIComponent(`Nome: ${form.name}\n\nMensagem:\n${form.message}`);
+    
+    // 3. Abre o cliente de e-mail
+    window.location.href = `mailto:workqueueai@gmail.com?subject=${assunto}&body=${corpo}`;
+
+    // ----------------------------------------
+
     setSent(true);
     setTimeout(() => setSent(false), 3000);
   }
@@ -29,7 +44,6 @@ export default function FaleConosco() {
 
       <main className="flex flex-col md:flex-row grow">
 
-        {/* IMAGEM LATERAL */}
         <div className="md:w-1/2 h-72 md:h-auto overflow-hidden">
           <img
             src={mulherfoto}
@@ -42,7 +56,6 @@ export default function FaleConosco() {
         <div className="md:w-1/2 flex items-center justify-center p-10">
           <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
 
-            {/* LOGO */}
             <div className="flex flex-col items-center mb-6">
               <img
                 src="/logo.png"
@@ -64,7 +77,6 @@ export default function FaleConosco() {
               Quer conversar com a equipe da WorkQueue? Preencha o formulário abaixo.
             </p>
 
-            {/* FORM */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
               <input

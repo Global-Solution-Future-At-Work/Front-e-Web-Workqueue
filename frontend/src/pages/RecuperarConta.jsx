@@ -22,66 +22,53 @@ export default function RecuperarConta() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       
-      <div className="bg-white dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full border border-gray-200 dark:border-gray-700 transition-colors">
+      {/* Card Principal */}
+      <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-xl max-w-lg w-full border border-gray-100 relative overflow-hidden">
         
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+        {/* Detalhe decorativo no topo (Barra azul) */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+
+        <div className="text-center">
+          
+          {/* Ícone para dar contexto visual */}
+          <div className="mx-auto w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
             Recuperação de Conta
           </h1>
-          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
-            Esqueceu sua senha? Sem problemas!
-          </h2>
-        </div>
+          
+          <p className="text-lg text-gray-600 mb-8">
+            Está com problemas para logar?
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-
-          <div>
-            <label
-              htmlFor="nome"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              Entre em contato com o suporte
+            </p>
+            
+            {/* Link para abrir o email direto */}
+            <a 
+              href="mailto:work.queueai@gmail.com" 
+              className="block text-1xl sm:text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors break-all"
             >
-              Nome Completo:
-            </label>
-            <input
-              type="text"
-              id="nome"
-              name="nome"
-              value={formData.nome}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-            />
+              work.queueai@gmail.com
+            </a>
           </div>
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
-            >
-              Email de Cadastro:
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full mt-6 px-4 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-150 shadow-lg"
+          <button 
+            onClick={() => window.history.back()} 
+            className="mt-8 text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors underline"
           >
-            {buttonText}
+            Voltar para o login
           </button>
 
-        </form>
-
+        </div>
       </div>
     </div>
   );

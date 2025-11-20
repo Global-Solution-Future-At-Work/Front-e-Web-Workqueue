@@ -1,0 +1,14 @@
+[
+  {
+    "id": "vaga_1",
+    "titulo": "Desenvolvedor Front-End React",
+    "empresa": "NextCode Labs",
+    "status": "Ativa"
+  },
+  {
+    "id": "vaga_2",
+    "titulo": "Designer UI/UX Senior",
+    "empresa": "Creative Studio",
+    "status": "Fechada"
+  }
+]
