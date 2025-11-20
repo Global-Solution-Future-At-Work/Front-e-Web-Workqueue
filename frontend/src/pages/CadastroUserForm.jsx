@@ -6,8 +6,8 @@ export default function CadastroUserForm() {
     email: '',
     senha: '',
     confirmarSenha: '',
-    atuacao: '',      // Será enviado como 'cargo'
-    experiencia: '',  // Será enviado como 'experiencias'
+    atuacao: '',
+    experiencia: '',
     localizacao: '',
   });
 
@@ -71,20 +71,21 @@ export default function CadastroUserForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      
-      <div className="bg-gray-200 p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full">
-        
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
+
+      <div className="bg-gray-200 dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full transition-colors">
+
+        {/* Cabeçalho */}
         <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
-                Cadastre-se
-            </h1>
-            <p className="text-gray-600 mt-1 mb-4">
-                Crie sua conta na WorkQueue!
-            </p>
-            <h2 className="text-xl font-semibold text-gray-700">
-                Cadastre-se como usuário profissional.
-            </h2>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            Cadastre-se
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1 mb-4">
+            Crie sua conta na WorkQueue!
+          </p>
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200">
+            Cadastro de Usuário Profissional
+          </h2>
         </div>
 
         {message && (
@@ -94,9 +95,10 @@ export default function CadastroUserForm() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
+          {/* Nome */}
           <div>
-            <label htmlFor="nome" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="nome" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome completo:
             </label>
             <input
@@ -106,12 +108,13 @@ export default function CadastroUserForm() {
               value={formData.nome}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               E-mail profissional:
             </label>
             <input
@@ -121,12 +124,13 @@ export default function CadastroUserForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Senha */}
           <div>
-            <label htmlFor="senha" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="senha" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Senha:
             </label>
             <input
@@ -137,12 +141,13 @@ export default function CadastroUserForm() {
               onChange={handleChange}
               required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Confirmar senha */}
           <div>
-            <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirmar senha:
             </label>
             <input
@@ -153,13 +158,14 @@ export default function CadastroUserForm() {
               onChange={handleChange}
               required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Área de atuação */}
           <div>
-            <label htmlFor="atuacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              Área de Atuação (Tecnologia, Marketing, Design):
+            <label htmlFor="atuacao" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Área de atuação (Tecnologia, Marketing, Design):
             </label>
             <input
               type="text"
@@ -168,13 +174,14 @@ export default function CadastroUserForm() {
               value={formData.atuacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Experiência */}
           <div>
-            <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 text-left mb-1">
-              Nível de Experiência (Júnior, Pleno, Sênior):
+            <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Nível de experiência (Júnior, Pleno, Sênior):
             </label>
             <input
               type="text"
@@ -183,12 +190,13 @@ export default function CadastroUserForm() {
               value={formData.experiencia}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
+          {/* Localização */}
           <div>
-            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Localização (Cidade, Estado):
             </label>
             <input
@@ -198,10 +206,11 @@ export default function CadastroUserForm() {
               value={formData.localizacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
-          
+
+          {/* Botão */}
           <button
             type="submit"
             disabled={loading}
@@ -213,7 +222,7 @@ export default function CadastroUserForm() {
           </button>
 
         </form>
-        
+
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function CadastroEmpresaForm() {
+export default function RecuperarConta() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -22,23 +22,26 @@ export default function CadastroEmpresaForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
       
-      <div className="bg-gray-200 p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full">
+      <div className="bg-white dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full border border-gray-200 dark:border-gray-700 transition-colors">
         
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
             Recuperação de Conta
           </h1>
-          <h2 className="text-xl font-semibold text-gray-700">
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
             Esqueceu sua senha? Sem problemas!
           </h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           <div>
-            <label htmlFor="nome" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label
+              htmlFor="nome"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+            >
               Nome Completo:
             </label>
             <input
@@ -48,12 +51,15 @@ export default function CadastroEmpresaForm() {
               value={formData.nome}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+            >
               Email de Cadastro:
             </label>
             <input
@@ -63,19 +69,19 @@ export default function CadastroEmpresaForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full mt-6 px-4 py-3 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600 transition duration-150 shadow-lg"
+            className="w-full mt-6 px-4 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-150 shadow-lg"
           >
             {buttonText}
           </button>
 
         </form>
-        
+
       </div>
     </div>
   );

@@ -96,8 +96,11 @@ export default function LoginForm() {
         <form onSubmit={handleSubmit} className="space-y-5">
           
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              E-mail
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+            >
+              E-mail:
             </label>
             <input
               type="email"
@@ -108,14 +111,17 @@ export default function LoginForm() {
               required
               placeholder="seu@email.com"
               disabled={isLoading}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all disabled:bg-gray-50"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
           <div>
+
             <div className="flex justify-between items-center mb-1">
-                <label htmlFor="senha" className="block text-sm font-medium text-gray-700">
-                Senha
+            <label
+              htmlFor="senha"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
+            >                Senha
                 </label>
                 {/* Correção: 'class' para 'className' e <a> para <Link> */}
                 <Link to="/recuperar-conta" className="text-sm text-blue-600 hover:underline">
@@ -129,9 +135,10 @@ export default function LoginForm() {
               value={formData.senha}
               onChange={handleChange}
               required
+              minLength="8"
               placeholder="••••••••"
               disabled={isLoading}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all disabled:bg-gray-50"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 

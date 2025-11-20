@@ -151,31 +151,39 @@ export default function VisaoGeral() {
   // RENDERIZAÇÃO DA DASHBOARD
   // ---------------------------------------------------------
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="bg-blue-800 h-32"></div>
 
-      <div className="max-w-6xl mx-auto p-8 bg-white shadow-xl rounded-lg relative -mt-16 mb-12">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">
+    <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors">
+      <div className="bg-blue-800 dark:bg-blue-900 h-32"></div>
+
+      <div className="
+        max-w-6xl mx-auto p-8 
+        bg-white dark:bg-[#1E293B]
+        shadow-xl rounded-lg 
+        relative -mt-16 mb-12
+        transition-colors
+      ">        
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8 border-b dark:border-gray-600 pb-4">
           Visão Geral do Sistema
         </h1>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Coluna 1: Geral */}
           <div>
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Geral</h2>
-            <div className="space-y-2 text-sm text-gray-700 mb-8">
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Geral</h2>
+            <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300 mb-8">
               <p className="flex items-center">
-                <span className="text-blue-600 mr-2">👥</span>
+                <span className="text-blue-600 dark:text-blue-400 mr-2">👥</span>
                 <span className="font-semibold">Usuários ativos:</span>{" "}
                 {usuariosAtivos.toLocaleString()}
               </p>
+
               <p className="flex items-center">
-                <span className="text-gray-600 mr-2">🏢</span>
+                <span className="text-gray-600 dark:text-gray-300 mr-2">🏢</span>
                 <span className="font-semibold">Empresas cadastradas:</span>{" "}
                 {empresasAtivas.toLocaleString()}
               </p>
+
               <p className="flex items-center">
-                <span className="text-green-600 mr-2">💼</span>
+                <span className="text-green-600 dark:text-green-400 mr-2">💼</span>
                 <span className="font-semibold">Vagas ativas:</span>{" "}
                 {vagasAtivas.toLocaleString()}
               </p>
@@ -184,68 +192,85 @@ export default function VisaoGeral() {
 
           {/* Coluna 2: Botões de Gerenciamento */}
           <div className="space-y-8">
+            
             <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
                 Gerenciar Usuários Profissionais
               </h2>
-              <p className="text-sm text-gray-600 mb-4">
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 Gerencie a lista de profissionais cadastrados na plataforma.
+
               </p>
 
               {/* Botão que abre o Modal de Usuários */}
               <button
                 onClick={handleGerenciarUsuarios}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
+                className="px-6 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition duration-150 font-medium"
               >
                 Gerenciar Usuários
               </button>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
                 Controle de Vagas Ativas
               </h2>
-              <p className="text-sm text-gray-600 mb-4">
+
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 Visualize e modere as vagas publicadas recentemente.
               </p>
               <button
                 onClick={handleGerenciarVagas}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
+                className="px-6 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition duration-150 font-medium"
               >
                 Gerenciar Vagas
               </button>
             </div>
+
           </div>
 
-          {/* Coluna 3: Empresas e IA */}
           <div className="space-y-8">
+
             <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
                 Gerenciar Empresas Parceiras
               </h2>
-              <p className="text-sm text-gray-600 mb-4">
-                Administre os cadastros corporativos e permissões.
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                (Ao abrir esse perfil, abrir uma tabela com a lista das empresas)
               </p>
               {/* Botão Atualizado para abrir Modal de Empresas */}
               <button
                 onClick={handleGerenciarEmpresas}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
+                className="px-6 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition duration-150 font-medium"
               >
                 Gerenciar Empresas
               </button>
             </div>
 
             <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
                 Status da integração com IA
               </h2>
-              <div className="space-y-2 text-sm text-gray-700">
+
+              <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+
                 <p className="flex items-center">
                   <span className="text-green-500 mr-2">🤖</span>
                   <span className="font-semibold">Conexão:</span> {statusGemini}
                 </p>
+
+                <p className="font-semibold mt-4">Funções ativas:</p>
+
+                <ul className="list-disc ml-5 text-gray-600 dark:text-gray-400 space-y-1">
+                  {iaStatus.funcoesAtivas.map((func, index) => (
+                    <li key={index}>{func}</li>
+                  ))}
+                </ul>
               </div>
+
             </div>
+
           </div>
         </div>
       </div>
@@ -267,6 +292,7 @@ export default function VisaoGeral() {
       />
 
       <ChatFlutuante />
+
     </div>
   );
 }
