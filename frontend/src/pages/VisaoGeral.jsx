@@ -1,7 +1,7 @@
-import React from 'react';
-
+import { useState, useEffect } from 'react';
 import ChatFlutuante from '../components/ChatFlutuante';
-
+import PainelLoginAdmin from '../components/PainelLoginAdmin';
+import UserListModal from '../components/UserListAdminModal';
 
 const generalIndicators = {
   usuariosAtivos: 4820,
@@ -10,49 +10,92 @@ const generalIndicators = {
   lobbiesEmExecucao: 78,
 };
 
-const iaStatus = {
-  conexao: "Estável",
-  ultimaSincronizacao: "há 2 minutos",
-  funcoesAtivas: [
-    "Recomendações automáticas",
-    "Criação de lobbies",
-    "Análise de compatibilidade",
-  ],
-};
-
-
 export default function VisaoGeral() {
-  
-  const handleReiniciarIntegracao = () => { console.log("Reiniciar Integração acionado!"); };
-  const handleGerenciarUsuarios = () => { console.log("Gerenciar Usuários acionado!"); };
-  const handleGerenciarEmpresas = () => { console.log("Gerenciar Empresas acionado!"); };
-  const handleGerenciarVagas = () => { console.log("Gerenciar Vagas acionado!"); };
-  const handleVisualizarGrafico = () => { console.log("Visualizar Gráfico acionado!"); };
+  const [estaLogado, setEstaLogado] = useState(false);
+  const [statusGemini, setStatusGemini] = useState("Verificando...");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listaUsuarios, setListaUsuarios] = useState([]);
 
+  useEffect(() => {
+    fetch("http://127.0.0.1:3000/admin/gemini_status")
+      .then((res) => res.text())
+      .then((data) => {
+        setStatusGemini(data);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar status:", err);
+        setStatusGemini("Erro de conexão");
+      });
+
+
+  }, []);
+
+  const liberarAcesso = () => {
+    setEstaLogado(true);
+  };
+
+  // Abre o modal de usuários
+  const handleGerenciarUsuarios = () => {
+    fetch("http://127.0.0.1:3000/useradmin", {
+      headers: {
+        "admin_code": localStorage.getItem("codigo")
+      }
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        setListaUsuarios(data);
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error("Erro ao buscar usuários:", err);
+      });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteUser = (idToDelete) => {
+    if (window.confirm("Tem certeza que deseja remover este usuário?")) {
+      setListaUsuarios((prevUsers) => prevUsers.filter(user => user.id !== idToDelete));
+      fetch("http://127.0.0.1:3000/useradmin/" + idToDelete, {
+        method: "DELETE",
+        headers: {
+          "admin_code": localStorage.getItem("codigo")
+        }
+      })
+    }
+  };
+
+  // Placeholders para os outros botões
+  const handleGerenciarVagas = () => console.log("Gerenciar Vagas (Ainda não implementado)");
+  const handleGerenciarEmpresas = () => console.log("Gerenciar Empresas (Ainda não implementado)");
+
+  // ---------------------------------------------------------
+  // RENDERIZAÇÃO CONDICIONAL (Login)
+  // ---------------------------------------------------------
+  if (!estaLogado) {
+    return <PainelLoginAdmin aoLogar={liberarAcesso} />;
+  }
+
+  // ---------------------------------------------------------
+  // RENDERIZAÇÃO DA DASHBOARD
+  // ---------------------------------------------------------
   return (
-    
     <div className="min-h-screen bg-gray-100">
-      
-      
       <div className="bg-blue-800 h-32"></div>
 
-      
       <div className="max-w-6xl mx-auto p-8 bg-white shadow-xl rounded-lg relative -mt-16 mb-12">
-        
         <h1 className="text-3xl font-bold text-gray-800 mb-8 border-b pb-4">
           Visão Geral do Sistema
         </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-         
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Coluna 1: Geral */}
           <div>
-           
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Geral</h2>
             <div className="space-y-2 text-sm text-gray-700 mb-8">
-              <p>
-                <span className="font-semibold">Indicador:</span> Valor de exemplo
-              </p>
               <p className="flex items-center">
                 <span className="text-blue-600 mr-2">👥</span>
                 <span className="font-semibold">Usuários ativos:</span>{" "}
@@ -68,24 +111,20 @@ export default function VisaoGeral() {
                 <span className="font-semibold">Vagas ativas:</span>{" "}
                 {generalIndicators.vagasAtivas.toLocaleString()}
               </p>
-              <p className="flex items-center">
-                <span className="text-purple-600 mr-2">📦</span>
-                <span className="font-semibold">Lobbies em execução:</span>{" "}
-                {generalIndicators.lobbiesEmExecucao}
-              </p>
             </div>
-
-            
           </div>
 
+          {/* Coluna 2: Botões de Gerenciamento */}
           <div className="space-y-8">
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Gerenciar Usuários Profissionais
               </h2>
               <p className="text-sm text-gray-600 mb-4">
-                (Ao abrir esse perfil, abrir uma tabela com a lista dos profissionais)
+                Gerencie a lista de profissionais cadastrados na plataforma.
               </p>
+
+              {/* Botão que abre o Modal */}
               <button
                 onClick={handleGerenciarUsuarios}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-150 font-medium"
@@ -93,13 +132,13 @@ export default function VisaoGeral() {
                 Gerenciar Usuários
               </button>
             </div>
-            
+
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Controle de Vagas Ativas
               </h2>
               <p className="text-sm text-gray-600 mb-4">
-                (Ao abrir esse perfil, abrir uma tabela com a lista das vagas ativas)
+                Visualize e modere as vagas publicadas recentemente.
               </p>
               <button
                 onClick={handleGerenciarVagas}
@@ -109,14 +148,15 @@ export default function VisaoGeral() {
               </button>
             </div>
           </div>
-          
+
+          {/* Coluna 3: Empresas e IA */}
           <div className="space-y-8">
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Gerenciar Empresas Parceiras
               </h2>
               <p className="text-sm text-gray-600 mb-4">
-                (Ao abrir esse perfil, abrir uma tabela com a lista das empresas)
+                Administre os cadastros corporativos e permissões.
               </p>
               <button
                 onClick={handleGerenciarEmpresas}
@@ -125,34 +165,30 @@ export default function VisaoGeral() {
                 Gerenciar Empresas
               </button>
             </div>
-            
+
             <div>
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
                 Status da integração com IA
               </h2>
               <div className="space-y-2 text-sm text-gray-700">
                 <p className="flex items-center">
-                  <span className="text-green-500 mr-2">🟢</span>
-                  <span className="font-semibold">Conexão:</span> {iaStatus.conexao}
+                  <span className="text-green-500 mr-2">🤖</span>
+                  <span className="font-semibold">Conexão:</span> {statusGemini}
                 </p>
-                <p className="flex items-center">
-                  <span className="text-blue-400 mr-2">⏱️</span>
-                  <span className="font-semibold">Última sincronização:</span>{" "}
-                  {iaStatus.ultimaSincronizacao}
-                </p>
-                <p className="font-semibold mt-4">Funções ativas:</p>
-                <ul className="list-disc ml-5 text-gray-600 space-y-1">
-                  {iaStatus.funcoesAtivas.map((func, index) => (
-                    <li key={index}>{func}</li>
-                  ))}
-                </ul>
               </div>
-              
             </div>
           </div>
-          
         </div>
       </div>
+
+      {/* --- MODAL DE USUÁRIOS --- */}
+      <UserListModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        users={listaUsuarios}
+        onDelete={handleDeleteUser}
+      />
+
       <ChatFlutuante />
     </div>
   );

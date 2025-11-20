@@ -30,7 +30,7 @@ function App() {
             <Route path= "/perfiluser" element={<PerfilUser />} />
             <Route path= "/perfilempresa" element={<PerfilEmpresa />}></Route>
             <Route path="/lobby" element={<Lobby />}></Route>
-            <Route path="/visao-geral" element={<VisaoGeral />}></Route>
+            <Route path="/admin" element={<VisaoGeral />}></Route>
             <Route path="/feed" element={<Feed />}></Route>
             <Route path="/escolher-tipo" element={<EscolherTipo />}></Route>
             <Route path="/cadastro-user" element={<CadastroUserForm />}></Route>
