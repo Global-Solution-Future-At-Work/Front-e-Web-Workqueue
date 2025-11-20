@@ -16,9 +16,8 @@ export default function Navbar() {
   // Função para realizar o logout
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user'); // Opcional: remove dados do usuário se houver
-    window.location.reload(); // Recarrega a página para atualizar a UI
-    // ou use: window.location.href = '/login'; para redirecionar
+    localStorage.removeItem('user'); 
+    window.location.reload(); 
   };
 
   return (
@@ -78,7 +77,7 @@ export default function Navbar() {
           </ul>
 
           {/* CTA BUTTON */}
-          <button
+          <Link to="/feed"
             className="
               bg-white dark:bg-[#152238]
               text-[#0B2A6B] dark:text-white
@@ -88,7 +87,7 @@ export default function Navbar() {
             "
           >
             Descubra novas oportunidades
-          </button>
+          </Link>
 
           {/* DARK MODE BUTTON */}
           <button
@@ -140,9 +139,9 @@ export default function Navbar() {
           )}
         </ul>
 
-        <button className="w-full bg-white text-[#0B2A6B] px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors mt-3">
+        <Link to="/feed" className="w-full bg-white text-[#0B2A6B] px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors mt-3">
           Descubra novas oportunidades
-        </button>
+        </Link>
 
         <button
           className="p-2 rounded-full hover:bg-white/10 transition-colors mt-3"

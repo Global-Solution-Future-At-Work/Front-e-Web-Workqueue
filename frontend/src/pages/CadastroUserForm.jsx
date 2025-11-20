@@ -72,22 +72,27 @@ export default function CadastroUserForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
-
+      
+      {/* Card Container - Mesma cor de fundo e estilo do form de Empresa */}
       <div className="bg-gray-200 dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full transition-colors">
 
         {/* Cabeçalho */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-300">
             Cadastre-se
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1 mb-4">
+          <p className="text-gray-600 mt-1 mb-4 dark:text-gray-100">
             Crie sua conta na WorkQueue!
           </p>
-          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200">
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
             Cadastro de Usuário Profissional
           </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">
+            Encontre as melhores oportunidades para sua carreira
+          </p>
         </div>
 
+        {/* Mensagens de Erro/Sucesso */}
         {message && (
           <div className={`mb-4 p-3 rounded text-center ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
             {message.text}
@@ -108,7 +113,9 @@ export default function CadastroUserForm() {
               value={formData.nome}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -124,7 +131,9 @@ export default function CadastroUserForm() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -141,7 +150,9 @@ export default function CadastroUserForm() {
               onChange={handleChange}
               required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -158,7 +169,9 @@ export default function CadastroUserForm() {
               onChange={handleChange}
               required
               minLength="8"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -174,7 +187,9 @@ export default function CadastroUserForm() {
               value={formData.atuacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -190,7 +205,9 @@ export default function CadastroUserForm() {
               value={formData.experiencia}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -206,7 +223,9 @@ export default function CadastroUserForm() {
               value={formData.localizacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-[#0F172A] dark:text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
@@ -222,7 +241,6 @@ export default function CadastroUserForm() {
           </button>
 
         </form>
-
       </div>
     </div>
   );

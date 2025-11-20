@@ -79,16 +79,16 @@ export default function CadastroEmpresaForm() {
 
         {/* Cabeçalho */}
         <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-300 ">
                 Cadastre-se
             </h1>
-            <p className="text-gray-600 mt-1 mb-4">
+            <p className="text-gray-600 mt-1 mb-4 dark:text-gray-100">
                 Crie sua conta na WorkQueue!
             </p>
-            <h2 className="text-xl font-semibold text-gray-700">
+            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300">
                 Cadastre-se como uma empresa.
             </h2>
-            <p className="text-sm text-gray-500">Divulgue vagas, encontre talentos e otimize seu recrutamento com IA</p>
+            <p className="text-sm text-gray-500 dark:text-gray-300">Divulgue vagas, encontre talentos e otimize seu recrutamento com IA</p>
         </div>
 
         {message && (
@@ -188,7 +188,7 @@ export default function CadastroEmpresaForm() {
 
           {/* Tamanho */}
           <div>
-            <label htmlFor="tamanho" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="tamanho" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Tamanho da Empresa (pequena, média, grande):
             </label>
             <input
@@ -221,7 +221,7 @@ export default function CadastroEmpresaForm() {
           </div>
 
           <div>
-            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Localização (Sede):
             </label>
             <input
@@ -231,12 +231,14 @@ export default function CadastroEmpresaForm() {
               value={formData.localizacao}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="site" className="block text-sm font-medium text-gray-700 text-left mb-1">
+            <label htmlFor="site" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Site da Empresa:
             </label>
             <input
@@ -246,7 +248,9 @@ export default function CadastroEmpresaForm() {
               value={formData.site}
               onChange={handleChange}
               placeholder="https://..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 
+                         dark:bg-[#0F172A] dark:text-gray-100 rounded-lg 
+                         focus:ring-blue-500 focus:border-blue-500 transition"
             />
           </div>
           

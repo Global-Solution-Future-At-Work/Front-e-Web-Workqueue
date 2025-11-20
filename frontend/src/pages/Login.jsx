@@ -76,19 +76,19 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 sm:p-12 rounded-xl shadow-2xl max-w-md w-full border border-gray-200">
+<div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-xl shadow-2xl max-w-md w-full border border-gray-200 dark:border-gray-700 transition-colors duration-200">
         
         <div className="mb-8 text-center">
-            <h1 className="text-3xl font-bold text-gray-800">Bem-vindo(a)!</h1>
-            <p className="text-gray-500 mt-2">
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Bem-vindo(a)!</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">
                 Insira suas credenciais para acessar a WorkQueue.
             </p>
         </div>
 
         {/* Feedback de Erro */}
         {error && (
-          <div className="mb-4 p-3 rounded bg-red-50 border border-red-200 text-red-600 text-sm text-center">
+          <div className="mb-4 p-3 rounded bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm text-center">
             {error}
           </div>
         )}
@@ -111,7 +111,7 @@ export default function LoginForm() {
               required
               placeholder="seu@email.com"
               disabled={isLoading}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
@@ -124,7 +124,7 @@ export default function LoginForm() {
             >                Senha
                 </label>
                 {/* Correção: 'class' para 'className' e <a> para <Link> */}
-                <Link to="/recuperar-conta" className="text-sm text-blue-600 hover:underline">
+                <Link to="/recuperar-conta" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
                     Esqueceu a senha?
                 </Link>
             </div>
@@ -138,14 +138,14 @@ export default function LoginForm() {
               minLength="8"
               placeholder="••••••••"
               disabled={isLoading}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-[#0F172A] text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full mt-2 px-4 py-3 bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 active:bg-blue-800 transition duration-150 shadow-md flex justify-center items-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full mt-2 px-4 py-3 bg-blue-600 dark:bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-500 active:bg-blue-800 transition duration-150 shadow-md flex justify-center items-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {isLoading ? (
               // Spinner simples SVG
@@ -158,10 +158,10 @@ export default function LoginForm() {
 
         </form>
         
-        <div className="mt-6 text-center text-sm text-gray-600">
+        <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Não tem uma conta?{' '}
             {/* Atualizado para Link e apontando para a página de escolha de tipo */}
-            <Link to="/escolher-tipo" className="text-blue-600 font-semibold hover:underline">
+            <Link to="/escolher-tipo" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                 Cadastre-se
             </Link>
         </div>
