@@ -1,13 +1,46 @@
 [
-    {
-        "id": "ced54ffc-a881-4b79-b1e0-bde9e1d41d68",
-        "nome_empresa": "Daniel",
-        "email_corporativo": "example@ab.com",
-        "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
-        "area_atuacao": "Desenvolvimento",
-        "tamanho": "Grande",
-        "descricao": "Empresa Softhouse",
-        "localizacao": "Barueri - SP",
-        "site": "https://www.google.com"
-    }
+  {
+    "id": "5f8d4b3a-9c12-4e56-a789-d0e1f2g3h4i5",
+    "nome_empresa": "TechNova Solutions",
+    "email_corporativo": "contato@technova.com.br",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Consultoria de TI",
+    "tamanho": "Média",
+    "descricao": "Especialistas em transformação digital",
+    "localizacao": "Rio de Janeiro - RJ",
+    "site": "https://www.technova.com.br"
+  },
+  {
+    "id": "9a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6",
+    "nome_empresa": "AgroFuture",
+    "email_corporativo": "admin@agrofuture.io",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Agronegócio",
+    "tamanho": "Pequena",
+    "descricao": "Tecnologia para monitoramento de safras",
+    "localizacao": "Ribeirão Preto - SP",
+    "site": "https://www.agrofuture.io"
+  },
+  {
+    "id": "1q2w3e4r-5t6y-7u8i-9o0p-a1s2d3f4g5h6",
+    "nome_empresa": "BlueSky Logistics",
+    "email_corporativo": "rh@blueskylog.com",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Logística",
+    "tamanho": "Grande",
+    "descricao": "Soluções logísticas internacionais",
+    "localizacao": "Curitiba - PR",
+    "site": "https://www.blueskylog.com"
+  },
+  {
+    "id": "z9x8c7v6-b5n4-m3l2-k1j0-h9g8f7d6s5a4",
+    "nome_empresa": "HealthCare Connect",
+    "email_corporativo": "suporte@healthconnect.med",
+    "senha": "$2b$10$30zYS9csCXoN9wC8F6gXDOSkOKSEqYMJ7hl3GkNZooQbWlnjtEhxC",
+    "area_atuacao": "Saúde",
+    "tamanho": "Média",
+    "descricao": "Plataforma de telemedicina integrada",
+    "localizacao": "Belo Horizonte - MG",
+    "site": "https://www.healthconnect.med"
+  }
 ]

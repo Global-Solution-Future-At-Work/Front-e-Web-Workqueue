@@ -37,7 +37,7 @@ export default function HomePage() {
 
         {/* BOTÕES */}
         <div className="mt-6 flex flex-col items-center md:items-start gap-2">
-          <button
+          <Link to="/login"
             className="
               border border-gray-400 dark:border-gray-600
               text-gray-800 dark:text-gray-200
@@ -48,9 +48,10 @@ export default function HomePage() {
             "
           >
             Entrar com e-mail
-          </button>
+          </Link>
 
           <p className="text-xs text-gray-600 dark:text-gray-400 transition-colors">
+
             Ainda não faz parte da WorkQueue?{" "}
             <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
               <Link to="/escolher-tipo">Cadastrar-se</Link>

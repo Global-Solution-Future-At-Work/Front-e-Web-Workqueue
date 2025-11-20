@@ -11,24 +11,63 @@ export default function CadastroUserForm() {
     localizacao: '',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(null);
 
     if (formData.senha !== formData.confirmarSenha) {
       alert('As senhas não coincidem!');
       return;
     }
 
-    console.log('Dados submetidos (Usuário Profissional):', formData);
-    alert('Cadastro inicial enviado!');
+    setLoading(true);
 
-    // Redireciona corretamente após o envio
-    window.location.href = '/cadastro-concluido';
+    // Preparar o payload conforme esperado pelo backend (/register/user)
+    const payload = {
+      nome: formData.nome,
+      email: formData.email,
+      senha: formData.senha,
+      cargo: formData.atuacao,
+      localizacao: formData.localizacao,
+      experiencias: formData.experiencia
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/register/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Erro ao cadastrar usuário');
+      }
+
+      // Sucesso
+      alert('Usuário criado com sucesso!');
+      console.log('Sucesso:', data);
+      
+      // Redirecionar ou limpar formulário
+      window.location.href = '/login'; 
+
+    } catch (error) {
+      console.error('Erro:', error);
+      setMessage({ type: 'error', text: error.message });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,7 +88,12 @@ export default function CadastroUserForm() {
           </h2>
         </div>
 
-        {/* Formulário */}
+        {message && (
+          <div className={`mb-4 p-3 rounded text-center ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+            {message.text}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
 
           {/* Nome */}
@@ -169,9 +213,12 @@ export default function CadastroUserForm() {
           {/* Botão */}
           <button
             type="submit"
-            className="w-full mt-6 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-lg font-semibold transition shadow-lg"
+            disabled={loading}
+            className={`w-full mt-6 px-4 py-3 text-white rounded-lg text-lg font-semibold transition duration-150 shadow-lg ${
+              loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
           >
-            Próximo
+            {loading ? 'Enviando...' : 'Cadastrar'}
           </button>
 
         </form>
