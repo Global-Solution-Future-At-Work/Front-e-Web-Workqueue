@@ -1,8 +1,14 @@
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 text-center px-4">
-      <h1 className="text-6xl font-bold text-gray-800">404</h1>
-      <p className="text-xl text-gray-600 mt-4">Página não encontrada</p>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-[#0F172A] text-center px-4 transition-colors">
+      
+      <h1 className="text-6xl font-bold text-gray-800 dark:text-gray-100">
+        404
+      </h1>
+
+      <p className="text-xl text-gray-600 dark:text-gray-300 mt-4">
+        Página não encontrada
+      </p>
 
       <a
         href="/"

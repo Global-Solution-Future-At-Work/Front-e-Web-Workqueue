@@ -2,7 +2,6 @@ import React from 'react';
 
 import ChatFlutuante from '../components/ChatFlutuante';
 
-
 const lobbyData = {
   vaga: "Desenvolvedor Front-End",
   sugestao: "IA Gemini: Sugestão automática de candidatos",
@@ -32,7 +31,6 @@ const candidates = [
   },
 ];
 
-
 export default function Lobby() {
   const handleInvite = () => {
     alert("Convidar manualmente acionado!");
@@ -55,29 +53,28 @@ export default function Lobby() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 sm:p-10">
-      <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg p-8">
-        
-         
-        <div className="flex justify-between items-center border-b pb-4 mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0F172A] p-6 sm:p-10 transition-colors">
+      <div className="max-w-6xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8 border border-gray-200 dark:border-gray-700">
+
+        {/* HEADER */}
+        <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4 mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
             Lobby - Empresa: <span className="text-blue-600">NextCode Labs</span>
           </h1>
           <img
-            src="/nextcode-logo.png" 
+            src="/nextcode-logo.png"
             alt="NextCode Labs Logo"
             className="w-16 h-auto"
           />
         </div>
 
-        
         <div className="flex flex-col lg:flex-row gap-8">
-          
-          
-          <div className="w-full lg:w-1/3 p-4 border-r border-gray-200">
-            <h2 className="text-xl font-bold text-gray-700 mb-4">Informações Gerais</h2>
-            
-            <div className="space-y-3 text-sm text-gray-700">
+
+          {/* COLUNA ESQUERDA */}
+          <div className="w-full lg:w-1/3 p-4 border-r border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-gray-700 dark:text-gray-100 mb-4">Informações Gerais</h2>
+
+            <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
               <p>
                 <span className="font-semibold">Vaga:</span> {lobbyData.vaga}
               </p>
@@ -92,53 +89,53 @@ export default function Lobby() {
                 <span className="font-semibold mr-1">Status: Lobby</span>
                 <span className="text-green-600 font-bold flex items-center">
                     {lobbyData.status}
-                    <svg className="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+                    <svg className="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                    </svg>
                 </span>
               </p>
               <p>
                 <span className="font-semibold">Criado em:</span> {lobbyData.criadoEm}
               </p>
             </div>
-            
+
             <div className="mt-8 flex flex-col space-y-3">
               <button
                 onClick={handleInvite}
-                className="px-4 py-2 bg-blue-100 text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-200 transition duration-150 text-sm font-medium"
+                className="px-4 py-2 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 border border-blue-300 dark:border-blue-700 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition duration-150 text-sm font-medium"
               >
                 Convidar manualmente
               </button>
               <button
                 onClick={handleUpdateCriteria}
-                className="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-200 transition duration-150 text-sm font-medium"
+                className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 text-sm font-medium"
               >
                 Atualizar critérios da IA
               </button>
             </div>
           </div>
-          
-          
+
+          {/* COLUNA DIREITA */}
           <div className="w-full lg:w-2/3 p-4">
-            <h2 className="text-xl font-bold text-gray-700 mb-4">
-              Lista de Candidatos sugeridos
-            </h2>
-            
+            <h2 className="text-xl font-bold text-gray-700 dark:text-gray-100 mb-4">Lista de Candidatos sugeridos</h2>
+
             <div className="flex flex-wrap gap-6 justify-start">
               {candidates.map(candidate => (
                 <div 
                   key={candidate.id} 
-                  className="w-full sm:w-56 bg-white border border-gray-200 rounded-lg shadow-md p-4 flex flex-col items-center text-center"
+                  className="w-full sm:w-56 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg shadow-md p-4 flex flex-col items-center text-center"
                 >
-                  <div className="w-24 h-24 bg-blue-300 rounded-full mb-3 flex items-center justify-center text-white font-medium text-xs">
+                  <div className="w-24 h-24 bg-blue-300 dark:bg-blue-600 rounded-full mb-3 flex items-center justify-center text-white font-medium text-xs">
                     Foto do candidato aqui
                   </div>
                   
-                  <h3 className="font-semibold text-gray-800">{candidate.name}</h3>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <h3 className="font-semibold text-gray-800 dark:text-gray-100">{candidate.name}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
                     <span className="font-medium">Principais habilidades:</span>{" "}
                     {candidate.habilidades.join(", ")}
                   </p>
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium">Compatibilidade (%) com a vaga:</span>{" "}
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    <span className="font-medium">Compatibilidade (%):</span>{" "}
                     {candidate.compatibilidade}%
                   </p>
                   
@@ -148,12 +145,11 @@ export default function Lobby() {
                 </div>
               ))}
             </div>
-            
           </div>
         </div>
 
-        
-        <div className="mt-8 pt-4 border-t border-gray-200 flex justify-end items-center space-x-3">
+        {/* AÇÕES FINAIS */}
+        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-end items-center space-x-3">
             <button
                 onClick={handleGenerateOtherLobby}
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150 text-sm font-medium"
@@ -175,6 +171,7 @@ export default function Lobby() {
         </div>
 
       </div>
+
       <ChatFlutuante />
     </div>
   );
