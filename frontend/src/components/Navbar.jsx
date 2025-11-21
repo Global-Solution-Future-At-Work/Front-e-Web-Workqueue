@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Moon, Sun, Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // 1. Importação adicionada
 import useDarkMode from '../hooks/useDarkMode';
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [theme, setTheme] = useDarkMode();
+  
+  // 2. Inicializa o navigate e chama o useLocation para forçar re-render na troca de rota
+  const navigate = useNavigate();
+  useLocation(); 
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,7 +22,8 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user'); 
-    window.location.reload(); 
+    // 3. Redireciona para login (o useLocation vai detectar e atualizar o menu)
+    navigate('/login'); 
   };
 
   return (
