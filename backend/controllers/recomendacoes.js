@@ -16,7 +16,6 @@ router.get("/recomendacao/user/:id", async (req, res) => {
 router.post("/recomendacao", authMiddleware, async (req, res) => {
     const { id_user, mensagem } = req.body
 
-    // Validação simples para não salvar vazio
     if (!id_user || !mensagem) {
         return res.status(400).send("ID do usuário e mensagem são obrigatórios.")
     }
@@ -40,7 +39,6 @@ router.delete("/recomendacao/:id", authMiddleware, async (req, res) => {
 router.get("/recomendacaoadmin", async (req, res) => {
     let data = await AdminRepository.read()
     
-    // Verifica o código de admin no header
     if (req.headers["admin_code"] === data.codigo) {
         const recomendacoes = await RecomendacoesRepository.findAll()
         res.json(recomendacoes)

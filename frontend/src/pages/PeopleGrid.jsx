@@ -1,36 +1,24 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import fotohomem from "../assets/fotohomem.svg"; 
+import fotohomem from "../assets/fotohomem.svg";
 import ChatFlutuante from '../components/ChatFlutuante';
 
-// --- FUNÇÕES AUXILIARES (Para evitar erros de tipos) ---
-
-// 1. Garante que listas simples (skills, interesses) sejam sempre arrays
 const ensureArray = (data) => {
-  if (!data) return []; // Se for null/undefined, retorna array vazio
-  if (Array.isArray(data)) return data; // Se já for array, retorna ele mesmo
-  if (typeof data === 'string') return data.split(',').map(s => s.trim()); // Se for string "Java, React", vira array
-  return [data]; // Qualquer outra coisa vira um item no array
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === 'string') return data.split(',').map(s => s.trim());
+  return [data];
 };
 
-// 2. Normaliza Experiências (String -> Objeto)
 const normalizeExperience = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
-  // Se vier apenas uma string ex: "Dev Junior", cria um objeto fictício
   if (typeof data === 'string') {
-    return [{ 
-      cargo: data, 
-      empresa: "Empresa não inf.", 
-      inicio: "", 
-      fim: "", 
-      descricao: "" 
-    }];
+    return [{ cargo: data, empresa: "Empresa não inf.", inicio: "", fim: "", descricao: "" }];
   }
   return [];
 };
 
-// 3. Normaliza Formação (String -> Objeto)
 const normalizeEducation = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
@@ -40,11 +28,135 @@ const normalizeEducation = (data) => {
   return [];
 };
 
-// 4. Normaliza Projetos
 const normalizeProjects = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
   return [];
+};
+
+// --- MessageModal Corrigido ---
+const MessageModal = ({ isOpen, onClose, targetUser }) => {
+  const [mensagem, setMensagem] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert("Erro: Usuário não autenticado. Faça login novamente.");
+        setLoading(false);
+        return;
+    }
+
+    try {
+      // 1. Obter dados do usuário logado (quem envia)
+      const authResponse = await fetch('http://127.0.0.1:3000/datajwt', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!authResponse.ok) {
+        throw new Error("Falha ao validar token do usuário.");
+      }
+
+      const authData = await authResponse.json();
+      
+      // Pegamos ID e Role de quem está logado
+      const { id, role } = authData.jwt_data; 
+
+      // 2. Montar Payload
+      // Cenário: Uma Empresa (logada) envia mensagem para um Usuário/Talento (targetUser)
+      
+      const payload = {
+        mensagem: mensagem,
+        // O destinatário da mensagem é o usuário do card que clicamos
+        id_user: targetUser.id, 
+        
+        // O remetente (contexto da conversa) é a empresa logada
+        // Se quem estiver logado não for empresa, mandamos null (o backend vai recusar, pois é regra de negócio)
+        id_empresa: role === 'empresa' ? id : null, 
+        
+        // CAMPO NOVO OBRIGATÓRIO: Quem de fato clicou no botão "Enviar"
+        enviado_por: id 
+      };
+
+      // Validação básica antes de enviar para evitar 400 desnecessário
+      if (!payload.id_empresa) {
+         alert("Apenas contas do tipo 'Empresa' podem iniciar conversas com talentos.");
+         setLoading(false);
+         return;
+      }
+
+      // 3. Enviar
+      const response = await fetch('http://127.0.0.1:3000/mensagem', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        alert(`Mensagem enviada para ${targetUser.nome}!`);
+        setMensagem("");
+        onClose();
+      } else {
+        const errorData = await response.json();
+        alert(`Erro ao enviar: ${errorData.error || 'Tente novamente.'}`);
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+      alert('Erro ao processar solicitação: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-fade-in-up">
+        <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+            Mensagem para {targetUser.nome}
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
+        </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sua mensagem</label>
+            <textarea 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white resize-none h-32"
+              placeholder={`Olá ${targetUser.nome}, gostaríamos de marcar uma entrevista...`}
+              value={mensagem}
+              onChange={(e) => setMensagem(e.target.value)}
+              required
+            />
+          </div>
+          <div className="flex justify-end gap-3">
+            <button type="button" onClick={onClose} className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">Cancelar</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2">
+              {loading ? 'Enviando...' : (
+                <>
+                  <span>Enviar</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 // --- Modal de Recomendação ---
@@ -90,9 +202,7 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-fade-in-up">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-          <h3 className="text-lg font-bold text-gray-800 dark:text-white">
-            Recomendar {userName}
-          </h3>
+          <h3 className="text-lg font-bold text-gray-800 dark:text-white">Recomendar {userName}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">✕</button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -108,7 +218,7 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
           </div>
           <div className="flex justify-end gap-3">
             <button type="button" onClick={onClose} className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">Cancelar</button>
-            <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50">{loading ? 'Enviando...' : 'Enviar'}</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50">{loading ? 'Enviando...' : 'Enviar'}</button>
           </div>
         </form>
       </div>
@@ -119,10 +229,10 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
 // --- Modal de Detalhes (UserModal) ---
 const UserModal = ({ user, onClose }) => {
   const [isRecModalOpen, setIsRecModalOpen] = useState(false);
+  const [isMsgModalOpen, setIsMsgModalOpen] = useState(false);
 
   if (!user) return null;
 
-  // Normaliza os dados antes de renderizar para evitar erros de .map
   const experiencias = normalizeExperience(user.experiencias);
   const formacao = normalizeEducation(user.formacao);
   const projetos = normalizeProjects(user.projetos);
@@ -136,7 +246,7 @@ const UserModal = ({ user, onClose }) => {
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
         <div className="bg-white dark:bg-gray-800 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-fade-in-up scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600">
-          
+           
           {/* Header */}
           <div className="sticky top-0 z-10 flex justify-between items-center p-6 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">Perfil Profissional</h2>
@@ -166,13 +276,24 @@ const UserModal = ({ user, onClose }) => {
                   <span>{user.email}</span>
                 </div>
 
-                <div className="mt-4 flex justify-center sm:justify-start">
+                {/* BOTÕES DE AÇÃO */}
+                <div className="mt-4 flex justify-center sm:justify-start gap-3 flex-wrap">
+                  {/* Botão de Recomendação (Verde) */}
                   <button 
                     onClick={() => setIsRecModalOpen(true)}
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" /></svg>
-                    Fazer Recomendação
+                    Recomendar
+                  </button>
+
+                  {/* Botão de Mensagem (Azul) */}
+                  <button 
+                    onClick={() => setIsMsgModalOpen(true)}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                    Mensagem
                   </button>
                 </div>
               </div>
@@ -186,10 +307,9 @@ const UserModal = ({ user, onClose }) => {
 
             {/* Grid de Informações */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              
+               
               {/* ESQUERDA */}
               <div className="space-y-6">
-                
                 {/* Habilidades */}
                 <div>
                   <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">⚡ Habilidades Técnicas</h4>
@@ -216,22 +336,18 @@ const UserModal = ({ user, onClose }) => {
                       <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">🌎 Idiomas</h4>
                       <div className="flex flex-wrap gap-2">
                         {idiomas.map((item, idx) => {
-                            // Trata caso o idioma seja string ou objeto
                             const nome = typeof item === 'object' ? item.idioma : item;
                             const nivel = typeof item === 'object' ? item.nivel : '';
                             return (
                               <div key={idx} className="px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300 rounded-lg text-sm font-medium flex items-center gap-2">
                                 <span>{nome}</span>
-                                {nivel && <>
-                                  <span className="w-1 h-1 bg-current rounded-full opacity-50"></span>
-                                  <span className="text-xs opacity-80 uppercase tracking-wide">{nivel}</span>
-                                </>}
+                                {nivel && <span className="text-xs opacity-80 uppercase tracking-wide">({nivel})</span>}
                               </div>
                             )
                         })}
                       </div>
                     </div>
-                 )}
+                  )}
 
                 {/* Certificações */}
                 {certificacoes.length > 0 && (
@@ -272,7 +388,6 @@ const UserModal = ({ user, onClose }) => {
                     )) : <p className="text-sm text-gray-500">Não informada</p>}
                   </div>
                 </div>
-
               </div>
 
               {/* DIREITA - Experiência e Projetos */}
@@ -327,11 +442,18 @@ const UserModal = ({ user, onClose }) => {
         userId={user.id}
         userName={user.nome}
       />
+
+      {/* Integração do Modal de Mensagem */}
+      <MessageModal 
+        isOpen={isMsgModalOpen}
+        onClose={() => setIsMsgModalOpen(false)}
+        targetUser={user}
+      />
     </>
   );
 };
 
-// --- Componente Principal ---
+// --- Componente Principal (PeopleGrid) ---
 export default function PeopleGrid() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
@@ -373,7 +495,6 @@ export default function PeopleGrid() {
 
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
-      // Normaliza as habilidades no filtro também para evitar erro no .some
       const habilidades = ensureArray(user.habilidadesTecnicas);
 
       const matchArea = filters.area === '' || 
@@ -415,7 +536,6 @@ export default function PeopleGrid() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredUsers.map((user) => {
-                // Normalização de segurança para o card
                 const skillsSafe = ensureArray(user.habilidadesTecnicas);
                 
                 return (

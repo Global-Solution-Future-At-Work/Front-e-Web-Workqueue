@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "4331c471-708f-484d-9ebc-940ba47232fc",
+    "data_criacao": 1763694716552,
+    "id_empresa": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "id_user": "e282445f-f217-4962-9fda-2f26f63e9692",
+    "enviado_por": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "mensagem": "oi"
+  },
+  {
+    "id": "6f8050c8-22fb-43ad-a837-ca7628353967",
+    "data_criacao": 1763694726217,
+    "id_empresa": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "id_user": "e282445f-f217-4962-9fda-2f26f63e9692",
+    "enviado_por": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "mensagem": "a"
+  },
+  {
+    "id": "d07de72c-dd1b-4f49-82ab-ddbca60db1e0",
+    "data_criacao": 1763694814873,
+    "id_empresa": "5b88803e-94a9-4762-9cbf-55b700498526",
+    "id_user": "e282445f-f217-4962-9fda-2f26f63e9692",
+    "enviado_por": "e282445f-f217-4962-9fda-2f26f63e9692",
+    "mensagem": "asd"
+  }
+]

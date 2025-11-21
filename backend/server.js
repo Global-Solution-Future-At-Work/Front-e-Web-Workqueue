@@ -14,7 +14,7 @@ import vagas from "./controllers/vagas.js"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 import recomendacoes from "./controllers/recomendacoes.js";
-
+import mensagem from "./controllers/mensagem.js"
 
 dotenv.config(); 
 
@@ -36,6 +36,7 @@ app.use(empresa)
 app.use(lobbies)
 app.use(vagas)
 app.use(recomendacoes)
+app.use("/mensagem", mensagem)
 
 app.get('/healthcheck', (req, res) => {
   res.send("Ok!")

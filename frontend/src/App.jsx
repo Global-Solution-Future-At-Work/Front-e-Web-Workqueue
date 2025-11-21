@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 // Componentes Globais
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import PrivateRoute from "./components/PrivateRoute"; // Importe sua Guarda de Rota
+import PrivateRoute from "./components/PrivateRoute";
 
 // Páginas Públicas
 import HomePage from "./pages/HomePage";

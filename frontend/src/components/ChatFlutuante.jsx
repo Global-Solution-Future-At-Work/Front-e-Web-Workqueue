@@ -1,137 +1,300 @@
-import React, { useState } from 'react';
-
-const dummyConversations = [
-  {
-    id: 'alexandre',
-    name: 'Alexandre Silva',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-e6955c6d3ad2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80',
-    lastMessage: 'Alexandre Silva: Boa tarde!',
-    messages: [
-      { id: 1, sender: 'Alexandre Silva', text: 'Boa tarde!', time: '14:30' },
-      { id: 2, sender: 'Você', text: 'Olá Alexandre! Como posso ajudar?', time: '14:31' },
-    ],
-  },
-  {
-    id: 'suporte',
-    name: 'Suporte WorkQueue',
-    avatar: 'https://via.placeholder.com/150/007bff/ffffff?text=WQ',
-    lastMessage: 'Suporte: Seu ticket foi atualizado.',
-    messages: [
-      { id: 1, sender: 'Suporte WorkQueue', text: 'Seu ticket #12345 foi atualizado.', time: 'Ontem' },
-      { id: 2, sender: 'Você', text: 'Obrigado pela informação!', time: 'Ontem' },
-    ],
-  },
-];
+import React, { useState, useEffect, useRef } from 'react';
+import fotohomem from "../assets/fotohomem.svg"; // Ajuste o caminho se necessário
 
 const ChatFlutuante = () => {
+  // Estados de UI
   const [isOpen, setIsOpen] = useState(false);
-  const [activeChat, setActiveChat] = useState(null);
+  const [activeChatId, setActiveChatId] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+  
+  // Estados de Dados
+  const [userData, setUserData] = useState(null); // { id, role }
+  const [conversations, setConversations] = useState({}); 
+  const [loading, setLoading] = useState(false);
+  
+  const scrollRef = useRef(null);
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-    if (isOpen) setActiveChat(null);
+  // 1. Identificar o usuário via Token JWT
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://127.0.0.1:3000/datajwt', {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.jwt_data);
+        }
+      } catch (error) {
+        console.error("Erro ao decodificar token:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // 2. Buscar histórico quando abrir o chat
+  useEffect(() => {
+    if (isOpen && userData) {
+      fetchHistory();
+    }
+  }, [isOpen, userData]);
+
+  // 3. Scroll automático
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [activeChatId, conversations]);
+
+  // --- FUNÇÕES ---
+
+  const fetchHistory = async () => {
+    if (!userData) return;
+    setLoading(true);
+
+    try {
+      const response = await fetch(`http://127.0.0.1:3000/mensagem/historico/${userData.role}/${userData.id}`);
+      
+      if (response.ok) {
+        const messages = await response.json();
+        processMessages(messages);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar mensagens:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const openConversation = (chatId) => setActiveChat(chatId);
-  const closeConversation = () => setActiveChat(null);
+  const processMessages = (messages) => {
+    const groups = {};
+    const myRole = userData.role;
+    const myId = userData.id;
 
-  const currentChat = activeChat ? dummyConversations.find(chat => chat.id === activeChat) : null;
+    messages.forEach(msg => {
+      // Determina o ID do "outro lado" da conversa
+      let otherId = null;
+      let chatName = "";
+
+      if (myRole === 'user') {
+        otherId = msg.id_empresa; // Se sou user, converso com a empresa
+        chatName = `Empresa`; 
+      } else {
+        otherId = msg.id_user; // Se sou empresa, converso com o user
+        chatName = `Candidato`;
+      }
+
+      // Fallback caso venha nulo (mensagens antigas ou erro)
+      if (!otherId) otherId = "desconhecido";
+
+      if (!groups[otherId]) {
+        groups[otherId] = {
+          id: otherId,
+          name: `${chatName} #${otherId.substring(0, 4)}`,
+          avatar: fotohomem,
+          messages: []
+        };
+      }
+
+      // NOVA LÓGICA: Verifica quem enviou baseado no campo 'enviado_por'
+      // Se o campo não existir (msg antiga), tentamos adivinhar, mas o ideal é o campo novo.
+      const isMe = msg.enviado_por === myId;
+
+      groups[otherId].messages.push({
+        ...msg,
+        text: msg.mensagem,
+        isMe: isMe,
+        time: new Date(msg.data_criacao).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+    });
+
+    // Ordenar por data
+    Object.keys(groups).forEach(key => {
+      groups[key].messages.sort((a, b) => a.data_criacao - b.data_criacao);
+    });
+
+    setConversations(groups);
+  };
+
+  const handleSendMessage = async (e) => {
+    if ((e.key === 'Enter' || e.type === 'click') && newMessage.trim() && activeChatId) {
+      
+      const myRole = userData.role;
+      const myId = userData.id;
+      const targetId = activeChatId;
+
+      // Montagem do Payload
+      const payload = {
+        mensagem: newMessage,
+        // Define o contexto da conversa (Quem participa)
+        id_empresa: myRole === 'empresa' ? myId : targetId, 
+        id_user: myRole === 'user' ? myId : targetId,
+        // CAMPO NOVO: Define quem enviou explicitamente
+        enviado_por: myId
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:3000/mensagem', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          setNewMessage("");
+          fetchHistory(); // Atualiza para ver a mensagem
+        } else {
+           alert("Erro ao enviar mensagem");
+        }
+      } catch (error) {
+        console.error("Erro:", error);
+      }
+    }
+  };
+
+  // --- RENDERIZAÇÃO (UI) ---
+
+  const activeConversation = activeChatId ? conversations[activeChatId] : null;
+  const conversationList = Object.values(conversations);
+
+  if (!userData) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-60">
 
-      {/* CAIXA DO CHAT */}
+      {/* JANELA DO CHAT */}
       {isOpen && (
-        <div className="bg-white dark:bg-[#1E293B] shadow-xl rounded-lg w-72 h-96 mb-3 flex flex-col transition-all duration-300 transform origin-bottom-right text-gray-900 dark:text-gray-100">
+        <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-xl w-80 h-[500px] mb-4 flex flex-col transition-all duration-300 border border-gray-200 dark:border-gray-700 animate-fade-in-up overflow-hidden">
 
-          {/* CABEÇALHO */}
-          <div className="bg-blue-600 dark:bg-blue-700 text-white p-3 rounded-t-lg flex items-center">
-            {activeChat && (
-              <button onClick={closeConversation} className="mr-2 text-xl hover:text-gray-300">
-                &lt;
-              </button>
-            )}
-            <h3 className="text-lg font-semibold grow">
-              {activeChat ? currentChat.name : 'Mensagens'}
-            </h3>
-            <button
-              onClick={toggleChat}
-              className="text-white hover:text-gray-200 text-2xl"
-            >
-              &times;
+          {/* HEADER */}
+          <div className="bg-blue-600 text-white p-4 flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-2">
+                {activeChatId && (
+                <button onClick={() => setActiveChatId(null)} className="mr-1 hover:bg-blue-700 p-1 rounded transition-colors">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                )}
+                <div>
+                    <h3 className="font-bold text-sm">
+                        {activeChatId ? activeConversation?.name : 'Minhas Conversas'}
+                    </h3>
+                    {activeChatId && <span className="text-xs text-blue-200 block">Online</span>}
+                </div>
+            </div>
+            <button onClick={() => setIsOpen(false)} className="text-blue-100 hover:text-white">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
 
-          {/* CHAT ATIVO */}
-          {activeChat ? (
-            <div className="grow flex flex-col p-3 overflow-y-auto">
-
-              {currentChat.messages.map(msg => (
-                <div
-                  key={msg.id}
-                  className={`mb-2 p-2 rounded-lg max-w-[80%] text-sm
-                    ${
-                      msg.sender === 'Você'
-                        ? 'bg-blue-100 dark:bg-blue-900 self-end text-gray-900 dark:text-gray-100'
-                        : 'bg-gray-100 dark:bg-gray-800 self-start text-gray-900 dark:text-gray-100'
-                    }`}
-                >
-                  <p>{msg.text}</p>
-                  <span className="text-xs text-gray-500 dark:text-gray-400 float-right ml-2">{msg.time}</span>
+          {/* AREA DE CONTEUDO */}
+          {activeChatId && activeConversation ? (
+            <>
+                {/* MENSAGENS */}
+                <div className="flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-gray-800/50 scrollbar-thin" ref={scrollRef}>
+                    {activeConversation.messages.length === 0 && (
+                        <p className="text-center text-gray-400 text-sm mt-4">Nenhuma mensagem.</p>
+                    )}
+                    
+                    {activeConversation.messages.map((msg, idx) => (
+                        <div key={msg.id || idx} className={`flex mb-3 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`max-w-[80%] p-3 rounded-2xl text-sm shadow-sm ${
+                                    msg.isMe
+                                    ? 'bg-blue-600 text-white rounded-br-none'
+                                    : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-600 rounded-bl-none'
+                                }`}
+                            >
+                                <p>{msg.text}</p>
+                                <span className={`text-[10px] block text-right mt-1 ${msg.isMe ? 'text-blue-200' : 'text-gray-400'}`}>
+                                    {msg.time}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              ))}
 
-              {/* INPUT */}
-              <div className="mt-auto pt-2 border-t border-gray-200 dark:border-gray-700">
-                <input
-                  type="text"
-                  placeholder="Digite sua mensagem..."
-                  className="w-full p-2 border rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-gray-100 border-gray-300 dark:border-gray-600"
-                />
-              </div>
-            </div>
+                {/* INPUT */}
+                <div className="p-3 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                    <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyDown={handleSendMessage}
+                        placeholder="Digite sua mensagem..."
+                        className="flex-1 p-2.5 bg-gray-100 dark:bg-gray-800 border-0 rounded-lg text-sm text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                    />
+                    <button 
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        className="p-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                    </button>
+                </div>
+            </>
           ) : (
-
             /* LISTA DE CONVERSAS */
-            <div className="grow overflow-y-auto">
-              {dummyConversations.map(conv => (
-                <div
-                  key={conv.id}
-                  onClick={() => openConversation(conv.id)}
-                  className="flex items-center p-3 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-                >
-                  <img
-                    src={conv.avatar}
-                    alt={conv.name}
-                    className="w-10 h-10 rounded-full mr-3 object-cover"
-                  />
-                  <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-gray-100">{conv.name}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate w-48">
-                      {conv.lastMessage}
-                    </p>
-                  </div>
-                </div>
-              ))}
-
-              {dummyConversations.length === 0 && (
-                <p className="text-center text-gray-500 dark:text-gray-400 p-5">
-                  Nenhuma conversa encontrada.
-                </p>
-              )}
+            <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
+                {loading ? (
+                    <div className="flex justify-center items-center h-full">
+                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    </div>
+                ) : conversationList.length > 0 ? (
+                    conversationList.map(chat => (
+                        <div
+                            key={chat.id}
+                            onClick={() => setActiveChatId(chat.id)}
+                            className="flex items-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer border-b border-gray-50 dark:border-gray-800 transition-colors group"
+                        >
+                            <div className="relative">
+                                <img src={chat.avatar} alt="Avatar" className="w-10 h-10 rounded-full object-cover bg-gray-200 dark:bg-gray-700" />
+                                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+                            </div>
+                            <div className="ml-3 flex-1 min-w-0">
+                                <div className="flex justify-between items-baseline mb-0.5">
+                                    <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate group-hover:text-blue-600 transition-colors">
+                                        {chat.name}
+                                    </h4>
+                                    <span className="text-[10px] text-gray-400">
+                                        {chat.messages[chat.messages.length - 1]?.time}
+                                    </span>
+                                </div>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                    {chat.messages[chat.messages.length - 1]?.text}
+                                </p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-gray-400 p-6 text-center">
+                        <p className="text-sm">Nenhuma mensagem encontrada.</p>
+                    </div>
+                )}
             </div>
           )}
-
         </div>
       )}
 
-      {/* BOTÃO */
-      }
+      {/* FAB (Botão Flutuante) */}
       <button
-        onClick={toggleChat}
-        className="w-14 h-14 bg-blue-600 dark:bg-blue-700 text-white rounded-full shadow-xl flex items-center justify-center text-2xl hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-2xl transition-all transform hover:scale-110 hover:shadow-blue-500/30 focus:outline-none ${
+            isOpen 
+            ? 'bg-gray-700 text-white rotate-90' 
+            : 'bg-blue-600 text-white hover:bg-blue-700'
+        }`}
       >
-        {isOpen ? <>&times;</> : <>💬</>}
+        {isOpen ? <span className="text-3xl">&times;</span> : (
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+        )}
       </button>
     </div>
   );
