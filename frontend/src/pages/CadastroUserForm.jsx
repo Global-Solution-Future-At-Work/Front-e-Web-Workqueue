@@ -30,7 +30,7 @@ export default function CadastroUserForm() {
 
     setLoading(true);
 
-    // Preparar o payload conforme esperado pelo backend (/register/user)
+    // Preparar o payload para o backend
     const payload = {
       nome: formData.nome,
       email: formData.email,
@@ -55,7 +55,6 @@ export default function CadastroUserForm() {
         throw new Error(data.message || 'Erro ao cadastrar usuário');
       }
 
-      // Sucesso
       alert('Usuário criado com sucesso!');
       console.log('Sucesso:', data);
       
@@ -73,10 +72,9 @@ export default function CadastroUserForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] p-4 transition-colors">
       
-      {/* Card Container - Mesma cor de fundo e estilo do form de Empresa */}
+      {/* Card Container */}
       <div className="bg-gray-200 dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full transition-colors">
 
-        {/* Cabeçalho */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-300">
             Cadastre-se
@@ -92,7 +90,7 @@ export default function CadastroUserForm() {
           </p>
         </div>
 
-        {/* Mensagens de Erro/Sucesso */}
+        {/* Msg de Erro/Sucesso */}
         {message && (
           <div className={`mb-4 p-3 rounded text-center ${message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
             {message.text}
@@ -101,7 +99,6 @@ export default function CadastroUserForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Nome */}
           <div>
             <label htmlFor="nome" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome completo:
@@ -119,7 +116,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               E-mail profissional:
@@ -137,7 +133,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Senha */}
           <div>
             <label htmlFor="senha" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Senha:
@@ -175,7 +170,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Área de atuação */}
           <div>
             <label htmlFor="atuacao" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Área de atuação (Tecnologia, Marketing, Design):
@@ -193,7 +187,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Experiência */}
           <div>
             <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nível de experiência (Júnior, Pleno, Sênior):
@@ -211,7 +204,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Localização */}
           <div>
             <label htmlFor="localizacao" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Localização (Cidade, Estado):
@@ -229,7 +221,6 @@ export default function CadastroUserForm() {
             />
           </div>
 
-          {/* Botão */}
           <button
             type="submit"
             disabled={loading}

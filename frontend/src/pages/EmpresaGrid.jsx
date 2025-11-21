@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-// Você pode importar um logo padrão de empresa aqui ou usar o SVG inline abaixo
 import defaultLogo from "../assets/fotohomem.svg"; 
 import ChatFlutuante from '../components/ChatFlutuante';
 
-// SVG Fallback para logo de empresa se não houver imagem
 const BuildingIcon = () => (
   <div className="w-24 h-24 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center border-2 border-blue-200 dark:border-blue-800 text-blue-500 dark:text-blue-400">
     <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -13,7 +11,7 @@ const BuildingIcon = () => (
   </div>
 );
 
-// --- Componente Modal de Detalhes da Empresa ---
+// Componente Modal de Detalhes da Empresa
 const EmpresaModal = ({ empresa, onClose }) => {
   if (!empresa) return null;
 
@@ -32,7 +30,6 @@ const EmpresaModal = ({ empresa, onClose }) => {
         <div className="p-6 space-y-8">
           {/* Cabeçalho da Empresa */}
           <div className="flex flex-col sm:flex-row items-center gap-6">
-            {/* Lógica de Imagem: Se tiver foto, mostra, senão mostra ícone padrão */}
             {empresa.foto ? (
                <img 
                src={empresa.foto} 
@@ -63,7 +60,7 @@ const EmpresaModal = ({ empresa, onClose }) => {
             </div>
           </div>
 
-          {/* Sobre / Descrição */}
+          {/* Sobre e Descrição */}
           <div className="bg-gray-50 dark:bg-gray-700/30 p-6 rounded-xl border border-gray-100 dark:border-gray-700">
             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-lg">Sobre a Empresa</h4>
             <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
@@ -71,7 +68,7 @@ const EmpresaModal = ({ empresa, onClose }) => {
             </p>
           </div>
 
-          {/* Informações de Contato e Links */}
+          {/* Contato e Links */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center gap-2">
@@ -104,21 +101,21 @@ const EmpresaModal = ({ empresa, onClose }) => {
   );
 };
 
-// --- Componente Principal da Página ---
+// Componente Principal da Página
 export default function EmpresaGrid() {
   const navigate = useNavigate();
   const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEmpresa, setSelectedEmpresa] = useState(null);
 
-  // Estado para os filtros
+  // State para filtros
   const [filters, setFilters] = useState({
     area: '',
     location: '',
     tamanho: '' // Substitui 'tech' por 'tamanho'
   });
 
-  // Atualiza o estado dos filtros
+  // Atualiza o state dos filtros
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -128,7 +125,6 @@ export default function EmpresaGrid() {
     const fetchEmpresas = async () => {
       try {
         const token = localStorage.getItem('token'); 
-        // IMPORTANTE: Assumindo que a rota é /empresa no backend
         const response = await fetch('http://127.0.0.1:3000/empresa', {
           method: 'GET',
           headers: {
@@ -153,18 +149,18 @@ export default function EmpresaGrid() {
     fetchEmpresas();
   }, []);
 
-  // Lógica de filtragem memorizada
+  // Filtro
   const filteredEmpresas = useMemo(() => {
     return empresas.filter(empresa => {
-      // Filtro por Área de Atuação
+      // Área de Atuação
       const matchArea = filters.area === '' || 
         (empresa.area_atuacao && empresa.area_atuacao.toLowerCase().includes(filters.area.toLowerCase()));
 
-      // Filtro por Localização
+      // Localização
       const matchLocation = filters.location === '' || 
         (empresa.localizacao && empresa.localizacao.toLowerCase().includes(filters.location.toLowerCase()));
 
-      // Filtro por Tamanho
+      // Tamanho
       const matchTamanho = filters.tamanho === '' || 
         (empresa.tamanho && empresa.tamanho.toLowerCase().includes(filters.tamanho.toLowerCase()));
 
@@ -191,12 +187,12 @@ export default function EmpresaGrid() {
 
       <div className="max-w-6xl mx-auto">
         
-        {/* --- BARRA DE FILTROS --- */}
+        {/* BARRA DE FILTROS */}
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md mb-8 border border-gray-200 dark:border-gray-700">
           <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">Buscar Empresas</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
-            {/* Filtro de Área */}
+            {/* Filtro por Área */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
@@ -211,7 +207,7 @@ export default function EmpresaGrid() {
               />
             </div>
 
-            {/* Filtro de Localização */}
+            {/* Filtro por Localização */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -226,7 +222,7 @@ export default function EmpresaGrid() {
               />
             </div>
 
-            {/* Filtro de Tamanho */}
+            {/* Filtro por Tamanho */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
@@ -265,7 +261,7 @@ export default function EmpresaGrid() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Renderiza a lista FILTRADA */}
+                {/* Lista filtrada */}
                 {filteredEmpresas.map((empresa) => (
                   <div 
                     key={empresa.id}
@@ -281,7 +277,7 @@ export default function EmpresaGrid() {
                                 className="w-20 h-20 rounded-xl object-cover border-2 border-gray-100 dark:border-gray-700 shadow-sm"
                             />
                          ) : (
-                            // Versão mini do icone para o card
+                            // Versão mini do ícone
                             <div className="w-20 h-20 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 dark:text-blue-400">
                                 <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                             </div>

@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'; // 1. Importar hooks
+import React, { useState, useEffect } from 'react'; 
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from "../assets/fotohomem.svg";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-// ... (Mantive seus dados estáticos de postData, profileCardData, etc para economizar espaço) ...
 const postData = {
   profileName: 'Alexandre Silva',
   profileTitle: 'Desenvolvedor Full Stack • Next Code Labs',
@@ -70,34 +69,30 @@ const Post = ({ data }) => (
 export default function Feed() {
   const navigate = useNavigate();
 
-  // 2. State para guardar o link correto. Padrão inicia como user, mas pode ser null
   const [perfilLink, setPerfilLink] = useState('/perfiluser');
 
-  // 3. useEffect para buscar os dados ao carregar a página
+  // CARREGAR DADOS DA PÁGINA
   useEffect(() => {
     const fetchUserRole = async () => {
-      // Recupera o token (Assumindo que você salvou como 'token' no login)
+      // RECUPERA O TOKEN SALVO
       const token = localStorage.getItem('token');
 
-      if (!token) {
+      if (!token) { // REDIRECIONAR SE NÃO TIVER LOGIN SALVO
         console.log("Token não encontrado, redirecionando para login...");
-        // navigate('/login'); // Opcional: Redirecionar se não tiver token
         return;
       }
 
       try {
-        // IMPORTANTE: Ajuste a URL 'http://localhost:3000/datajwt' conforme a rota do seu backend
         const response = await fetch('http://localhost:3000/datajwt', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Envia o token no padrão Bearer
+            'Authorization': `Bearer ${token}`
           }
         });
 
         if (response.ok) {
           const data = await response.json();
-          // Backend retorna: { jwt_data: { id: '...', role: 'user' | 'empresa' } }
 
           if (data.jwt_data && data.jwt_data.role === 'empresa') {
             setPerfilLink('/perfilempresa');

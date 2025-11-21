@@ -11,7 +11,7 @@ import {
   MapPin
 } from 'lucide-react';
 
-// --- DADOS DO JSON (Integrados para garantir que o card apareça) ---
+// DADOS DO JSON (Integrados para garantir que o card apareça)
 const LOCAL_LOBBY_DATA = [
   {
     "id": "lobby_1",
@@ -327,7 +327,7 @@ export default function LobbiesScreen() {
               <LobbyCard 
                 key={lobby.id} 
                 lobby={lobby} 
-                onClick={(id) => navigate(`/lobby/`)} 
+                onClick={(id) => navigate(`/lobby`)} 
               />
             ))}
           </div>
