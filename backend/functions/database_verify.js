@@ -5,7 +5,9 @@ const nome_arquivo = {
     empresa: "empresa.json",
     feed: "feed.json",
     mensagem: "mensagem.json",
-    queue: "queue.json"
+    queue: "queue.json",
+    recomendacoes: "recomendacoes.json",
+    lobbies: "lobbies.json",
 };
 
 export default function verify() {

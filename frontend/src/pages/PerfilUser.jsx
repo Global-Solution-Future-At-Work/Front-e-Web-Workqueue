@@ -1,10 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Briefcase, Zap, Award, ChevronDown, Check, Pencil, X } from 'lucide-react';
-
-// --- IMPORTAÇÕES REAIS (Certifique-se que os caminhos estão corretos) ---
+import { 
+  MapPin, Briefcase, Zap, Award, ChevronDown, Check, Pencil, X, 
+  Trash2, MessageSquare
+} from 'lucide-react';
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from '../assets/fotohomem.svg'; 
+
+// --- FUNÇÕES AUXILIARES (Normalização de Dados) ---
+// Mesma lógica de segurança usada no PeopleGrid para evitar quebras
+
+const ensureArray = (data) => {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === 'string') return data.split(',').map(s => s.trim());
+  return [data];
+};
+
+const normalizeExperience = (data) => {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === 'string') {
+    return [{ 
+      cargo: data, 
+      empresa: "Empresa não inf.", 
+      inicio: "", 
+      fim: "", 
+      descricao: "" 
+    }];
+  }
+  return [];
+};
+
+const normalizeEducation = (data) => {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === 'string') {
+    return [{ curso: data, instituicao: "", ano: "" }];
+  }
+  return [];
+};
 
 const PerfilUser = () => {
   const [open, setOpen] = useState(false); 
@@ -12,8 +47,10 @@ const PerfilUser = () => {
   
   const [userData, setUserData] = useState(null); 
   const [rawData, setRawData] = useState(null); 
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Estado do formulário de edição
   const [formData, setFormData] = useState({
     nome: '',
     cargo: '',
@@ -32,88 +69,115 @@ const PerfilUser = () => {
   const fetchUserData = async () => {
     const token = localStorage.getItem('token');
     
-    // 1. Validação de Token Real
     if (!token) {
       navigate('/login');
       return;
     }
 
     try {
-      // 2. Obter o ID do usuário através do Token (Endpoint datajwt)
-      const authResponse = await fetch('http://localhost:3000/datajwt', {
+      // 1. Obter ID via Token
+      const authResponse = await fetch('http://127.0.0.1:3000/datajwt', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!authResponse.ok) {
-        throw new Error('Falha na autenticação');
-      }
+      if (!authResponse.ok) throw new Error('Falha na autenticação');
 
       const authData = await authResponse.json();
-      // Ajuste aqui se a estrutura do seu JSON for diferente (ex: authData.id ou authData.user.id)
       const myId = authData.jwt_data.id; 
 
-      // 3. Buscar dados do usuário na API
-      const userResponse = await fetch('http://localhost:3000/user', {
+      // 2. Buscar dados do usuário
+      const userResponse = await fetch('http://127.0.0.1:3000/user', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
-      if (!userResponse.ok) {
-        throw new Error('Erro ao buscar usuários');
-      }
+      if (!userResponse.ok) throw new Error('Erro ao buscar usuários');
 
       const usersList = await userResponse.json();
       const currentUser = usersList.find(user => user.id === myId);
 
-      if (!currentUser) {
-        throw new Error('Usuário não encontrado na base de dados');
-      }
+      if (!currentUser) throw new Error('Usuário não encontrado');
 
       setRawData(currentUser);
 
-      // Helpers de formatação
-      const formatList = (list) => Array.isArray(list) ? list.map(item => item).join(', ') : list;
-      const formatSoft = (list) => Array.isArray(list) ? list.join(' • ') : list;
-      
-      const experienciasFormatadas = Array.isArray(currentUser.experiencias) 
-        ? currentUser.experiencias.map(exp => ({
-            titulo: exp.empresa ? `${exp.empresa} — ${exp.cargo || 'Cargo não inf.'} (${exp.inicio || '?'} - ${exp.fim || 'Atual'})` : "Experiência",
-            descricao: exp.descricao || "Sem descrição."
-          }))
-        : typeof currentUser.experiencias === 'string' 
-            ? [{ titulo: "Experiência", descricao: currentUser.experiencias }] 
-            : [];
+      // 3. Buscar Recomendações
+      try {
+         const recResponse = await fetch(`http://127.0.0.1:3000/recomendacao/user/${myId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+         });
+         
+         if (recResponse.ok) {
+            const recData = await recResponse.json();
+            setRecommendations(recData);
+         }
+      } catch (err) {
+          console.error("Erro ao buscar recomendações:", err);
+      }
 
-      const formacaoFormatada = Array.isArray(currentUser.formacao)
-        ? currentUser.formacao.map(form => ({
-            descricao: `🎓 ${form.curso} — ${form.instituicao} (${form.ano})`
-          }))
-        : [];
+      // Normalização dos dados recebidos para o state de visualização
+      const experienciasSafe = normalizeExperience(currentUser.experiencias);
+      const formacaoSafe = normalizeEducation(currentUser.formacao);
+      const habilidadesSafe = ensureArray(currentUser.habilidadesTecnicas);
+      const softSafe = ensureArray(currentUser.softSkills);
+      const idiomasSafe = ensureArray(currentUser.idiomas);
+      const certificacoesSafe = ensureArray(currentUser.certificacoes);
+      const interessesSafe = ensureArray(currentUser.areaInteresses);
+
+      // Formatação específica para strings de exibição no card
+      const formatList = (list) => list.map(item => typeof item === 'string' ? item : (item.idioma || item)).join(', ');
+      const formatSoft = (list) => list.join(' • ');
 
       setUserData({
         nome: currentUser.nome,
         localizacao: currentUser.localizacao || "Localização não informada",
         cargo: currentUser.cargo || "Cargo não informado",
         area: currentUser.area || "",
-        instituicao: currentUser.experiencias?.[0]?.empresa || "Disponível para oportunidades", 
+        instituicao: experienciasSafe[0]?.empresa || "Disponível para oportunidades", 
         sobre: currentUser.resumo || "Sem resumo cadastrado.",
-        habilidade: formatList(currentUser.habilidadesTecnicas),
-        soft: formatSoft(currentUser.softSkills),
-        formacao: formacaoFormatada,
-        idiomas: currentUser.idiomas || [],
-        certificacoes: currentUser.certificacoes || [],
-        areaInteresses: currentUser.areaInteresses || [],
-        experiencias: experienciasFormatadas,
+        habilidade: formatList(habilidadesSafe),
+        soft: formatSoft(softSafe),
+        formacao: formacaoSafe.map(f => ({ descricao: `🎓 ${f.curso} — ${f.instituicao} ${f.ano ? `(${f.ano})` : ''}` })),
+        idiomas: idiomasSafe,
+        certificacoes: certificacoesSafe,
+        areaInteresses: interessesSafe,
+        experiencias: experienciasSafe.map(exp => ({
+            titulo: exp.empresa ? `${exp.empresa} — ${exp.cargo || 'Cargo não inf.'} (${exp.inicio || '?'} - ${exp.fim || 'Atual'})` : "Experiência",
+            descricao: exp.descricao || "Sem descrição."
+        })),
         isOwner: true 
       });
 
     } catch (error) {
       console.error("Erro ao carregar perfil:", error);
-      // Opcional: Redirecionar para login se der erro de auth
       if (error.message === 'Falha na autenticação') {
         navigate('/login');
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // --- Função para Deletar Recomendação ---
+  const handleDeleteRecommendation = async (id) => {
+    if (!window.confirm("Tem certeza que deseja apagar esta recomendação?")) return;
+
+    const token = localStorage.getItem('token');
+    try {
+        const response = await fetch(`http://127.0.0.1:3000/recomendacao/${id}`, {
+            method: 'DELETE',
+            headers: { 
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            setRecommendations(prev => prev.filter(rec => rec.id !== id));
+            alert("Recomendação removida.");
+        } else {
+            alert("Erro ao remover recomendação.");
+        }
+    } catch (error) {
+        console.error("Erro ao deletar:", error);
+        alert("Erro de conexão.");
     }
   };
 
@@ -123,14 +187,15 @@ const PerfilUser = () => {
 
   const handleOpenModal = () => {
     if (rawData) {
-      const habTec = Array.isArray(rawData.habilidadesTecnicas) ? rawData.habilidadesTecnicas.join(', ') : '';
-      const softSk = Array.isArray(rawData.softSkills) ? rawData.softSkills.join(', ') : '';
-      const certs = Array.isArray(rawData.certificacoes) ? rawData.certificacoes.join(', ') : '';
-      const interesses = Array.isArray(rawData.areaInteresses) ? rawData.areaInteresses.join(', ') : '';
+      // Prepara os dados para o formulário (transforma arrays em strings separadas por vírgula)
+      const habTec = ensureArray(rawData.habilidadesTecnicas).join(', ');
+      const softSk = ensureArray(rawData.softSkills).join(', ');
+      const certs = ensureArray(rawData.certificacoes).join(', ');
+      const interesses = ensureArray(rawData.areaInteresses).join(', ');
       
-      const idiomasStr = Array.isArray(rawData.idiomas) 
-        ? rawData.idiomas.map(i => typeof i === 'object' ? `${i.idioma} (${i.nivel})` : i).join(', ')
-        : '';
+      const idiomasStr = ensureArray(rawData.idiomas) 
+        .map(i => typeof i === 'object' ? `${i.idioma} (${i.nivel})` : i)
+        .join(', ');
 
       setFormData({
         nome: rawData.nome || '',
@@ -192,8 +257,7 @@ const PerfilUser = () => {
         areaInteresses: interessesArray
       };
 
-      // 4. Chamada Real de Update (PUT)
-      const response = await fetch(`http://localhost:3000/user/${rawData.id}`, {
+      const response = await fetch(`http://127.0.0.1:3000/user/${rawData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +269,7 @@ const PerfilUser = () => {
       if (response.ok) {
         alert("Perfil atualizado com sucesso!");
         setIsModalOpen(false);
-        fetchUserData(); // Recarrega os dados da API para garantir sincronia
+        fetchUserData(); 
       } else {
         alert("Erro ao atualizar perfil. Tente novamente.");
       }
@@ -230,7 +294,9 @@ const PerfilUser = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6">
 
         {/* LADO ESQUERDO */}
-        <div className="lg:w-3/4 w-full">
+        <div className="lg:w-3/4 w-full flex flex-col gap-6"> 
+          
+          {/* --- CARD PRINCIPAL DO PERFIL --- */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition">
 
             {/* BANNER E FOTO */}
@@ -312,11 +378,15 @@ const PerfilUser = () => {
                   
                   {userData.idiomas && userData.idiomas.length > 0 && (
                     <li className="flex flex-wrap gap-2 mt-3 pt-2">
-                      {userData.idiomas.map((lang, idx) => (
-                         <span key={idx} className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-100 dark:border-green-900">
-                           📘 {lang.idioma} <span className="text-xs opacity-75 ml-1 uppercase">({lang.nivel})</span>
-                         </span>
-                      ))}
+                      {userData.idiomas.map((item, idx) => {
+                          const nome = typeof item === 'string' ? item : item.idioma;
+                          const nivel = typeof item === 'string' ? '' : item.nivel;
+                          return (
+                            <span key={idx} className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-100 dark:border-green-900">
+                                📘 {nome} {nivel && <span className="text-xs opacity-75 ml-1 uppercase">({nivel})</span>}
+                            </span>
+                          )
+                      })}
                     </li>
                   )}
                 </ul>
@@ -353,7 +423,7 @@ const PerfilUser = () => {
                   </h3>
                   <div className="flex flex-wrap gap-2 mt-2">
                       {userData.habilidade ? userData.habilidade.split(', ').map((tech, i) => (
-                         <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 rounded-lg text-sm">{tech}</span>
+                          <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 rounded-lg text-sm">{tech}</span>
                       )) : "Nenhuma listada"}
                   </div>
 
@@ -409,11 +479,49 @@ const PerfilUser = () => {
                   {open ? "Ver menos" : "Ver mais detalhes"}
                   <ChevronDown size={16} className={`ml-1 transition-transform ${open ? "rotate-180" : ""}`} />
                 </button>
-
               </div>
-
             </div>
           </div>
+
+          {/* --- NOVA SEÇÃO: RECOMENDAÇÕES --- */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition p-8">
+             <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                <MessageSquare size={20} className="text-green-600" />
+                Recomendações Recebidas
+             </h3>
+
+             {recommendations.length === 0 ? (
+                 <p className="text-gray-500 dark:text-gray-400 italic">Você ainda não possui recomendações.</p>
+             ) : (
+                 <div className="grid gap-4">
+                     {recommendations.map((rec) => (
+                         <div key={rec.id} className="relative p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700/30">
+                             {/* Ícone de Citação */}
+                             <div className="absolute top-4 left-4 opacity-20">
+                                 <svg className="w-8 h-8 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.896 14.321 16.33 15.657 15.33C16.871 14.42 17.059 14.315 17.338 13.68C16.525 13.68 16.164 13.68 15.89 13.68C12.951 13.68 11.464 12.193 11.464 9.253V5H17.964V9.253C17.964 12.407 18.144 13.587 19.705 14.82C20.881 15.75 21.964 15.75 21.964 18C21.964 19.657 20.621 21 18.964 21H14.017ZM6.017 21L6.017 18C6.017 16.896 6.321 16.33 7.657 15.33C8.871 14.42 9.059 14.315 9.338 13.68C8.525 13.68 8.164 13.68 7.89 13.68C4.951 13.68 3.464 12.193 3.464 9.253V5H9.964V9.253C9.964 12.407 10.144 13.587 11.705 14.82C12.881 15.75 13.964 15.75 13.964 18C13.964 19.657 12.621 21 10.964 21H6.017Z" /></svg>
+                             </div>
+                             
+                             <p className="relative z-10 text-gray-700 dark:text-gray-300 italic pt-2 pl-8 pr-8">
+                                 "{rec.mensagem}"
+                             </p>
+
+                             {/* Botão de Excluir (Só aparece se for o dono) */}
+                             {userData.isOwner && (
+                                 <button 
+                                     onClick={() => handleDeleteRecommendation(rec.id)}
+                                     className="absolute top-2 right-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors"
+                                     title="Excluir recomendação"
+                                 >
+                                     <Trash2 size={16} />
+                                 </button>
+                             )}
+                         </div>
+                     ))}
+                 </div>
+             )}
+          </div>
+          {/* --- FIM SEÇÃO RECOMENDAÇÕES --- */}
+
         </div>
         
       </div>
@@ -434,7 +542,6 @@ const PerfilUser = () => {
             </div>
 
             <form onSubmit={handleSave} className="p-6 space-y-4">
-              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
