@@ -13,6 +13,7 @@ Bem-vindo ao repositório do **WorkQueue**, uma plataforma desenvolvida para con
 | Lucas de Almeida Pires       | 562757  |
 
 Link do GitHub: https://github.com/Global-Solution-Future-At-Work/Front-e-Web-Workqueue
+Link do Vídeo Demonstrativo: https://www.linkedin.com/feed/update/urn:li:activity:7397707679533555712
 
 ## 📋 Funcionalidades Principais
 
@@ -50,7 +51,7 @@ Certifique-se de ter o **Node.js** e o **npm** instalados em sua máquina.
 Clone este repositório e instale as dependências:
 
 # Clone o repositório
-git clone [https://github.com/seu-usuario/workqueue.git](https://github.com/seu-usuario/workqueue.git)
+git clone https://github.com/Global-Solution-Future-At-Work/Front-e-Web-Workqueue
 
 # Entre na pasta do projeto
 cd workqueue
