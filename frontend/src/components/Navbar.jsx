@@ -14,7 +14,7 @@ export default function Navbar() {
 
   const hasToken = localStorage.getItem('token');
 
-  // Função para realizar o logout
+  // Função Logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user'); 
@@ -46,7 +46,7 @@ export default function Navbar() {
           {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
 
-        {/* --- MENU DESKTOP --- */}
+        {/* MENU DESKTOP */}
         <div className="hidden md:flex items-center gap-6">
           <ul className="flex gap-6 text-sm">
             <li className="hover:underline cursor-pointer">
@@ -59,14 +59,14 @@ export default function Navbar() {
               <Link to="/sobre">Sobre</Link>
             </li>
             
-            {/* Se NÃO tem token, mostra Login */}
+            {/* Se não tem token, mostra Login */}
             {!hasToken && (
               <li className="hover:underline cursor-pointer">
                 <Link to="/login">Login</Link>
               </li>
             )}
 
-            {/* Se TEM token, mostra Sair */}
+            {/* Se tem token, mostra Sair */}
             {hasToken && (
               <li 
                 className="hover:underline cursor-pointer text-red-300 hover:text-red-200" 
@@ -77,7 +77,7 @@ export default function Navbar() {
             )}
           </ul>
 
-          {/* CTA BUTTON */}
+          {/* Botão CTA */}
           <Link to="/feed"
             className="
               bg-white dark:bg-[#152238]
@@ -90,7 +90,7 @@ export default function Navbar() {
             Descubra novas oportunidades
           </Link>
 
-          {/* DARK MODE BUTTON */}
+          {/* DARK MODE */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="
@@ -107,7 +107,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* --- MENU MOBILE --- */}
+      {/* MENU MOBILE */}
       <div
         className={`${isMenuOpen ? 'flex' : 'hidden'} 
           md:hidden flex-col items-center mt-4 space-y-3 pb-3 border-t border-white/20`}
@@ -123,7 +123,6 @@ export default function Navbar() {
              <Link to="/sobre">Sobre</Link>
           </li>
 
-          {/* Lógica Login/Sair no Mobile */}
           {!hasToken && (
             <li className="w-full text-center py-2 hover:bg-white/10 cursor-pointer rounded">
               <Link to="/login">Login</Link>

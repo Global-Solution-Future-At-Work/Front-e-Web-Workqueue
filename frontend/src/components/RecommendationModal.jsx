@@ -11,11 +11,11 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/recomendacao', { // Ajuste a porta se necessário
+      const response = await fetch('http://localhost:3000/recomendacao', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` // Assumindo que você guarda o token assim
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({
           id_user: userId,
@@ -39,7 +39,6 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
   };
 
   return (
-    // Z-INDEX 60 para ficar ACIMA do UserModal (que é z-50)
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-gray-900 w-full max-w-md rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-fade-in-up">
         

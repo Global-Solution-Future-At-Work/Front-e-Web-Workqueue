@@ -15,7 +15,6 @@ export default function SobrePage() {
       px-6 py-16 transition-colors
     ">
       
-      {/* Área de texto */}
       <div className="md:w-1/2 w-full max-w-2xl pr-0 md:pr-10 mb-10 md:mb-0">
         
         <h1 className="text-5xl font-bold mb-6 leading-tight">
@@ -48,7 +47,6 @@ export default function SobrePage() {
 
       </div>
 
-      {/* Imagem */}
       <div className="md:w-1/2 w-full flex justify-center">
         <img
           src={fotomaorobo}

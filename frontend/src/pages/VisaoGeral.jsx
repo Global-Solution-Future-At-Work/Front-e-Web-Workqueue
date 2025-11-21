@@ -14,15 +14,15 @@ export default function VisaoGeral() {
   const [estaLogado, setEstaLogado] = useState(false);
   const [statusGemini, setStatusGemini] = useState("Verificando...");
   
-  // Estados para Usuários
+  // States para Usuários
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [listaUsuarios, setListaUsuarios] = useState([]);
 
-  // Estados para Empresas
+  // States para Empresas
   const [isEmpresaModalOpen, setIsEmpresaModalOpen] = useState(false);
   const [listaEmpresas, setListaEmpresas] = useState([]);
 
-  // --- NOVO: Estado para Vagas ---
+  // States para Vagas
   const [showVagasModal, setShowVagasModal] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,6 @@ export default function VisaoGeral() {
   }, []);
 
   const liberarAcesso = () => {
-    // Busca contagem inicial de usuários
     fetch("http://127.0.0.1:3000/useradmin", {
       headers: { "admin_code": localStorage.getItem("codigo") }
     })
@@ -46,7 +45,6 @@ export default function VisaoGeral() {
       .then((data) => { if(data) setUsuariosAtivos(data.length); })
       .catch((err) => console.error(err));
       
-      // Busca contagem inicial de empresas
       fetch("http://127.0.0.1:3000/empresaadmin", { 
         headers: { "admin_code": localStorage.getItem("codigo") }
       })
@@ -54,7 +52,6 @@ export default function VisaoGeral() {
       .then((data) => { if(data) setEmpresasAtivas(data.length); })
       .catch((err) => console.error(err));
 
-      // Busca contagem inicial de Vagas (Se quiser adicionar depois)
       fetch("http://127.0.0.1:3000/api/vagas") // Use a rota que criamos
       .then((res) => { if (res.ok) return res.json(); })
       .then((data) => { if(data) setVagasAtivas(data.length); })
@@ -63,7 +60,7 @@ export default function VisaoGeral() {
     setEstaLogado(true);
   };
 
-  // --- LÓGICA DE USUÁRIOS ---
+  // LÓGICA DE USUÁRIOS
   const handleGerenciarUsuarios = () => {
     fetch("http://127.0.0.1:3000/useradmin", {
       headers: { "admin_code": localStorage.getItem("codigo") }
@@ -84,7 +81,7 @@ export default function VisaoGeral() {
     }
   };
 
-  // --- LÓGICA DE EMPRESAS ---
+  // LÓGICA DE EMPRESAS
   const handleGerenciarEmpresas = () => {
     fetch("http://127.0.0.1:3000/empresaadmin", {
       headers: { "admin_code": localStorage.getItem("codigo") }
@@ -118,21 +115,17 @@ export default function VisaoGeral() {
     }
   };
 
-  // --- LÓGICA DE VAGAS (CORRIGIDA) ---
+  // LÓGICA DE VAGAS
   const handleGerenciarVagas = () => {
-    setShowVagasModal(true); // Agora abre o modal corretamente
+    setShowVagasModal(true);
   };
 
-  // ---------------------------------------------------------
   // RENDERIZAÇÃO CONDICIONAL (Login)
-  // ---------------------------------------------------------
   if (!estaLogado) {
     return <PainelLoginAdmin aoLogar={liberarAcesso} />;
   }
 
-  // ---------------------------------------------------------
   // RENDERIZAÇÃO DA DASHBOARD
-  // ---------------------------------------------------------
   return (
 
     <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] transition-colors">
@@ -149,7 +142,6 @@ export default function VisaoGeral() {
           Visão Geral do Sistema
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Coluna 1: Geral */}
           <div>
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4">Geral</h2>
             <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300 mb-8">
@@ -173,7 +165,7 @@ export default function VisaoGeral() {
             </div>
           </div>
 
-          {/* Coluna 2: Botões de Gerenciamento */}
+          {/* Botões de Gerenciamento */}
           <div className="space-y-8">
             
             <div>
@@ -249,7 +241,7 @@ export default function VisaoGeral() {
         </div>
       </div>
 
-      {/* --- MODAL DE USUÁRIOS --- */}
+      {/* MODAL DE USUÁRIOS */}
       <UserListModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -257,7 +249,7 @@ export default function VisaoGeral() {
         onDelete={handleDeleteUser}
       />
 
-      {/* --- MODAL DE EMPRESAS --- */}
+      {/* MODAL DE EMPRESAS */}
       <EmpresaListAdminModal
         isOpen={isEmpresaModalOpen}
         onClose={() => setIsEmpresaModalOpen(false)}
@@ -265,7 +257,7 @@ export default function VisaoGeral() {
         onDelete={handleDeleteEmpresa}
       />
 
-      {/* --- MODAL DE VAGAS (NOVO) --- */}
+      {/* MODAL DE VAGAS */}
       {showVagasModal && (
         <VagasListAdminModal onClose={() => setShowVagasModal(false)} />
       )}

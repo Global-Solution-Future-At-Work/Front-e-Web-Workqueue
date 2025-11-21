@@ -7,7 +7,7 @@ export default function ModalProfissional({ open, onClose, data }) {
     <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white dark:bg-[#0F172A] w-full max-w-xl rounded-2xl shadow-xl p-6 relative text-gray-900 dark:text-gray-100">
 
-        {/* Botão fechar */}
+        {/* Botão Fechar */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white text-2xl"

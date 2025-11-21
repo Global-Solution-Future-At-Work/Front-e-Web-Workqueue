@@ -5,13 +5,11 @@ import { fileURLToPath } from 'url';
 
 const router = express.Router();
 
-// Configuração de caminhos
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Note que precisamos subir um nível (..) para sair de 'controllers' e entrar em 'data'
 const vagasPath = path.join(__dirname, '..', 'data', 'vagas.json');
 
-// 1. ROTA PARA LISTAR TODAS AS VAGAS
+// LISTAR TODAS AS VAGAS
 router.get('/api/vagas', (req, res) => {
     if (!fs.existsSync(vagasPath)) {
         return res.json([]); // Se não existir arquivo, retorna lista vazia
@@ -28,7 +26,7 @@ router.get('/api/vagas', (req, res) => {
     });
 });
 
-// 2. ROTA PARA DELETAR UMA VAGA
+// DELETAR UMA VAGA
 router.delete('/api/vagas/:id', (req, res) => {
     const { id } = req.params;
 

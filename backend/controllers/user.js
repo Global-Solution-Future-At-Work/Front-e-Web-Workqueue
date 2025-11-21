@@ -28,8 +28,6 @@ router.put("/user/:id", authMiddleware, async (req, res) => {
     res.send("Atualizado com sucesso")
 })
 
-
-//----
 //admin routes
 
 router.get("/useradmin", async (req, res) => {

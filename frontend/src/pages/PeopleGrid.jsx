@@ -34,7 +34,7 @@ const normalizeProjects = (data) => {
   return [];
 };
 
-// --- MessageModal Corrigido ---
+// MessageModal
 const MessageModal = ({ isOpen, onClose, targetUser }) => {
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ const MessageModal = ({ isOpen, onClose, targetUser }) => {
     }
 
     try {
-      // 1. Obter dados do usuário logado (quem envia)
+      // Busca os dados do usuário logado
       const authResponse = await fetch('http://127.0.0.1:3000/datajwt', {
         method: 'GET',
         headers: {
@@ -69,33 +69,24 @@ const MessageModal = ({ isOpen, onClose, targetUser }) => {
 
       const authData = await authResponse.json();
       
-      // Pegamos ID e Role de quem está logado
       const { id, role } = authData.jwt_data; 
-
-      // 2. Montar Payload
-      // Cenário: Uma Empresa (logada) envia mensagem para um Usuário/Talento (targetUser)
       
       const payload = {
         mensagem: mensagem,
-        // O destinatário da mensagem é o usuário do card que clicamos
         id_user: targetUser.id, 
         
-        // O remetente (contexto da conversa) é a empresa logada
-        // Se quem estiver logado não for empresa, mandamos null (o backend vai recusar, pois é regra de negócio)
         id_empresa: role === 'empresa' ? id : null, 
         
-        // CAMPO NOVO OBRIGATÓRIO: Quem de fato clicou no botão "Enviar"
         enviado_por: id 
       };
 
-      // Validação básica antes de enviar para evitar 400 desnecessário
+      // Validação 
       if (!payload.id_empresa) {
          alert("Apenas contas do tipo 'Empresa' podem iniciar conversas com talentos.");
          setLoading(false);
          return;
       }
 
-      // 3. Enviar
       const response = await fetch('http://127.0.0.1:3000/mensagem', { 
         method: 'POST',
         headers: {
@@ -159,7 +150,7 @@ const MessageModal = ({ isOpen, onClose, targetUser }) => {
   );
 };
 
-// --- Modal de Recomendação ---
+// Modal de Recomendação
 const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
   const [mensagem, setMensagem] = useState("");
   const [loading, setLoading] = useState(false);
@@ -226,7 +217,7 @@ const RecommendationModal = ({ isOpen, onClose, userId, userName }) => {
   );
 };
 
-// --- Modal de Detalhes (UserModal) ---
+// Modal de Detalhes (UserModal)
 const UserModal = ({ user, onClose }) => {
   const [isRecModalOpen, setIsRecModalOpen] = useState(false);
   const [isMsgModalOpen, setIsMsgModalOpen] = useState(false);
@@ -256,7 +247,7 @@ const UserModal = ({ user, onClose }) => {
           </div>
 
           <div className="p-6 space-y-8">
-            {/* Info Principal */}
+            {/* Infos principais */}
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <img 
                 src={user.foto || fotohomem} 
@@ -278,7 +269,6 @@ const UserModal = ({ user, onClose }) => {
 
                 {/* BOTÕES DE AÇÃO */}
                 <div className="mt-4 flex justify-center sm:justify-start gap-3 flex-wrap">
-                  {/* Botão de Recomendação (Verde) */}
                   <button 
                     onClick={() => setIsRecModalOpen(true)}
                     className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
@@ -287,7 +277,6 @@ const UserModal = ({ user, onClose }) => {
                     Recomendar
                   </button>
 
-                  {/* Botão de Mensagem (Azul) */}
                   <button 
                     onClick={() => setIsMsgModalOpen(true)}
                     className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-full shadow-md transition-all hover:shadow-lg flex items-center gap-2"
@@ -299,16 +288,14 @@ const UserModal = ({ user, onClose }) => {
               </div>
             </div>
 
-            {/* Resumo */}
             <div className="bg-gray-50 dark:bg-gray-700/30 p-4 rounded-xl border border-gray-100 dark:border-gray-700">
               <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">Sobre</h4>
               <p className="text-gray-600 dark:text-gray-300">{user.resumo || "Sem resumo disponível."}</p>
             </div>
 
-            {/* Grid de Informações */}
+            {/* Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                
-              {/* ESQUERDA */}
               <div className="space-y-6">
                 {/* Habilidades */}
                 <div>
@@ -390,7 +377,7 @@ const UserModal = ({ user, onClose }) => {
                 </div>
               </div>
 
-              {/* DIREITA - Experiência e Projetos */}
+              {/* Experiência e Projetos */}
               <div className="space-y-6">
                 <div>
                   <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">💼 Experiência</h4>
@@ -435,7 +422,7 @@ const UserModal = ({ user, onClose }) => {
         </div>
       </div>
 
-      {/* Integração do Modal de Recomendação */}
+      {/* Integração do Modal (RECOMENDAÇÃO) */}
       <RecommendationModal 
         isOpen={isRecModalOpen} 
         onClose={() => setIsRecModalOpen(false)} 
@@ -443,7 +430,7 @@ const UserModal = ({ user, onClose }) => {
         userName={user.nome}
       />
 
-      {/* Integração do Modal de Mensagem */}
+      {/* Integração do Modal (MENSAGEM)*/}
       <MessageModal 
         isOpen={isMsgModalOpen}
         onClose={() => setIsMsgModalOpen(false)}
@@ -453,7 +440,7 @@ const UserModal = ({ user, onClose }) => {
   );
 };
 
-// --- Componente Principal (PeopleGrid) ---
+// PeopleGrid
 export default function PeopleGrid() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);

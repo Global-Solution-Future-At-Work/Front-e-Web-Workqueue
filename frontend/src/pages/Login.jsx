@@ -5,7 +5,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Define para onde ir após o login: ou para onde o usuário queria ir, ou para o /feed
+  // Define para onde ir após o login
   const from = location.state?.from?.pathname || '/feed';
 
   const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Verifica se já está logado ao carregar o componente
+  // Verifica se já está logado
   useEffect(() => {
     const hasToken = localStorage.getItem('token');
     if (hasToken) {
@@ -32,13 +32,12 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Limpa erros anteriores
+    setError(''); // Limpar erros de antes
 
     try {
       setIsLoading(true);
 
-      // --- SEU ENDPOINT DE LOGIN ---
-      // Certifique-se que seu backend está rodando nesta porta
+      // ENDPOINT DE LOGIN
       const endpoint = 'http://127.0.0.1:3000/login'; 
       
       const response = await fetch(endpoint, {
@@ -58,7 +57,7 @@ export default function LoginForm() {
         throw new Error(data.message || 'Credenciais inválidas.');
       }
 
-      // --- SUCESSO NO LOGIN ---
+      // LOGIN BEM SUCEDIDO
       console.log('Login realizado:', data);
       
       if (data.token) {
@@ -86,7 +85,7 @@ export default function LoginForm() {
             </p>
         </div>
 
-        {/* Feedback de Erro */}
+        {/* Feedback para caso de Erro */}
         {error && (
           <div className="mb-4 p-3 rounded bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm text-center">
             {error}
@@ -123,7 +122,6 @@ export default function LoginForm() {
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-left mb-1"
             >                Senha
                 </label>
-                {/* Correção: 'class' para 'className' e <a> para <Link> */}
                 <Link to="/recuperar-conta" className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
                     Esqueceu a senha?
                 </Link>
@@ -148,7 +146,6 @@ export default function LoginForm() {
             className={`w-full mt-2 px-4 py-3 bg-blue-600 dark:bg-blue-600 text-white rounded-lg text-lg font-semibold hover:bg-blue-700 dark:hover:bg-blue-500 active:bg-blue-800 transition duration-150 shadow-md flex justify-center items-center ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {isLoading ? (
-              // Spinner simples SVG
               <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -160,7 +157,6 @@ export default function LoginForm() {
         
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
             Não tem uma conta?{' '}
-            {/* Atualizado para Link e apontando para a página de escolha de tipo */}
             <Link to="/escolher-tipo" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
                 Cadastre-se
             </Link>

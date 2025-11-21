@@ -7,7 +7,7 @@ import {
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from '../assets/fotohomem.svg'; 
 
-// --- FUNÇÕES AUXILIARES (Normalização de Dados) ---
+// FUNÇÕES AUXILIARES
 const ensureArray = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
@@ -48,10 +48,10 @@ const PerfilUser = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Estado do formulário de edição
+  // State do formulário de edição
   const [formData, setFormData] = useState({
     nome: '',
-    foto: '', // Novo campo para URL da foto
+    foto: '', 
     cargo: '',
     area: '',
     localizacao: '',
@@ -109,7 +109,6 @@ const PerfilUser = () => {
           console.error("Erro ao buscar recomendações:", err);
       }
 
-      // Normalização dos dados recebidos para o state de visualização
       const experienciasSafe = normalizeExperience(currentUser.experiencias);
       const formacaoSafe = normalizeEducation(currentUser.formacao);
       const habilidadesSafe = ensureArray(currentUser.habilidadesTecnicas);
@@ -118,13 +117,13 @@ const PerfilUser = () => {
       const certificacoesSafe = ensureArray(currentUser.certificacoes);
       const interessesSafe = ensureArray(currentUser.areaInteresses);
 
-      // Formatação específica para strings de exibição no card
+      // Formatação específica para strings de exibição para o card
       const formatList = (list) => list.map(item => typeof item === 'string' ? item : (item.idioma || item)).join(', ');
       const formatSoft = (list) => list.join(' • ');
 
       setUserData({
         nome: currentUser.nome,
-        foto: currentUser.foto, // Captura a foto do banco
+        foto: currentUser.foto, 
         localizacao: currentUser.localizacao || "Localização não informada",
         cargo: currentUser.cargo || "Cargo não informado",
         area: currentUser.area || "",
@@ -153,7 +152,7 @@ const PerfilUser = () => {
     }
   };
 
-  // --- Função para Deletar Recomendação ---
+  // Deletar Recomendação
   const handleDeleteRecommendation = async (id) => {
     if (!window.confirm("Tem certeza que deseja apagar esta recomendação?")) return;
 
@@ -339,7 +338,6 @@ const PerfilUser = () => {
                   </p>
                 </div>
 
-                {/* BOTÕES */}
                 <div className="flex flex-col sm:flex-row gap-2 mt-2">
                   <button 
                     onClick={handleOpenModal}
@@ -351,7 +349,6 @@ const PerfilUser = () => {
                 </div>
               </div>
 
-              {/* SESSÕES */}
               <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">
                   Sobre mim
@@ -411,7 +408,6 @@ const PerfilUser = () => {
                 </ul>
               </div>
 
-              {/* SEÇÃO EXPANDIDA */}
               {open && (
                 <div className="mb-4 animate-fadeIn">
 
@@ -433,7 +429,6 @@ const PerfilUser = () => {
                     {userData.soft || "Nenhuma soft skill listada."}
                   </p>
 
-                   {/* Certificações */}
                    {userData.certificacoes && userData.certificacoes.length > 0 && (
                     <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
                       <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 flex items-center gap-2">
@@ -449,7 +444,6 @@ const PerfilUser = () => {
                     </div>
                    )}
 
-                   {/* Áreas de Interesse */}
                    {userData.areaInteresses && userData.areaInteresses.length > 0 && (
                     <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
                       <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">
@@ -468,7 +462,6 @@ const PerfilUser = () => {
                 </div>
               )}
 
-              {/* BOTÕES FINAL */}
               <div className="flex justify-between items-center mt-6 pt-4 border-t border-gray-300 dark:border-gray-700">
                 <button
                   onClick={() => setOpen(!open)}
@@ -481,7 +474,7 @@ const PerfilUser = () => {
             </div>
           </div>
 
-          {/* --- NOVA SEÇÃO: RECOMENDAÇÕES --- */}
+          {/* RECOMENDAÇÕES */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition p-8">
              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
                 <MessageSquare size={20} className="text-green-600" />
@@ -494,7 +487,6 @@ const PerfilUser = () => {
                  <div className="grid gap-4">
                      {recommendations.map((rec) => (
                          <div key={rec.id} className="relative p-4 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700/30">
-                             {/* Ícone de Citação */}
                              <div className="absolute top-4 left-4 opacity-20">
                                  <svg className="w-8 h-8 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.896 14.321 16.33 15.657 15.33C16.871 14.42 17.059 14.315 17.338 13.68C16.525 13.68 16.164 13.68 15.89 13.68C12.951 13.68 11.464 12.193 11.464 9.253V5H17.964V9.253C17.964 12.407 18.144 13.587 19.705 14.82C20.881 15.75 21.964 15.75 21.964 18C21.964 19.657 20.621 21 18.964 21H14.017ZM6.017 21L6.017 18C6.017 16.896 6.321 16.33 7.657 15.33C8.871 14.42 9.059 14.315 9.338 13.68C8.525 13.68 8.164 13.68 7.89 13.68C4.951 13.68 3.464 12.193 3.464 9.253V5H9.964V9.253C9.964 12.407 10.144 13.587 11.705 14.82C12.881 15.75 13.964 15.75 13.964 18C13.964 19.657 12.621 21 10.964 21H6.017Z" /></svg>
                              </div>
@@ -503,7 +495,6 @@ const PerfilUser = () => {
                                  "{rec.mensagem}"
                              </p>
 
-                             {/* Botão de Excluir (Só aparece se for o dono) */}
                              {userData.isOwner && (
                                  <button 
                                      onClick={() => handleDeleteRecommendation(rec.id)}
@@ -518,13 +509,10 @@ const PerfilUser = () => {
                  </div>
              )}
           </div>
-          {/* --- FIM SEÇÃO RECOMENDAÇÕES --- */}
-
         </div>
-        
       </div>
 
-      {/* --- MODAL DE EDIÇÃO --- */}
+      {/* MODAL DE EDIÇÃO */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">

@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import fotoempresa from "../assets/fotoempresa.svg";
 
 const PerfilEmpresa = () => {
-  const [open, setOpen] = useState(false); // Controle do "Ver mais"
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controle do Modal
+  const [open, setOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const [empresaData, setEmpresaData] = useState(null); // Dados formatados para exibir
-  const [rawData, setRawData] = useState(null); // Dados brutos do banco para edição
+  const [empresaData, setEmpresaData] = useState(null); 
+  const [rawData, setRawData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Estado do Formulário de Edição
@@ -34,14 +34,14 @@ const PerfilEmpresa = () => {
     }
 
     try {
-      // 1. Pega ID do Token
+      // Pega ID do Token
       const authResponse = await fetch('http://localhost:3000/datajwt', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const authData = await authResponse.json();
       const myId = authData.jwt_data.id;
 
-      // 2. Pega dados da Empresa
+      // Pega os dados da Empresa
       const empresaResponse = await fetch(`http://localhost:3000/empresa/${myId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -50,10 +50,10 @@ const PerfilEmpresa = () => {
       
       const data = await empresaResponse.json();
 
-      // Salva os dados brutos para usar no formulário depois
+      // Salva os dados brutos 
       setRawData(data);
 
-      // Formata os dados para visualização (View)
+      // Formata os dados para visualização
       setEmpresaData({
         nome: data.nome_empresa,
         localizacao: data.localizacao,
@@ -77,7 +77,7 @@ const PerfilEmpresa = () => {
     fetchEmpresaData();
   }, [navigate]);
 
-  // Abre o modal e preenche os inputs com os dados atuais
+  // Abrindo o modal e preenchendo os inputs com os dados 
   const handleOpenModal = () => {
     if (rawData) {
       setFormData({
@@ -93,13 +93,11 @@ const PerfilEmpresa = () => {
     setIsModalOpen(true);
   };
 
-  // Atualiza o estado do formulário conforme digita
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Envia a atualização (PUT)
   const handleSave = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
@@ -107,7 +105,6 @@ const PerfilEmpresa = () => {
     if (!rawData || !rawData.id) return;
 
     try {
-      // NOTA: Não enviamos a 'senha'. O controller receberá 'undefined' e o repository manterá a antiga.
       const response = await fetch(`http://localhost:3000/empresa/${rawData.id}`, {
         method: 'PUT',
         headers: {
@@ -120,7 +117,7 @@ const PerfilEmpresa = () => {
       if (response.ok) {
         alert("Perfil atualizado com sucesso!");
         setIsModalOpen(false);
-        fetchEmpresaData(); // Recarrega a página com os novos dados
+        fetchEmpresaData(); 
       } else {
         alert("Erro ao atualizar. Verifique os dados.");
       }
@@ -136,11 +133,9 @@ const PerfilEmpresa = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] py-8 transition-colors">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6">
 
-        {/* CARD PRINCIPAL */}
         <div className="lg:w-3/4 w-full">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition">
             
-            {/* BANNER */}
             <div className="bg-blue-600 h-32 rounded-t-lg relative">
               <div className="absolute left-8 top-16">
                 <div className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-700 bg-gray-300 dark:bg-gray-600 overflow-hidden shadow-md">
@@ -149,10 +144,8 @@ const PerfilEmpresa = () => {
               </div>
             </div>
 
-            {/* CONTEÚDO */}
             <div className="pt-20 px-8 pb-8">
               
-              {/* HEADER */}
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center">
@@ -171,7 +164,6 @@ const PerfilEmpresa = () => {
                   </p>
                 </div>
 
-                {/* BOTÕES DE AÇÃO */}
                 <div className="flex flex-col gap-3 mt-3">
                   <button 
                     onClick={handleOpenModal}
@@ -195,7 +187,6 @@ const PerfilEmpresa = () => {
                 </div>
               </div>
 
-              {/* SEÇÕES DE TEXTO */}
               <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6">
                 <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-3">Sobre a Empresa</h3>
                 <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">{empresaData.sobre}</p>
@@ -206,7 +197,6 @@ const PerfilEmpresa = () => {
                 <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">{empresaData.vagas}</p>
               </div>
 
-              {/* VER MAIS */}
               {open && (
                 <div className="mb-4 animate-fadeIn">
                   <div className="border-t border-gray-300 dark:border-gray-700 pt-6 mt-6" />
@@ -234,12 +224,11 @@ const PerfilEmpresa = () => {
         </div>
       </div>
 
-      {/* --- MODAL DE EDIÇÃO --- */}
+      {/* MODAL DE EDIÇÃO */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">
             
-            {/* Cabeçalho do Modal */}
             <div className="sticky top-0 bg-white dark:bg-gray-800 z-10 border-b border-gray-200 dark:border-gray-700 p-5 flex justify-between items-center">
               <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
                 <Pencil size={20} className="mr-2 text-blue-600" />
@@ -250,7 +239,7 @@ const PerfilEmpresa = () => {
               </button>
             </div>
 
-            {/* Formulário */}
+            {/* Form */}
             <form onSubmit={handleSave} className="p-6 space-y-4">
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -338,7 +327,7 @@ const PerfilEmpresa = () => {
                 />
               </div>
 
-              {/* Footer do Modal */}
+              {/* Footer */}
               <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <button 
                   type="button" 

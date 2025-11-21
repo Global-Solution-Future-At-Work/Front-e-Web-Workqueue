@@ -5,7 +5,6 @@ const AccountSelection = () => {
   return (
     <div className="grow flex flex-col items-center justify-center p-8 bg-white dark:bg-[#0F172A] transition-colors">
       
-      {/* Logo */}
       <div className="text-center mb-10 dark:invert dark:brightness-50">
         <div className="flex justify-center items-center mb-4">
           <div className="text-4xl text-gray-800 dark:text-gray-100 mr-2">
@@ -20,7 +19,6 @@ const AccountSelection = () => {
         </p>
       </div>
 
-      {/* Título */}
       <div className="text-center mb-12">
         <h2 className="text-4xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
           Cadastre-se
@@ -30,12 +28,10 @@ const AccountSelection = () => {
         </p>
       </div>
 
-      {/* Subtítulo */}
       <p className="text-xl text-gray-700 dark:text-gray-200 mb-8 font-light">
         Escolha o tipo de conta para começar:
       </p>
 
-      {/* Botões */}
       <div className="space-y-4 w-full max-w-sm">
         
         <button 

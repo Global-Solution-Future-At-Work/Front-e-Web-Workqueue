@@ -15,7 +15,7 @@ function saveDB(db) {
   fs.writeFileSync("./database.json", JSON.stringify(db, null, 2));
 }
 
-// --- Rotas Atualizadas com o prefixo /lobbies ---
+// Rotas Atualizadas com o prefixo /lobbies
 
 // GET /lobbies - Lista todos os lobbies
 router.get("/lobbies", (req, res) => {
@@ -44,7 +44,7 @@ router.post("/lobbies", (req, res) => {
   res.status(201).json(newLobby);
 });
 
-// GET /lobbies/:id - Detalhes de um lobby específico
+// Detalhes de um lobby específico
 router.get("/lobbies/:id", (req, res) => {
   const db = loadDB();
   const lobby = db.lobbies.find(l => l.id === req.params.id);
@@ -54,7 +54,7 @@ router.get("/lobbies/:id", (req, res) => {
   res.json(lobby);
 });
 
-// POST /lobbies/:id/add - Adicionar usuário ao lobby
+// POST - Adicionar usuário ao lobby
 router.post("/lobbies/:id/add", (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;

@@ -1,11 +1,9 @@
 import React from 'react';
 
 export default function EmpresaListAdminModal({ isOpen, onClose, empresas, onDelete }) {
-  // Se não estiver aberto, não renderiza nada
   if (!isOpen) return null;
 
   return (
-    // Overlay (Fundo escuro)
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       
       {/* Container do Modal */}
@@ -22,7 +20,6 @@ export default function EmpresaListAdminModal({ isOpen, onClose, empresas, onDel
           </button>
         </div>
 
-        {/* Corpo (Tabela com Scroll se for muito grande) */}
         <div className="p-4 max-h-[60vh] overflow-y-auto">
           {empresas.length === 0 ? (
             <p className="text-center text-gray-500 py-4">Nenhuma empresa encontrada.</p>
@@ -41,7 +38,7 @@ export default function EmpresaListAdminModal({ isOpen, onClose, empresas, onDel
                 {empresas.map((empresa) => (
                   <tr key={empresa.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
-                      #{empresa.id.substring(0, 8)}... {/* Encurtei o ID visualmente para não quebrar layout */}
+                      #{empresa.id.substring(0, 8)}... 
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
                       {empresa.nome_empresa}
@@ -67,7 +64,6 @@ export default function EmpresaListAdminModal({ isOpen, onClose, empresas, onDel
           )}
         </div>
 
-        {/* Rodapé */}
         <div className="bg-gray-50 px-6 py-3 flex justify-end">
           <button
             onClick={onClose}

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// Recebemos "aoLogar" via props
 export default function PainelLoginAdmin({ aoLogar }) {
   const [codigo, setCodigo] = useState('');
 

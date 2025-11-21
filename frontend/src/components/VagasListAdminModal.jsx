@@ -4,7 +4,7 @@ export default function GerenciarVagasModal({ onClose }) {
   const [vagas, setVagas] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Carregar vagas ao abrir
+  // Carregar vagas
   useEffect(() => {
     fetch('http://localhost:3000/api/vagas')
       .then(res => res.json())
@@ -18,7 +18,7 @@ export default function GerenciarVagasModal({ onClose }) {
       });
   }, []);
 
-  // Função de deletar
+  // Função deletar
   const handleDelete = async (id) => {
     if (!confirm("Tem certeza que deseja excluir esta vaga?")) return;
 
@@ -28,7 +28,7 @@ export default function GerenciarVagasModal({ onClose }) {
       });
 
       if (res.ok) {
-        setVagas(vagas.filter(v => v.id !== id)); // Atualiza a lista visualmente
+        setVagas(vagas.filter(v => v.id !== id)); 
       } else {
         alert("Erro ao deletar vaga");
       }
@@ -41,7 +41,6 @@ export default function GerenciarVagasModal({ onClose }) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden">
         
-        {/* Cabeçalho Azul */}
         <div className="bg-blue-600 p-4 flex justify-between items-center">
           <h2 className="text-white text-lg font-bold">Gerenciar Vagas Ativas</h2>
           <button onClick={onClose} className="text-white hover:text-gray-200 font-bold text-xl">
@@ -49,7 +48,6 @@ export default function GerenciarVagasModal({ onClose }) {
           </button>
         </div>
 
-        {/* Conteúdo da Tabela */}
         <div className="p-6 max-h-[70vh] overflow-y-auto">
           {loading ? (
             <p className="text-center text-gray-500">Carregando vagas...</p>
@@ -86,7 +84,6 @@ export default function GerenciarVagasModal({ onClose }) {
           )}
         </div>
 
-        {/* Rodapé */}
         <div className="bg-gray-50 p-4 flex justify-end border-t border-gray-100">
           <button 
             onClick={onClose}

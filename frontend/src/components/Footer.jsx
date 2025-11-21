@@ -19,7 +19,6 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between pb-8 space-y-8 md:space-y-0">
 
-          {/* COLUNA ESQUERDA */}
           <div className="flex flex-col space-y-4 items-start w-full md:w-auto">
             <img
               src={logo}

@@ -5,15 +5,13 @@ import AdminRepository from "../repository/admin_repository.js";
 
 const router = Router()
 
-// --- Rotas Públicas ou Protegidas (dependendo da sua regra de negócio) ---
-
 // Listar todas as empresas
 router.get("/empresa", authMiddleware, async (req, res) => {
     const empresas = await EmpresaRepository.read()
     res.json(empresas)
 })
 
-// Buscar empresa por ID (Adicionei esta pois seu Repositório tem o método findById)
+// Buscar empresa por ID 
 router.get("/empresa/:id", authMiddleware, async (req, res) => {
     const { id } = req.params
     const empresa = await EmpresaRepository.findById(id)
@@ -27,7 +25,6 @@ router.get("/empresa/:id", authMiddleware, async (req, res) => {
 
 // Criar uma nova empresa
 router.post("/empresa", authMiddleware, async (req, res) => {
-    // Desestruturando na ordem que o repositório espera, ou passando diretamente
     const { 
         nome_empresa, 
         email_corporativo, 
@@ -39,7 +36,6 @@ router.post("/empresa", authMiddleware, async (req, res) => {
         site 
     } = req.body;
 
-    // O método create do seu repositório espera argumentos posicionais
     await EmpresaRepository.create(
         nome_empresa, 
         email_corporativo, 
@@ -59,7 +55,6 @@ router.delete("/empresa/:id", authMiddleware, async (req, res) => {
     const { id } = req.params
     const result = await EmpresaRepository.delete(id)
     
-    // O repositório retorna 1 se deletou, ou -1 se falhou
     if (result === 1) {
         res.send("Empresa deletada com sucesso")
     } else {
@@ -100,7 +95,6 @@ router.put("/empresa/:id", authMiddleware, async (req, res) => {
     }
 })
 
-//---
 //admin routes
 router.get("/empresaadmin", async (req, res) => {
     let data = await AdminRepository.read()

@@ -1,17 +1,13 @@
 import React from 'react';
 
 export default function UserListAdminModal({ isOpen, onClose, users, onDelete }) {
-  // Se não estiver aberto, não renderiza nada
   if (!isOpen) return null;
 
   return (
-    // Overlay (Fundo escuro)
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       
-      {/* Container do Modal */}
       <div className="bg-white w-full max-w-3xl rounded-lg shadow-xl overflow-hidden m-4 animate-fade-in-down">
         
-        {/* Cabeçalho */}
         <div className="bg-blue-600 px-6 py-4 flex justify-between items-center">
           <h3 className="text-white text-lg font-bold">Gerenciar Usuários</h3>
           <button 
@@ -22,7 +18,6 @@ export default function UserListAdminModal({ isOpen, onClose, users, onDelete })
           </button>
         </div>
 
-        {/* Corpo (Tabela com Scroll se for muito grande) */}
         <div className="p-4 max-h-[60vh] overflow-y-auto">
           {users.length === 0 ? (
             <p className="text-center text-gray-500 py-4">Nenhum usuário encontrado.</p>
@@ -63,7 +58,6 @@ export default function UserListAdminModal({ isOpen, onClose, users, onDelete })
           )}
         </div>
 
-        {/* Rodapé */}
         <div className="bg-gray-50 px-6 py-3 flex justify-end">
           <button
             onClick={onClose}

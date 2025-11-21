@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import fotohomem from "../assets/fotohomem.svg"; // Ajuste o caminho se necessário
+import fotohomem from "../assets/fotohomem.svg"; 
 
 const ChatFlutuante = () => {
   // Estados de UI
@@ -8,13 +8,13 @@ const ChatFlutuante = () => {
   const [newMessage, setNewMessage] = useState("");
   
   // Estados de Dados
-  const [userData, setUserData] = useState(null); // { id, role }
+  const [userData, setUserData] = useState(null); 
   const [conversations, setConversations] = useState({}); 
   const [loading, setLoading] = useState(false);
   
   const scrollRef = useRef(null);
 
-  // 1. Identificar o usuário via Token JWT
+  // Identificar o usuário (Token JWT)
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
@@ -38,21 +38,21 @@ const ChatFlutuante = () => {
     fetchUserData();
   }, []);
 
-  // 2. Buscar histórico quando abrir o chat
+  // Busca histórico quando abre o chat
   useEffect(() => {
     if (isOpen && userData) {
       fetchHistory();
     }
   }, [isOpen, userData]);
 
-  // 3. Scroll automático
+  // Scroll automático
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [activeChatId, conversations]);
 
-  // --- FUNÇÕES ---
+  // FUNÇÕES
 
   const fetchHistory = async () => {
     if (!userData) return;
@@ -78,19 +78,17 @@ const ChatFlutuante = () => {
     const myId = userData.id;
 
     messages.forEach(msg => {
-      // Determina o ID do "outro lado" da conversa
       let otherId = null;
       let chatName = "";
 
       if (myRole === 'user') {
-        otherId = msg.id_empresa; // Se sou user, converso com a empresa
+        otherId = msg.id_empresa;
         chatName = `Empresa`; 
       } else {
-        otherId = msg.id_user; // Se sou empresa, converso com o user
+        otherId = msg.id_user;
         chatName = `Candidato`;
       }
 
-      // Fallback caso venha nulo (mensagens antigas ou erro)
       if (!otherId) otherId = "desconhecido";
 
       if (!groups[otherId]) {
@@ -102,8 +100,6 @@ const ChatFlutuante = () => {
         };
       }
 
-      // NOVA LÓGICA: Verifica quem enviou baseado no campo 'enviado_por'
-      // Se o campo não existir (msg antiga), tentamos adivinhar, mas o ideal é o campo novo.
       const isMe = msg.enviado_por === myId;
 
       groups[otherId].messages.push({
@@ -132,10 +128,8 @@ const ChatFlutuante = () => {
       // Montagem do Payload
       const payload = {
         mensagem: newMessage,
-        // Define o contexto da conversa (Quem participa)
         id_empresa: myRole === 'empresa' ? myId : targetId, 
         id_user: myRole === 'user' ? myId : targetId,
-        // CAMPO NOVO: Define quem enviou explicitamente
         enviado_por: myId
       };
 
@@ -151,7 +145,7 @@ const ChatFlutuante = () => {
 
         if (response.ok) {
           setNewMessage("");
-          fetchHistory(); // Atualiza para ver a mensagem
+          fetchHistory(); 
         } else {
            alert("Erro ao enviar mensagem");
         }
@@ -161,7 +155,7 @@ const ChatFlutuante = () => {
     }
   };
 
-  // --- RENDERIZAÇÃO (UI) ---
+  // RENDERIZAÇÃO (UI)
 
   const activeConversation = activeChatId ? conversations[activeChatId] : null;
   const conversationList = Object.values(conversations);
@@ -175,7 +169,6 @@ const ChatFlutuante = () => {
       {isOpen && (
         <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-xl w-80 h-[500px] mb-4 flex flex-col transition-all duration-300 border border-gray-200 dark:border-gray-700 animate-fade-in-up overflow-hidden">
 
-          {/* HEADER */}
           <div className="bg-blue-600 text-white p-4 flex items-center justify-between shadow-md">
             <div className="flex items-center gap-2">
                 {activeChatId && (
@@ -195,7 +188,6 @@ const ChatFlutuante = () => {
             </button>
           </div>
 
-          {/* AREA DE CONTEUDO */}
           {activeChatId && activeConversation ? (
             <>
                 {/* MENSAGENS */}

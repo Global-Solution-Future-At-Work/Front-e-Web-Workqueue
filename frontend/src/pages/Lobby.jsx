@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ChatFlutuante from '../components/ChatFlutuante';
 
 const lobbyData = {
-  id: "lobby_1", // ID fixo para bater com o backend
+  id: "lobby_1", 
   vaga: "Desenvolvedores Python e Designers UX/UI",
   sugestao: "IA Gemini: Sugestão automática de candidatos",
   compatibilidadeMedia: 86,
@@ -15,10 +15,9 @@ export default function Lobby() {
   const [userId, setUserId] = useState("");
   const [candidates, setCandidates] = useState([]);
   
-  // --- NOVO ESTADO: Loading da IA ---
+  // Loading da IA
   const [loadingIA, setLoadingIA] = useState(false);
 
-  // 1. Carregar dados ao iniciar (Mantido igual)
   useEffect(() => {
     fetchLobbyCandidates();
   }, []);
@@ -35,9 +34,9 @@ export default function Lobby() {
     }
   };
 
-  // --- 2. NOVA FUNÇÃO: Integração com IA Gemini ---
+  // Integração com IA Gemini ---
   const handleAIMatch = async () => {
-    setLoadingIA(true); // Ativa o spinner
+    setLoadingIA(true);
     try {
       const res = await fetch(`http://localhost:3000/api/lobby/${lobby.id}/ia-match`, {
         method: "POST"
@@ -55,11 +54,11 @@ export default function Lobby() {
       console.error(error);
       alert("Erro de conexão ao tentar usar a IA.");
     } finally {
-      setLoadingIA(false); // Desativa o spinner
+      setLoadingIA(false); 
     }
   };
 
-  // 3. Função Manual (Mantida EXATAMENTE como estava)
+  // Função Manual
   const handleInvite = async () => {
     if (!userId) {
       alert("Digite o ID do usuário para convidar!");
@@ -144,11 +143,11 @@ export default function Lobby() {
                   </>
                 ) : (
                   <>
-                    ✨ Auto-Selecionar com IA
+                    ✨Auto-Selecionar com IA
                   </>
                 )}
               </button>
-              {/* -------------------------- */}
+            
 
               <div className="border-t border-gray-200 my-2"></div>
               <p className="text-xs text-gray-500 uppercase font-bold tracking-wide mt-2">Adicionar Manualmente</p>
@@ -182,7 +181,7 @@ export default function Lobby() {
                   ${candidate.origem === "Sugestão IA" ? "bg-purple-50 border-purple-300 ring-1 ring-purple-200" : "bg-white border-gray-200"}`}
                 >
                   
-                  {/* Badge se for sugestão da IA */}
+                  {/* Ícone se for sugestão da IA */}
                   {candidate.origem === "Sugestão IA" && (
                     <span className="absolute top-2 right-2 text-[10px] font-bold text-purple-700 bg-purple-200 px-2 py-0.5 rounded-full">
                       IA ✨

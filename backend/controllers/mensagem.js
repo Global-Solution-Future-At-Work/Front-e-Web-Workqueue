@@ -13,7 +13,6 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    // ADICIONADO: enviado_por no body
     const { id_empresa, id_user, mensagem, enviado_por } = req.body;
 
     if (!mensagem || !id_empresa || !id_user || !enviado_por) {
@@ -21,7 +20,6 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        // Passamos o enviado_por para o repository
         await MensagemRepository.create(id_empresa, id_user, mensagem, enviado_por);
         res.status(201).json({ message: "Mensagem enviada com sucesso!" });
     } catch (error) {
@@ -39,13 +37,13 @@ router.get('/historico/:tipo/:id', async (req, res) => {
     try {
         const todasMensagens = await MensagemRepository.read();
 
-        // Filtra conversas onde o ID participa (seja como remetente ou destinatário)
+        // Filtra conversas onde o ID participa
         const mensagensFiltradas = todasMensagens.filter(msg => {
             if (tipo === 'user') {
-                // Usuário vê mensagens onde ele é o id_user
+                // Usuário vê as mensagens onde ele é o id_user
                 return String(msg.id_user) === String(id);
             } else if (tipo === 'empresa') {
-                // Empresa vê mensagens onde ela é a id_empresa
+                // Empresa vê as mensagens onde ela é a id_empresa
                 return String(msg.id_empresa) === String(id);
             }
         });
