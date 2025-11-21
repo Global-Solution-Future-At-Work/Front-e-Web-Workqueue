@@ -4,15 +4,48 @@ import fs from "fs";
 const router = express.Router();
 
 function loadDB() {
-  return JSON.parse(fs.readFileSync("./database.json"));
+  try {
+    return JSON.parse(fs.readFileSync("./database.json"));
+  } catch (e) {
+    return { lobbies: [], usuarios: [] };
+  }
 }
 
 function saveDB(db) {
   fs.writeFileSync("./database.json", JSON.stringify(db, null, 2));
 }
 
-// GET lobby
-router.get("/:id", (req, res) => {
+// --- Rotas Atualizadas com o prefixo /lobbies ---
+
+// GET /lobbies - Lista todos os lobbies
+router.get("/lobbies", (req, res) => {
+  const db = loadDB();
+  res.json(db.lobbies || []);
+});
+
+// POST /lobbies - Cria um novo lobby
+router.post("/lobbies", (req, res) => {
+  const db = loadDB();
+  
+  const newLobby = {
+    id: `lobby_${Date.now()}`,
+    nome: req.body.nome,
+    descricao: req.body.descricao,
+    localizacao: req.body.localizacao,
+    requisitos: req.body.requisitos,
+    candidatos: [], 
+    createdAt: new Date().toISOString()
+  };
+
+  if (!db.lobbies) db.lobbies = [];
+  db.lobbies.push(newLobby);
+  
+  saveDB(db);
+  res.status(201).json(newLobby);
+});
+
+// GET /lobbies/:id - Detalhes de um lobby específico
+router.get("/lobbies/:id", (req, res) => {
   const db = loadDB();
   const lobby = db.lobbies.find(l => l.id === req.params.id);
 
@@ -21,7 +54,8 @@ router.get("/:id", (req, res) => {
   res.json(lobby);
 });
 
-router.post("/:id/add", (req, res) => {
+// POST /lobbies/:id/add - Adicionar usuário ao lobby
+router.post("/lobbies/:id/add", (req, res) => {
   const { id } = req.params;
   const { userId } = req.body;
 

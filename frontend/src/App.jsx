@@ -26,6 +26,7 @@ import Feed from "./pages/Feed";
 import Lobby from "./pages/Lobby";
 import PeopleGrid from "./pages/PeopleGrid";
 import EmpresaGrid from "./pages/EmpresaGrid";
+import LobbiesScreen from "./pages/LobbiesScreen";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
             <Route path="/feed" element={<Feed />} />
             <Route path="/pessoas" element={<PeopleGrid/>} />
             <Route path="/empresas" element={<EmpresaGrid/>} />
+            <Route path="lobbies-rooms" element={<LobbiesScreen />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

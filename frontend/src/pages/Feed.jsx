@@ -27,7 +27,7 @@ const profileCardData = {
 const Post = ({ data }) => (
   <div className="bg-white dark:bg-gray-800 dark:border-gray-700 p-4 rounded-xl shadow-lg border border-gray-100 mb-6">
     <div className="flex items-start mb-3">
-      <img 
+      <img
         src={fotohomem}
         alt={data.profileName}
         className="w-10 h-10 rounded-full object-cover mr-3"
@@ -54,9 +54,9 @@ const Post = ({ data }) => (
       ))}
     </p>
 
-    <img 
-      src={fotohomem} 
-      alt="Imagem do Post" 
+    <img
+      src={fotohomem}
+      alt="Imagem do Post"
       className="w-full rounded-lg mb-4 object-cover max-h-80"
     />
 
@@ -69,47 +69,47 @@ const Post = ({ data }) => (
 
 export default function Feed() {
   const navigate = useNavigate();
-  
+
   // 2. State para guardar o link correto. Padrão inicia como user, mas pode ser null
-  const [perfilLink, setPerfilLink] = useState('/perfiluser'); 
+  const [perfilLink, setPerfilLink] = useState('/perfiluser');
 
   // 3. useEffect para buscar os dados ao carregar a página
   useEffect(() => {
     const fetchUserRole = async () => {
-        // Recupera o token (Assumindo que você salvou como 'token' no login)
-        const token = localStorage.getItem('token'); 
+      // Recupera o token (Assumindo que você salvou como 'token' no login)
+      const token = localStorage.getItem('token');
 
-        if (!token) {
-            console.log("Token não encontrado, redirecionando para login...");
-            // navigate('/login'); // Opcional: Redirecionar se não tiver token
-            return;
+      if (!token) {
+        console.log("Token não encontrado, redirecionando para login...");
+        // navigate('/login'); // Opcional: Redirecionar se não tiver token
+        return;
+      }
+
+      try {
+        // IMPORTANTE: Ajuste a URL 'http://localhost:3000/datajwt' conforme a rota do seu backend
+        const response = await fetch('http://localhost:3000/datajwt', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Envia o token no padrão Bearer
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Backend retorna: { jwt_data: { id: '...', role: 'user' | 'empresa' } }
+
+          if (data.jwt_data && data.jwt_data.role === 'empresa') {
+            setPerfilLink('/perfilempresa');
+          } else {
+            setPerfilLink('/perfiluser');
+          }
+        } else {
+          console.error('Erro ao validar token');
         }
-
-        try {
-            // IMPORTANTE: Ajuste a URL 'http://localhost:3000/datajwt' conforme a rota do seu backend
-            const response = await fetch('http://localhost:3000/datajwt', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Envia o token no padrão Bearer
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Backend retorna: { jwt_data: { id: '...', role: 'user' | 'empresa' } }
-                
-                if (data.jwt_data && data.jwt_data.role === 'empresa') {
-                    setPerfilLink('/perfilempresa');
-                } else {
-                    setPerfilLink('/perfiluser');
-                }
-            } else {
-                console.error('Erro ao validar token');
-            }
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
     };
 
     fetchUserRole();
@@ -153,7 +153,7 @@ export default function Feed() {
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 px-4 sm:px-0 justify-center">
 
         {/* Postagens */}
-        <div className="lg:col-span-7"> 
+        <div className="lg:col-span-7">
           <Post data={postData} />
           <Post data={postData} />
         </div>
@@ -176,10 +176,12 @@ export default function Feed() {
 
           <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg sticky top-64">
             <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">
-                <Link to={perfilLink}>Meu perfil 💼</Link>
+              <Link to={perfilLink}>Meu perfil 💼</Link>
             </h3>
-            <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">Meus lobbies 🏙️</h3>
-            <h3 className="text-md font-bold text-gray-800 dark:text-gray-100">Recomendações ✨</h3>
+
+            <h3 className="text-md font-bold text-gray-800 dark:text-gray-100 mb-3">
+              <Link to="/lobbies-rooms">Lobbies 🏙️</Link>
+            </h3>
           </div>
         </div>
 

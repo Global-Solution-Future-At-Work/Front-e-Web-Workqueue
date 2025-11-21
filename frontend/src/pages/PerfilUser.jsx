@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   MapPin, Briefcase, Zap, Award, ChevronDown, Check, Pencil, X, 
-  Trash2, MessageSquare
+  Trash2, MessageSquare, Image as ImageIcon
 } from 'lucide-react';
 import ChatFlutuante from '../components/ChatFlutuante';
 import fotohomem from '../assets/fotohomem.svg'; 
 
 // --- FUNÇÕES AUXILIARES (Normalização de Dados) ---
-// Mesma lógica de segurança usada no PeopleGrid para evitar quebras
-
 const ensureArray = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
@@ -53,6 +51,7 @@ const PerfilUser = () => {
   // Estado do formulário de edição
   const [formData, setFormData] = useState({
     nome: '',
+    foto: '', // Novo campo para URL da foto
     cargo: '',
     area: '',
     localizacao: '',
@@ -75,7 +74,6 @@ const PerfilUser = () => {
     }
 
     try {
-      // 1. Obter ID via Token
       const authResponse = await fetch('http://127.0.0.1:3000/datajwt', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -85,7 +83,6 @@ const PerfilUser = () => {
       const authData = await authResponse.json();
       const myId = authData.jwt_data.id; 
 
-      // 2. Buscar dados do usuário
       const userResponse = await fetch('http://127.0.0.1:3000/user', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -99,7 +96,6 @@ const PerfilUser = () => {
 
       setRawData(currentUser);
 
-      // 3. Buscar Recomendações
       try {
          const recResponse = await fetch(`http://127.0.0.1:3000/recomendacao/user/${myId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -128,6 +124,7 @@ const PerfilUser = () => {
 
       setUserData({
         nome: currentUser.nome,
+        foto: currentUser.foto, // Captura a foto do banco
         localizacao: currentUser.localizacao || "Localização não informada",
         cargo: currentUser.cargo || "Cargo não informado",
         area: currentUser.area || "",
@@ -187,7 +184,6 @@ const PerfilUser = () => {
 
   const handleOpenModal = () => {
     if (rawData) {
-      // Prepara os dados para o formulário (transforma arrays em strings separadas por vírgula)
       const habTec = ensureArray(rawData.habilidadesTecnicas).join(', ');
       const softSk = ensureArray(rawData.softSkills).join(', ');
       const certs = ensureArray(rawData.certificacoes).join(', ');
@@ -199,6 +195,7 @@ const PerfilUser = () => {
 
       setFormData({
         nome: rawData.nome || '',
+        foto: rawData.foto || '', 
         cargo: rawData.cargo || '',
         area: rawData.area || '',
         localizacao: rawData.localizacao || '',
@@ -246,6 +243,7 @@ const PerfilUser = () => {
       const payload = {
         ...rawData, 
         nome: formData.nome,
+        foto: formData.foto, 
         cargo: formData.cargo,
         area: formData.area,
         localizacao: formData.localizacao,
@@ -293,25 +291,25 @@ const PerfilUser = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-[#0F172A] py-8 transition-colors font-sans">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-6">
 
-        {/* LADO ESQUERDO */}
         <div className="lg:w-3/4 w-full flex flex-col gap-6"> 
           
-          {/* --- CARD PRINCIPAL DO PERFIL --- */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg transition">
 
-            {/* BANNER E FOTO */}
             <div className="bg-blue-600 h-32 rounded-t-lg relative">
               <div className="absolute left-8 top-16">
                 <div className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-700 bg-gray-300 dark:bg-gray-600 overflow-hidden shadow-md">
-                  <img src={fotohomem} alt={userData.nome} className="w-full h-full object-cover" />
+                  <img 
+                    src={userData.foto || fotohomem} 
+                    alt={userData.nome} 
+                    className="w-full h-full object-cover" 
+                    onError={(e) => { e.target.src = fotohomem; }} 
+                  />
                 </div>
               </div>
             </div>
 
-            {/* INFO */}
             <div className="pt-20 px-8 pb-8">
 
-              {/* HEADER */}
               <div className="flex justify-between items-start mb-4">
 
                 <div>
@@ -449,7 +447,7 @@ const PerfilUser = () => {
                         ))}
                       </ul>
                     </div>
-                  )}
+                   )}
 
                    {/* Áreas de Interesse */}
                    {userData.areaInteresses && userData.areaInteresses.length > 0 && (
@@ -465,7 +463,7 @@ const PerfilUser = () => {
                         ))}
                       </div>
                     </div>
-                  )}
+                   )}
 
                 </div>
               )}
@@ -542,6 +540,21 @@ const PerfilUser = () => {
             </div>
 
             <form onSubmit={handleSave} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 items-center gap-1">
+                  <ImageIcon size={16} /> URL da Foto de Perfil
+                </label>
+                <input 
+                  type="text" 
+                  name="foto"
+                  value={formData.foto}
+                  onChange={handleInputChange}
+                  placeholder="https://exemplo.com/minha-foto.jpg"
+                  className="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <p className="text-xs text-gray-400 mt-1">Cole o link direto de uma imagem (png, jpg, webp).</p>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome Completo</label>
