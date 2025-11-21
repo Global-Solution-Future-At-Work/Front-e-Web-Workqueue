@@ -3,7 +3,7 @@ import ChatFlutuante from '../components/ChatFlutuante';
 
 const lobbyData = {
   id: "lobby_1", // ID fixo para bater com o backend
-  vaga: "Desenvolvedor Front-End",
+  vaga: "Desenvolvedores Python e Designers UX/UI",
   sugestao: "IA Gemini: Sugestão automática de candidatos",
   compatibilidadeMedia: 86,
   status: "Ativo",
@@ -109,7 +109,7 @@ export default function Lobby() {
       <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg p-8">
         <div className="flex justify-between items-center border-b pb-4 mb-6">
           <h1 className="text-2xl font-semibold text-gray-800">
-            Lobby - Empresa: <span className="text-blue-600">NextCode Labs</span>
+            Lobby - Empresa: <span className="text-blue-600">Tech Team</span>
           </h1>
         </div>
 

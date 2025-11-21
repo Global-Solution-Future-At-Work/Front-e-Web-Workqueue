@@ -18,7 +18,6 @@ export default function EscolhaCadastro() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0F172A] p-4 transition-colors">
       <div className="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-xl shadow-2xl max-w-md w-full text-center border border-gray-200 dark:border-gray-700">
 
-        {/* LOGO */}
         <div className="mb-8">
           <img 
             src={logo}
@@ -33,7 +32,7 @@ export default function EscolhaCadastro() {
           </p>
         </div>
 
-        {/* ESCOLHA */}
+        {/* ESCOLHA CONTA */}
         <div className="mt-8">
           <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-100 mb-6">
             Escolha o tipo de conta para começar:

@@ -7,8 +7,8 @@ export default function CadastroEmpresaForm() {
     atuacao: '',
     tamanho: '',
     descricao: '',
-    localizacao: '', // Adicionado pois o backend utiliza
-    site: '',        // Adicionado pois o backend utiliza
+    localizacao: '', 
+    site: '',        
     senha: '',
     confirmarSenha: '',
   });
@@ -32,7 +32,7 @@ export default function CadastroEmpresaForm() {
 
     setLoading(true);
 
-    // Preparar o payload conforme esperado pelo backend (/register/empresa)
+    // Preparar o payload para o backend
     const payload = {
       nome_empresa: formData.nome,
       email_corporativo: formData.email,
@@ -59,7 +59,6 @@ export default function CadastroEmpresaForm() {
         throw new Error(data.message || 'Erro ao cadastrar empresa');
       }
 
-      // Sucesso
       alert('Empresa cadastrada com sucesso!');
       console.log('Sucesso:', data);
       window.location.href = '/login';
@@ -77,7 +76,6 @@ export default function CadastroEmpresaForm() {
 
       <div className="bg-gray-200 dark:bg-[#1E293B] p-8 sm:p-12 rounded-xl shadow-2xl max-w-lg w-full transition-colors">
 
-        {/* Cabeçalho */}
         <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-300 ">
                 Cadastre-se
@@ -99,7 +97,6 @@ export default function CadastroEmpresaForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* Nome */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nome da Empresa:
@@ -132,7 +129,6 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          {/* Senha */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Senha:
@@ -150,7 +146,6 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          {/* Confirmar senha */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Confirmar senha:
@@ -168,7 +163,6 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          {/* Área de atuação */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Área de atuação da Empresa:
@@ -186,7 +180,6 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          {/* Tamanho */}
           <div>
             <label htmlFor="tamanho" className="block text-sm font-medium text-gray-700 text-left mb-1 dark:text-gray-300">
               Tamanho da Empresa (pequena, média, grande):
@@ -203,7 +196,6 @@ export default function CadastroEmpresaForm() {
             />
           </div>
 
-          {/* Descrição */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Descrição breve da Empresa:

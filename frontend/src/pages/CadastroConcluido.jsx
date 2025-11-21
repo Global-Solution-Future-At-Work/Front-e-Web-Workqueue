@@ -10,24 +10,20 @@ export default function CadastroConcluido() {
                     bg-gray-50 dark:bg-[#0F172A] 
                     px-4 text-center transition-colors">
 
-      {/* LOGO */}
       <img 
         src={logo} 
         alt="WorkQueue Logo"
         className="w-[800px] max-w-full h-auto mb-6 dark:invert dark:brightness-50"
       />
 
-      {/* TÍTULO */}
       <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
         Cadastro concluído!
       </h1>
 
-      {/* TEXTO */}
       <p className="text-lg text-gray-600 dark:text-gray-300 max-w-xl mb-10">
         Bem-vindo à WorkQueue, onde IA e pessoas constroem o futuro juntos.
       </p>
 
-      {/* BOTÃO */}
       <button
         onClick={() => navigate('/')}
         className="px-10 py-3 bg-blue-500 hover:bg-blue-600 

@@ -11,10 +11,32 @@ import {
   MapPin
 } from 'lucide-react';
 
-// ... (CreateLobbyModal e LobbyCard permanecem iguais ao anterior)
-// Vou repetir apenas o componente principal com a lógica de autenticação alterada
+// DADOS DO JSON (Integrados para garantir que o card apareça)
+const LOCAL_LOBBY_DATA = [
+  {
+    "id": "lobby_1",
+    "nome": "Processo Seletivo - Tech Team",
+    "descricao": "Seleção para desenvolvedores Python e Designers UX/UI.",
+    "localizacao": "Rio de Janeiro - RJ",
+    "isNew": true,
+    "candidatos": [
+      {
+        "id": "user_4",
+        "name": "Dev Python Senior",
+        "habilidades": ["Python", "Django", "Flask"],
+        "compatibilidade": 95
+      },
+      {
+        "id": "user_5",
+        "name": "Ana Designer",
+        "habilidades": ["Figma", "UI/UX", "Adobe XD"],
+        "compatibilidade": 80
+      }
+    ]
+  }
+];
 
-// --- Modal de Criação (Mantido igual) ---
+// --- Modal de Criação ---
 const CreateLobbyModal = ({ isOpen, onClose, onCreate }) => {
   const [formData, setFormData] = useState({
     nome: '',
@@ -95,7 +117,7 @@ const CreateLobbyModal = ({ isOpen, onClose, onCreate }) => {
   );
 };
 
-// --- Card do Lobby (Mantido igual) ---
+// --- Card do Lobby (Com a lógica de clique no card inteiro) ---
 const LobbyCard = ({ lobby, onClick }) => {
   const candidateCount = Array.isArray(lobby.candidatos) ? lobby.candidatos.length : 0;
 
@@ -142,7 +164,7 @@ const LobbyCard = ({ lobby, onClick }) => {
   );
 };
 
-// --- Tela Principal com Autenticação ---
+// --- Tela Principal ---
 export default function LobbiesScreen() {
   const navigate = useNavigate();
   const [lobbies, setLobbies] = useState([]);
@@ -151,62 +173,49 @@ export default function LobbiesScreen() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Dados Mock para fallback
-  const fallbackData = [
-    {
-      id: "mock_1",
-      nome: "Vaga Exemplo (Offline)",
-      descricao: "Dados locais exibidos pois o servidor não respondeu.",
-      localizacao: "Localhost",
-      candidatos: [], 
-      createdAt: new Date().toISOString()
-    }
-  ];
-
   useEffect(() => {
     const initData = async () => {
       try {
-        // --- 1. Autenticação: Pegar token e verificar Role ---
-        const token = localStorage.getItem('token'); // Recupera o JWT salvo
-        
+        // --- 1. Autenticação ---
+        const token = localStorage.getItem('token');
         if (token) {
           try {
             const authResponse = await fetch('http://127.0.0.1:3000/datajwt', {
               method: 'GET',
               headers: { 
-                'Authorization': `Bearer ${token}`, // Envia o token no header
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
               }
             });
 
             if (authResponse.ok) {
               const jwtData = await authResponse.json();
-              // Verifica a role dentro do objeto retornado pelo controller
-              // Ajuste 'jwtData.role' ou 'jwtData.datajwt.role' conforme seu backend responde exatamento
               if (jwtData?.role === 'empresa' || jwtData?.datajwt?.role === 'empresa') {
                 setIsCompany(true);
               }
-            } else {
-              console.warn("Token inválido ou expirado");
-              // Opcional: localStorage.removeItem('token');
             }
           } catch (err) {
             console.warn("Erro ao validar token:", err);
           }
         }
 
-        // --- 2. Buscar Lobbies ---
-        const lobbiesResponse = await fetch('http://127.0.0.1:3000/lobbies');
-        if (lobbiesResponse.ok) {
-          const data = await lobbiesResponse.json();
-          setLobbies(Array.isArray(data) ? data : fallbackData);
-        } else {
-          setLobbies(fallbackData);
+        // --- 2. Buscar Lobbies (API ou JSON Local) ---
+        try {
+          const lobbiesResponse = await fetch('http://127.0.0.1:3000/lobbies');
+          if (lobbiesResponse.ok) {
+            const data = await lobbiesResponse.json();
+            setLobbies(Array.isArray(data) && data.length > 0 ? data : LOCAL_LOBBY_DATA);
+          } else {
+            setLobbies(LOCAL_LOBBY_DATA);
+          }
+        } catch (e) {
+            console.log("API Offline, usando JSON local");
+            setLobbies(LOCAL_LOBBY_DATA);
         }
 
       } catch (error) {
         console.error("Erro geral:", error);
-        setLobbies(fallbackData);
+        setLobbies(LOCAL_LOBBY_DATA);
       } finally {
         setLoading(false);
       }
@@ -216,7 +225,6 @@ export default function LobbiesScreen() {
   }, []);
 
   const handleCreateLobby = async (newLobbyData) => {
-    // UI Otimista
     const tempId = `temp_${Date.now()}`;
     const optimisicLobby = {
       id: tempId,
@@ -230,12 +238,10 @@ export default function LobbiesScreen() {
 
     try {
       const token = localStorage.getItem('token');
-      
       const response = await fetch('http://127.0.0.1:3000/lobbies', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // É boa prática enviar o token ao criar dados também
           'Authorization': token ? `Bearer ${token}` : '' 
         },
         body: JSON.stringify(newLobbyData)
@@ -321,7 +327,7 @@ export default function LobbiesScreen() {
               <LobbyCard 
                 key={lobby.id} 
                 lobby={lobby} 
-                onClick={(id) => navigate(`/lobby/${id}`)} 
+                onClick={(id) => navigate(`/lobby`)} 
               />
             ))}
           </div>

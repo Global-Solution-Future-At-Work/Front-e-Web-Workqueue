@@ -43,7 +43,7 @@ export default function FaleConosco() {
           />
         </div>
 
-        {/* FORMULÁRIO */}
+        {/* FORMS */}
         <div className="md:w-1/2 flex items-center justify-center p-10">
           <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
 
